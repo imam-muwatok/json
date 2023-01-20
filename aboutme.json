@@ -1,0 +1,13 @@
+{
+    "status": "ok",
+    "query": {
+        "format": "json",
+        "kode": "001"
+    },
+    "developer": [
+        {
+            "id": "0",
+            "name": "Muhammad Imam Muwatok"
+        }
+    ]
+}
