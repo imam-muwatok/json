@@ -1,13 +1,1 @@
-{
-    "status": "ok",
-    "query": {
-        "format": "json",
-        "kode": "001"
-    },
-    "developer": [
-        {
-            "id": "0",
-            "name": "Muhammad Imam Muwatok"
-        }
-    ]
-}
+{"username": "muwatok", "appName": "coba-coba", "version": 1.0}
