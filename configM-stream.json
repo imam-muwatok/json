@@ -1,0 +1,16 @@
+{
+  "ipPublic": "",
+  "ipLocal": "http://192.168.100.41",
+  "userName": "muwatok",
+  "fullName": "Muhammad Imam Muwatok",
+  "brand": "Muwatok Dev",
+  "about": "Hi, my name is Muhammad Imam Muwatok and I'm a web developer. I'm developing the website with PHP and JavaScript, last project I created a website with Codeigniter and Laravel. if you find web developer I'm ready to develop your web application.",
+  "email": "imuwatok@gmail.com",
+  "phone": "08995559594",
+  "website": "https://imam-muwatok.github.io/portfolio/",
+  "youtube": "https://www.youtube.com/@muwatokproject3519",
+  "linkin": "https://www.linkedin.com/in/muhammad-imam-muwatok-276669141/",
+  "gmap": "https://goo.gl/maps/Y1BPZXY7dm4A3s5K6",
+  "appName": "coba-coba",
+  "version": 1.0
+}
