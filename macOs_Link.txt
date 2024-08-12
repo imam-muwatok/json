@@ -1,0 +1,57 @@
+
+
+Do you need to download a full macOS installer? I’ll show you 7 different ways!
+How to download macOS Sequoia, Sonoma 14,Ventura 13, Monterey 12, Big Sur 11, Catalina 10.15, Mojave 10.14, High Sierra 10.13, Sierra 10.12, El Capitan 10.11, 10.10 Yosemite 10.10, Mavericks 10.9, Mountain Lion 10.8 & 10.7 Lion
+UPDATED 6/18/24
+
+If you are wondering how to download macOS full installers direct from Apple’s servers, you’ve found the right place. If you are a macOS user or just starting in Apple IT, you will find out pretty quickly this can get complicated.
+
+8 Different ways to download macOS Full Installers
+Need a full macOS installer to rebuild a Mac or create a USB Installer stick? I will show you 8 different ways to download macOS.
+
+1. App Store = High Sierra Mojave Catalina Big Sur Monterey Ventura Sonoma
+2. System Preferences/Settings = 10.14, 10.15, 11, 12, 13, 14 & 15 – NEW INFO!
+3. Softwareupdate –fetch-full-installer 10.14, 10.15, 11, 12, 13, 14 & 15
+4. InstallAssistant.pkg – Sequoia, Sonoma, Ventura, Monterey & Big Sur
+5. Direct Download links for 10.12 Sierra, 10.11 El Capitan & 10.10 Yosemite
+6. Direct download links for 10.8 Mountain Lion & 10.7 Lion
+7. How to download OS X Mavericks 10.9?
+8. MIST – macOS Installer Super Tool = 10.15, 11, 12, 13, 14 & 15
+9. Greg Neagle’s installinstallmacos.py 10.13, 10.14, 10.15, 11, 12, 13, 14 & 15
+10. MDS (Mac Deploy Stick) twocanoes.com 10.13, 10.14, 10.15, 11, 12, 13, 14 & 15
+1. Mac App Store
+The Mac App Store will be your main way to download macOS. You can download the following versions – 10.13, 10.14, 10.15, 11.7.10, 12, 13, 14 & 15. Each link below will open up that version in the Mac App Store. All you need to do is, click the Download Button. When the download is finished, the installer will be in /Applications.
+
+1 – macOS Sequoia 15 = Link not available yet
+
+2 – macOS Sonoma 14
+
+https://apps.apple.com/us/app/macos-sonoma/id6450717509
+
+3 – macOS Ventura 13
+
+https://apps.apple.com/us/app/macos-ventura/id1638787999
+
+4 – macOS Monterey 12
+
+https://apps.apple.com/us/app/macos-monterey/id1576738294
+
+5 – macOS Big Sur 11
+
+https://apps.apple.com/us/app/macos-big-sur/id1526878132
+
+6 – macOS Catalina 10.15
+
+https://apps.apple.com/us/app/macos-catalina/id1466841314
+
+7 – macOS Mojave 10.14
+
+https://apps.apple.com/us/app/macos-mojave/id1398502828
+
+8 – macOS High Sierra 10.13
+
+https://itunes.apple.com/us/app/macos-high-sierra/id1246284741
+
+9 – macOS Sierra 10.12
+
+https://apps.apple.com/us/app/macos-sierra/id1127487414
