@@ -1,0 +1,22 @@
+[
+  {
+    "nama app": "Wokwi",
+    "url": "https://wokwi.com/",
+    "type": "IOT"
+  },
+  {
+    "nama app": "Tradingview",
+    "url": "https://www.tradingview.com/chart/9auXgoQS/?symbol=CRYPTO%3ABTCUSD",
+    "type": "Chart"
+  },
+  {
+    "nama app": "Easyeda",
+    "url": "https://easyeda.com/",
+    "type": "Drawing,PCB Drawing"
+  },
+  {
+    "nama app": "CMC",
+    "url": "https://coinmarketcap.com/",
+    "type": "Crypto"
+  }
+]
