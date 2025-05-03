@@ -15,6 +15,11 @@
     "type": "Drawing,PCB Drawing"
   },
   {
+    "nama app": "Smartdraw",
+    "url": "https://app.smartdraw.com",
+    "type": "Drawing,Universal Drawing"
+  },
+  {
     "nama app": "CMC",
     "url": "https://coinmarketcap.com/",
     "type": "Crypto"
