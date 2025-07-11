@@ -1,0 +1,426 @@
+:root {
+    --primary-background-color: #fff; /* White background */
+    --secondary-background-color: #f8f9fa; /* Light gray background */
+    --primary-text-color: #000; /* Black text */
+    --secondary-text-color: #aaa; /* Gray text for secondary elements */
+    --accent-color: #007bff; /* Primary blue color */
+    --accent-hover-color: #0056b3; /* Darker blue for hover states */
+    --error-color: red; /* Red for error messages */
+    --error-background-color: #ffe0e0; /* Light red background for errors */
+    --border-color: #ddd; /* Light gray border color */
+    --border-light-color: #eee; /* Very light gray for some borders */
+    --success-color: green; /* Green for success messages */
+}
+
+/* Body Styles */
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding-top: 60px;
+}
+
+/* Navbar Styles */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--primary-background-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 0;
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.app-brand {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.nav-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+.nav-links li {
+    margin-left: 15px;
+}
+
+.nav-links button {
+    padding: 8px 12px;
+    background-color: var(--accent-color);
+    color: var(--primary-background-color);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.nav-links button:hover {
+    background-color: var(--accent-hover-color);
+}
+
+.menu-toggle {
+    display: none; /* Hide on larger screens */
+    background-color: transparent;
+    color: var(--primary-text-color);
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+}
+
+/* Media queries for responsive navbar */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none; /* Hide links by default on smaller screens */
+        flex-direction: column;
+        background-color: var(--primary-background-color);
+        position: absolute;
+        top: 60px; /* Adjust based on navbar height */
+        left: 0;
+        width: 100%;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        overflow-y: auto; /* Enable vertical scrolling if many menu items */
+        max-height: 80vh; /* Limit the height of the menu */
+    }
+
+    .nav-links.nav-active {
+        display: flex;
+    }
+
+    .nav-links li {
+        margin: 10px 0;
+        text-align: center;
+    }
+
+    .menu-toggle {
+        display: block; /* Show menu toggle on smaller screens */
+    }
+
+    .navbar-container {
+        justify-content: space-between;
+    }
+}
+
+@media (max-width: 576px) {
+    .nav-links {
+        display: none; /* Hide links by default on smaller screens */
+        flex-direction: row; /* Change to row */
+        background-color: var(--primary-background-color);
+        position: absolute;
+        top: 60px; /* Adjust based on navbar height */
+        left: 0;
+        width: 100%;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        overflow-x: auto; /* Enable horizontal scrolling */
+        white-space: nowrap; /* Prevent buttons from wrapping */
+        padding-bottom: 10px; /* Add some padding at the bottom for the scrollbar */
+        align-items: center; /* Align items vertically in the center */
+        justify-content: center; /* Center items horizontally */
+    }
+
+    .nav-links.nav-active {
+        display: flex;
+    }
+
+    .nav-links li {
+        margin: 10px 5px; /* Adjust spacing between buttons */
+        text-align: center;
+    }
+
+    .nav-links li:first-child {
+        margin-left: 10px; /* Adjust left margin for the first button */
+    }
+
+    .menu-toggle {
+        display: block; /* Show menu toggle on smaller screens */
+    }
+
+    .navbar-container {
+        justify-content: space-between;
+    }
+}
+
+/* Existing styles remain */
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding-top: 60px; /* Add padding to prevent content from being hidden under the fixed navbar */
+}
+.container {
+    width: 80%;
+    margin: 20px auto;
+}
+h1, h2 {
+    text-align: center;
+}
+.error-message {
+    color: var(--error-color);
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid var(--error-color);
+    background-color: var(--error-background-color);
+    border-radius: 5px;
+}
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+.modal-content {
+    background-color: var(--primary-background-color);
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888; /* Keep this as it's a specific shade */
+    width: 80%; /* Could be more or less, depending on screen size */
+    border-radius: 5px;
+    position: relative;
+}
+.close-button {
+    color: var(--secondary-text-color);
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+form label {
+    text-align: left;
+    display: block;
+    margin-bottom: 4px;
+}
+form input[type="number"],
+form input[type="text"],
+form select,
+form input[type="date"],
+form textarea {
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 16px;
+}
+form button[type="submit"] {
+    padding: 10px 15px;
+    background-color: var(--accent-color);
+    color: var(--primary-background-color);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+.error {
+    color: var(--error-color);
+    margin-top: 5px;
+}
+/* Style untuk tab */
+.tab-container {
+    display: flex;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+.tab-button {
+    padding: 10px 15px;
+    cursor: pointer;
+    border: none;
+    background-color: var(--secondary-background-color);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    margin-right: 5px;
+}
+.tab-button.active {
+    background-color: var(--primary-background-color);
+    border-bottom: 1px solid transparent;
+}
+.tab-content {
+    display: none; /* Initially hide all content */
+}
+.tab-content.active {
+    display: block; /* Show active content */
+}
+.summary {
+    margin-top: 20px;
+    text-align: right;
+    font-weight: bold;
+}
+.pemasukan {
+    color: var(--success-color);
+}
+.pengeluaran {
+    color: var(--error-color);
+}
+.debt-section {
+    margin-top: 30px;
+    border: 1px solid var(--border-light-color);
+    padding: 15px;
+    border-radius: 5px;
+}
+.debt-list {
+    margin-top: 10px;
+}
+.debt-item {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-direction: column; /* Stack details and form on smaller screens */
+}
+.debt-details {
+    flex-grow: 1;
+    margin-right: 10px;
+    margin-bottom: 10px; /* Add some space between details and form */
+}
+.pay-installment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: flex-start; /* Align form elements to the left on smaller screens */
+}
+.pay-installment-form label {
+    width: 100%; /* Make label take full width */
+}
+.pay-installment-form input[type="number"],
+.pay-installment-form button {
+    width: 100%; /* Make input and button take full width */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+.button-container {
+    margin-bottom: 20px;
+    text-align: center;
+    display: none; /* Hide the old button container */
+}
+.button-container button {
+    padding: 10px 15px;
+    margin: 0; /* Remove default margin, use gap instead */
+    flex-grow: 1; /* Distribute space between buttons */
+    min-width: fit-content; /* Allow buttons to shrink to their content width */
+}
+.import-export-container {
+    margin-top: 20px;
+    text-align: center;
+}
+.import-export-container button {
+    padding: 10px 15px;
+    margin: 0 10px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: var(--accent-color);
+    color: var(--primary-background-color);
+}
+.import-export-container button:hover {
+    background-color: var(--accent-hover-color);
+}
+#importFile {
+    display: none; /* Hide the default file input */
+}
+/* Style untuk tabel transaksi */
+#transactions table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Keep this as it's a subtle shadow */
+    border-radius: 5px;
+    overflow-x: auto; /* Enable horizontal scrolling for the table on smaller screens */
+    display: block; /* Necessary for overflow-x to work correctly */
+}
+
+#transactions th, #transactions td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    white-space: nowrap; /* Prevent text in cells from wrapping, forcing scroll */
+}
+
+#transactions th {
+    background-color: var(--secondary-background-color);
+    font-weight: bold;
+}
+
+#transactions tbody tr:nth-child(even) {
+    background-color: var(--secondary-background-color);
+}
+
+#transactions tbody tr:last-child {
+    border-bottom: none;
+}
+
+.filter-container {
+    margin-bottom: 10px;
+    display: flex;
+    flex-wrap: wrap; /* Allow filters to wrap */
+    align-items: center;
+    gap: 10px;
+}
+
+.filter-container label {
+    margin-right: 0;
+    flex-basis: auto; /* Adjust label width */
+}
+
+.filter-container select {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    flex-grow: 1;
+    max-width: 100%; /* Make select boxes take full width in their row */
+    box-sizing: border-box;
+}
+
+/* Home Tab Table Styles */
+#monthly-recap,
+#yearly-recap {
+    overflow-x: auto; /* Enable horizontal scrolling for responsiveness */
+}
+#monthly-recap table,
+#yearly-recap table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    min-width: 400px; /* Ensure some minimum width to prevent extreme shrinking */
+}
+#monthly-recap th,
+#monthly-recap td,
+#yearly-recap th,
+#yearly-recap td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    white-space: nowrap; /* Prevent text wrapping in cells */
+}
+#monthly-recap th,
+#yearly-recap th {
+    background-color: var(--secondary-background-color);
+    font-weight: bold;
+}
+.saldo-positif {
+    color: var(--success-color);
+}
+.saldo-negatif {
+    color: var(--error-color);
+}
+.saldo-nol {
+    color: var(--primary-text-color);
+}

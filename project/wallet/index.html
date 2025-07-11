@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallet</title>
+    <link rel="stylesheet" href="./css/main.css">
+    <!-- <link rel="stylesheet" href="./css/fontawesome.css"> -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="app-brand">Wallet</div>
+            <button class="menu-toggle" id="menu-toggle"><i class="fas fa-bars"></i></button>
+            <ul class="nav-links" id="nav-links">
+                <li><button onclick="openModal('addTransactionModal')">
+                     <i class="fas fa-money-bill-transfer"></i>
+                </button></li>
+                <li><button onclick="openModal('addDebtModal')">
+                     <i class="fas fa-landmark"></i>
+                </button></li>
+                <li><button onclick="clearAllData()">
+                    <i class="fas fa-trash"></i> 
+                </button></li>
+                <li>
+                    <button onclick="exportData()">
+                    <i class="fas fa-download"></i>
+                    </button>
+                </li>
+                <li>
+                    <button onclick="document.getElementById('importFile').click()">
+                        <i class="fas fa-upload"></i> 
+                    </button>
+                </li>
+                <li style="display: none;"><input type="file" id="importFile" accept="application/json"></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="error-message" id="error-message" style="display: none;"></div>
+
+        <div id="addTransactionModal" class="modal">
+            <div class="modal-content">
+                <span class="close-button" onclick="closeModal('addTransactionModal')">&times;</span>
+                <h2>Tambah Transaksi</h2>
+                <form id="addTransactionForm">
+                    <label for="transaction_name">Nama Transaksi:</label>
+                    <input type="text" name="transaction_name" id="transaction_name" required>
+
+                    <label for="type">Jenis:</label>
+                    <select name="type" id="type-transaction">
+                        <option value="pemasukan">Pemasukan</option>
+                        <option value="pengeluaran">Pengeluaran</option>
+                    </select>
+
+                    <label for="amount">Jumlah:</label>
+                    <input type="number" name="amount" id="amount-transaction" step="0.01" required>
+
+                    <label for="description">Deskripsi:</label>
+                    <input type="text" name="description" id="description-transaction">
+
+                    <label for="tag">Tag Transaksi:</label>
+                    <input type="text" name="tag" id="tag-transaction">
+
+                    <button type="submit">Tambah</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="addDebtModal" class="modal">
+            <div class="modal-content">
+                <span class="close-button" onclick="closeModal('addDebtModal')">&times;</span>
+                <h2>Tambah Hutang Baru</h2>
+                <form id="addDebtForm">
+                    <label for="debt_name">Nama Hutang:</label>
+                    <input type="text" name="debt_name" id="debt_name" required>
+
+                    <label for="principal_amount">Jumlah Hutang Asli (Pokok):</label>
+                    <input type="number" name="principal_amount" id="principal_amount" step="0.01" required>
+
+                    <label for="debt_installment">Jumlah Angsuran Per Bulan:</label>
+                    <input type="number" name="debt_installment" id="debt_installment" step="0.01" required>
+
+                    <label for="debt_total_installments">Tenor (Jumlah Angsuran):</label>
+                    <input type="number" name="debt_total_installments" id="debt_total_installments" required>
+
+                    <label for="debt_installment_due_day">Tanggal Jatuh Tempo Setiap Bulan (1-31):</label>
+                    <input type="number" name="debt_installment_due_day" id="debt_installment_due_day" min="1" max="31" required>
+
+                    <label for="debt_due_date">Tanggal Mulai Hutang:</label>
+                    <input type="date" name="debt_due_date" id="debt_due_date">
+
+                    <label for="debt_description">Keterangan Hutang:</label>
+                    <textarea name="debt_description" id="debt_description"></textarea>
+
+                    <button type="submit">Tambah Hutang</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="tab-container">
+            <button class="tab-button active" onclick="openTab('home', event)">Home</button>
+            <button class="tab-button" onclick="openTab('transactions', event)">Daftar Transaksi</button>
+            <button class="tab-button" onclick="openTab('debts', event)">Hutang</button>
+            <button class="tab-button" onclick="openTab('paid-debts', event)">Hutang Lunas</button>
+        </div>
+
+        <div id="home" class="tab-content active">
+            <h2>Rekap Keuangan</h2>
+            <h3>Rekap Bulanan Tahun Ini</h3>
+            <div id="monthly-recap">
+                </div>
+            <h3>Rekap Tahunan</h3>
+            <div id="yearly-recap">
+                </div>
+        </div>
+
+        <div id="transactions" class="tab-content">
+            <h2>Daftar Transaksi</h2>
+            <div class="filter-container">
+                <label for="month-filter">Filter Bulan:</label>
+                <select id="month-filter">
+                    <option value="">Semua</option>
+                    <option value="01">Januari</option>
+                    <option value="02">Februari</option>
+                    <option value="03">Maret</option>
+                    <option value="04">April</option>
+                    <option value="05">Mei</option>
+                    <option value="06">Juni</option>
+                    <option value="07">Juli</option>
+                    <option value="08">Agustus</option>
+                    <option value="09">September</option>
+                    <option value="10">Oktober</option>
+                    <option value="11">November</option>
+                    <option value="12">Desember</option>
+                </select>
+
+                <label for="name-filter">Filter Nama:</label>
+                <select id="name-filter">
+                    <option value="">Semua</option>
+                </select>
+
+                <label for="tag-filter">Filter Tag:</label>
+                <select id="tag-filter">
+                    <option value="">Semua</option>
+                </select>
+
+                <label for="type-filter">Filter Jenis:</label>
+                <select id="type-filter">
+                    <option value="">Semua</option>
+                    <option value="pemasukan">Pemasukan</option>
+                    <option value="pengeluaran">Pengeluaran</option>
+                    <option value="angsuran_hutang">Angsuran Hutang</option>
+                </select>
+
+            </div>
+            <table id="transactions-table">
+                <thead>
+                    <tr>
+                        <th>Tanggal</th>
+                        <th>Nama</th>
+                        <th>Jenis</th>
+                        <th>Jumlah</th>
+                        <th>Deskripsi</th>
+                        <th>Tag</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3"><strong>Total Pemasukan</strong></td>
+                        <td id="filtered-total-pemasukan" style="text-align:right;" class="pemasukan">Rp 0</td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"><strong>Total Pengeluaran</strong></td>
+                        <td id="filtered-total-pengeluaran" style="text-align:right;" class="pengeluaran">Rp 0</td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"><strong>Saldo</strong></td>
+                        <td id="filtered-total-saldo" style="text-align:right;"><strong>Rp 0</strong></td>
+                        <td colspan="2"></td>
+                    </tr>
+                </tfoot>
+
+
+            </table>
+            <p id="no-transactions" style="display:none;">Belum ada transaksi.</p>
+        </div>
+
+        <div id="debts" class="tab-content">
+            <div class="debt-section">
+                <h2>Daftar Hutang</h2>
+                <div id="debts-list">
+                    <p id="no-debts" style="display:none;">Belum ada hutang.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="paid-debts" class="tab-content">
+            <div class="debt-section">
+                <h2>Hutang Lunas</h2>
+                <div id="paid-debts-list">
+                    <p id="no-paid-debts" style="display:none;">Tidak ada hutang yang sudah lunas.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="summary">
+            <p>Total Pemasukan: <span class="pemasukan" id="total-pemasukan">Rp 0</span></p>
+            <p>Total Pengeluaran (termasuk Angsuran Hutang): <span class="pengeluaran" id="total-pengeluaran">Rp 0</span></p>
+            <p>Saldo: <span id="saldo">Rp 0</span></p>
+            <p>Saldo Setelah Dikurangi Semua Hutang: <span id="saldo-setelah-hutang">Rp 0</span></p>
+        </div>
+
+    </div>
+
+    <script src="./js/main.js"></script>
+    <script>
+        
+    </script>
+</body>
+</html>
