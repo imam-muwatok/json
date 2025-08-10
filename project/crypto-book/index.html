@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Book</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <!-- main css -->
+     <link rel="stylesheet" href="./assets/css/main.css">
+
+</head>
+<body>
+    <div class="navbar">
+        <span class="title">Crypto Book</span>
+        <div>
+            <a href="#" onclick="showSection('home-section', this)" data-section="home-section">Home</a>
+            <a href="#" onclick="showSection('deposit-withdraw-section', this)" data-section="deposit-withdraw-section">Deposit</a>
+            <a href="#" onclick="showSection('transactions-section', this)" data-section="transactions-section">Transaksi</a>
+            <a href="#" onclick="showSection('import-export', this)" data-section="import-export">Import/Export Data</a>
+        </div>
+    </div>
+
+    <div class="container" id="home-section">
+        <h1>Dashboard Crypto Book</h1>
+        
+        <div class="cards-container">
+            <div class="card">
+                <h3>Total USDT Saat Ini</h3>
+                <p id="homeTotalUSDT">0 USDT</p>
+            </div>
+            <div class="card">
+                <h3>Total IDR Invested (Net)</h3>
+                <p id="homeTotalIDR">0 IDR</p>
+            </div>
+            <div class="card">
+                <h3>Profit/Loss Transaksi</h3>
+                <p id="homeTotalProfitLoss" class="even">0 USDT</p>
+            </div>
+            <div class="card crypto-balance-card">
+                <h3>Rata-rata Kurs (Deposit/Withdraw)</h3>
+                <p id="homeAverageRateDepositWithdraw">0 IDR/USDT</p>
+            </div>
+            <div class="card">
+                <h3>Total Deposit USDT</h3>
+                <p id="homeTotalDepositUSDT">0 USDT</p>
+            </div>
+            <div class="card">
+                <h3>Total Withdraw USDT</h3>
+                <p id="homeTotalWithdrawUSDT">0 USDT</p>
+            </div>
+            <div class="card crypto-balance-card">
+                <h3>Rata-rata Kurs (Deposit + Profit)</h3>
+                <p id="homeAverageRateOverall">0 IDR/USDT</p>
+            </div>
+        </div>
+        <hr>
+        <h2>Saldo Crypto Anda</h2>
+        <div id="cryptoBalancesContainer" class="cards-container">
+            <p>Belum ada saldo crypto yang dicatat.</p>
+        </div>
+        <hr>
+        <h2>Rekap Transaksi Per Tahun</h2>
+        <div id="yearlySummaryTable">
+            <p>Belum ada data transaksi untuk direkap.</p>
+        </div>
+     
+    </div>
+
+    <div class="container hidden" id="deposit-withdraw-section">
+        <h1>Deposit/Withdraw IDR ke USDT</h1>
+
+        <button class="add-modal-button" onclick="openDepositModal()">+ Tambah Deposit/Withdraw</button>
+
+        <div class="results">
+            <h2>Catatan Deposit/Withdraw Anda</h2>
+            <div id="depositRecords">
+                <p>Belum ada catatan deposit.</p>
+            </div>
+            <div class="summary">
+                <p>Total IDR yang diinvestasikan: <span id="totalIDR_deposit">0 IDR</span></p>
+                <p>Total USDT yang dimiliki: <span id="totalUSDT_deposit">0 USDT</span></p>
+                <p>Rata-rata Kurs (Deposit/Withdraw): <span id="averageRate_deposit">0 IDR/USDT</span></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container hidden" id="transactions-section">
+        <h1>Transaksi Crypto</h1>
+
+        <button class="add-modal-button" onclick="openTransactionModal()">+ Tambah Transaksi Baru</button>
+
+        <div class="results">
+            <h2>Riwayat Transaksi</h2>
+            <div id="transactionRecords">
+                <p>Belum ada riwayat transaksi.</p>
+            </div>
+            <div class="summary">
+                <p>Total USDT yang digunakan untuk beli: <span id="totalUsdtUsedForBuy">0 USDT</span></p>
+                <p>Total USDT yang didapat dari jual/konversi: <span id="totalUsdtReceivedFromSellConvert">0 USDT</span></p>
+                <p>Total Profit/Loss dari Transaksi: <span id="totalProfitLoss_transaction">0 USDT</span></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container hidden" id="import-export">
+        <h1>Import/Export Data</h1>
+
+        <div class="form-section">
+            <h2>Ekspor Data</h2>
+            <button onclick="exportDataToJson()">Ekspor Data ke JSON</button>
+            <p style="margin-top: 15px; color: salmon;">Data Anda akan diunduh sebagai `crypto_book.json`.</p>
+        </div>
+
+        <div class="form-section" style="margin-top: 30px;">
+            <h2>Impor Data</h2>
+            <div class="form-group">
+                <label for="jsonFileInput">Pilih File JSON:</label>
+                <input type="file" id="jsonFileInput" accept=".json">
+            </div>
+            <p style="color: salmon;">Pilih file JSON yang berisi data deposit Anda. Ini akan **menimpa** data yang ada.</p>
+
+            <button onclick="importDataFromJson()">Impor Data dari JSON</button>
+            <div id="importExportMessage" class="info-message"></div>
+        </div>
+    </div>
+
+    <div id="depositModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeDepositModal()">&times;</span>
+            <h2>Tambah Deposit/Withdraw IDR & USDT</h2>
+            <div class="form-group">
+                <label for="depositWithdrawDate">Tanggal Transaksi:</label>
+                <input type="date" id="depositWithdrawDate">
+            </div>
+            <div class="form-group deposit-type-group">
+                <label>Tipe Transaksi:</label>
+                <input type="radio" id="typeDeposit" name="depositType" value="deposit" checked onchange="updateDepositWithdrawFields()">
+                <label for="typeDeposit">Deposit (IDR -> USDT)</label>
+                <input type="radio" id="typeWithdraw" name="depositType" value="withdraw" onchange="updateDepositWithdrawFields()">
+                <label for="typeWithdraw">Withdraw (USDT -> IDR)</label>
+            </div>
+            <div class="form-group">
+                <label for="idrAmount">Jumlah IDR:</label>
+                <input type="number" id="idrAmount" placeholder="Contoh: 1500000" min="0" step="any">
+            </div>
+            <div class="form-group">
+                <label for="usdtAmount">Jumlah USDT:</label>
+                <input type="number" id="usdtAmount" placeholder="Contoh: 96.7742" min="0" step="any">
+            </div>
+            <button onclick="addDepositWithdrawFromForm()">Tambah Transaksi</button>
+            <div id="modalErrorMessage" class="error-message"></div>
+        </div>
+    </div>
+
+    <div id="transactionModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeTransactionModal()">&times;</span>
+            <h2>Tambah Transaksi Crypto</h2>
+            <div class="form-group">
+                <label for="transactionDate">Tanggal Transaksi:</label>
+                <input type="date" id="transactionDate">
+            </div>
+            <div class="form-group">
+                <label for="transactionType">Tipe Transaksi:</label>
+                <select id="transactionType" onchange="updateTransactionFields()">
+                    <option value="">-- Pilih Tipe --</option>
+                    <option value="buy">Beli (USDT -> Crypto)</option>
+                    <option value="sell">Jual (Crypto -> USDT)</option>
+                    <option value="convert">Konversi (Crypto A -> Crypto B / Crypto -> USDT)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="cryptoSymbol">Simbol Crypto:</label>
+                <input type="text" id="cryptoSymbol" placeholder="Contoh: BTC, ETH, SOL" style="text-transform: uppercase;">
+            </div>
+            <div class="form-group">
+                <label for="cryptoAmount">Jumlah Crypto:</label>
+                <input type="number" id="cryptoAmount" placeholder="Jumlah crypto yang ditransaksikan" min="0" step="any">
+            </div>
+            <div class="form-group">
+                <label for="usdtAmountTx">Jumlah USDT:</label>
+                <input type="number" id="usdtAmountTx" placeholder="USDT yang digunakan/diterima" min="0" step="any">
+            </div>
+            <div id="transactionDirectionInfo" style="font-size: 0.9em; color: #555; margin-top: -10px; margin-bottom: 10px;"></div>
+            
+            <div class="form-group">
+                <label for="transactionNotes">Catatan (Opsional):</label>
+                <textarea id="transactionNotes" rows="3" placeholder="Contoh: Beli saat harga turun, Jual sebagian profit"></textarea>
+            </div>
+
+            <button onclick="addTransactionFromForm()">Tambah Transaksi</button>
+            <div id="transactionModalErrorMessage" class="error-message"></div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2025 Crypto Book. All rights reserved.</p>
+        <p>Dibuat dengan &#10084;&#65039; untuk membantu pencatatan transaksi crypto Anda.</p>
+        <p>Kontak: <a href="mailto:support@cryptobook.com">support@cryptobook.com</a></p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="./assets/js/main.js"></script>
+    
+</body>
+</html>
