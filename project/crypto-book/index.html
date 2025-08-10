@@ -280,6 +280,48 @@
         .footer a:hover {
             text-decoration: underline;
         }
+
+        /* --- Responsive Styles --- */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+                padding-top: 5px;
+                padding-bottom: 5px;
+            }
+            .navbar div {
+                display: flex;
+                flex-wrap: wrap;
+                margin-top: 5px;
+            }
+            .navbar a {
+                padding: 8px 12px;
+                font-size: 14px;
+            }
+            .container {
+                padding: 15px;
+                margin: 15px auto;
+            }
+            .cards-container {
+                flex-direction: column;
+            }
+            .card {
+                max-width: 100%;
+                min-width: 100%;
+                margin-bottom: 10px;
+            }
+            .add-modal-button {
+                width: 100%;
+                padding: 12px;
+            }
+            input[type="number"], input[type="date"], input[type="file"], input[type="text"], select, textarea {
+                width: 100%;
+            }
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+        }
     </style>
 </head>
 <body>
