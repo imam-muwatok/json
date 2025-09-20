@@ -5,11 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SLB Wahid Hasyim - Sekolah Inklusif dan Ramah Difabel</title>
     <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" href="<?php echo base_url('assets/app/website/css/bootstrap.5.3.0.css');?>">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
         :root {
             --primary: #2E7D32;
@@ -78,7 +81,7 @@
         }
         
         .hero-section {
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1577896851231-70ef18881754?ixlib=rb-4.0.3&auto=format&fit=crop&w=1500&q=80');
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('<?php echo base_url('assets/app/website/uploads/slider/1.png');?>');
             background-size: cover;
             background-position: center;
             padding: 150px 0 100px;
@@ -213,6 +216,10 @@
             .accessibility-buttons .btn {
                 margin-bottom: 5px;
             }
+
+            .nav-tag {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -223,22 +230,8 @@
             <div class="row align-items-center">
                 <div class="col-md-6">
                     <i class="fas fa-universal-access accessibility-icon"></i>
-<!--                     <small>Website ramah difabel dengan fitur aksesibilitas</small> -->
+                    <small>Website ramah difabel dengan fitur aksesibilitas</small>
                 </div>
-<!--                 <div class="col-md-6 text-md-end accessibility-buttons">
-                    <button class="btn btn-sm btn-outline-primary me-2" id="fontIncrease" title="Perbesar ukuran teks">
-                        <i class="fas fa-plus-circle"></i> Perbesar Teks
-                    </button>
-                    <button class="btn btn-sm btn-outline-primary me-2" id="fontDecrease" title="Perkecil ukuran teks">
-                        <i class="fas fa-minus-circle"></i> Perkecil Teks
-                    </button>
-                    <button class="btn btn-sm btn-outline-primary me-2" id="contrastToggle" title="Mode kontras tinggi">
-                        <i class="fas fa-adjust"></i> Kontras Tinggi
-                    </button>
-                    <button class="btn btn-sm btn-outline-secondary" id="resetSettings" title="Kembalikan ke pengaturan default">
-                        <i class="fas fa-undo"></i> Reset
-                    </button>
-                </div> -->
             </div>
         </div>
     </div>
@@ -251,7 +244,7 @@
                 <a class="navbar-brand" href="#">
                     <span class="fw-bold text-primary">SLB WAHID HASYIM</span>
                     <br>
-                    <small class="text-muted">Sekolah Inklusif dan Ramah Difabel</small>
+                    <small class="text-muted nav-tag">Sekolah Inklusif dan Ramah Difabel</small>
                 </a>
             </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -278,7 +271,7 @@
                         <a class="nav-link" href="#kontak">Kontak</a>
                     </li>
                     <li class="nav-item ms-2">
-                        <a class="btn btn-accent" href="#ppdb">Daftar Sekolah</a>
+                        <a class="btn btn-accent" href="<?php echo base_url('auth');?>">login</a>
                     </li>
                 </ul>
             </div>
@@ -634,7 +627,7 @@
                 <div class="col-md-6 text-md-end">
                     <a href="#" class="text-white text-decoration-none me-3">Kebijakan Privasi</a>
                     <a href="#" class="text-white text-decoration-none me-3">Syarat & Ketentuan</a>
-                    <a href="https://imam-muwatok.github.io/portfolio/" class="text-white text-decoration-none me-3" target="_blank">Developer</a>
+                    <a href="https://imam-muwatok.github.io/portfolio/" class="text-white text-decoration-none me-3" target="_blank">Powered By : Muwatok Project</a>
                 </div>
             </div>
         </div>
@@ -644,52 +637,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
     
-    <!-- Custom JavaScript for Accessibility Features -->
-    <script>
-        // Default font size
-        const defaultFontSize = 16;
-        
-        // Initialize font size
-        document.documentElement.style.setProperty('--font-size', defaultFontSize + 'px');
-        
-        // Font size increase functionality
-        document.getElementById('fontIncrease').addEventListener('click', function() {
-            const currentSize = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--font-size'));
-            document.documentElement.style.setProperty('--font-size', (currentSize + 2) + 'px');
-        });
-        
-        // Font size decrease functionality
-        document.getElementById('fontDecrease').addEventListener('click', function() {
-            const currentSize = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--font-size'));
-            if (currentSize > 12) {
-                document.documentElement.style.setProperty('--font-size', (currentSize - 2) + 'px');
-            }
-        });
-        
-        // Contrast toggle functionality
-        document.getElementById('contrastToggle').addEventListener('click', function() {
-            document.body.classList.toggle('high-contrast');
-        });
-        
-        // Reset settings functionality
-        document.getElementById('resetSettings').addEventListener('click', function() {
-            // Reset font size
-            document.documentElement.style.setProperty('--font-size', defaultFontSize + 'px');
-            
-            // Remove high contrast
-            document.body.classList.remove('high-contrast');
-            
-            // Reset color variables to default
-            document.documentElement.style.setProperty('--primary', '#2E7D32');
-            document.documentElement.style.setProperty('--secondary', '#F5F5F5');
-            document.documentElement.style.setProperty('--accent', '#FF9800');
-            document.documentElement.style.setProperty('--light-blue', '#E3F2FD');
-            document.documentElement.style.setProperty('--dark-text', '#212121');
-            document.documentElement.style.setProperty('--light-text', '#757575');
-            document.documentElement.style.setProperty('--white', '#FFFFFF');
-        });
-    </script>
+
 </body>
 </html>
-
-
