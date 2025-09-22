@@ -5,225 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SLB Wahid Hasyim - Sekolah Inklusif dan Ramah Difabel</title>
     <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<!--     <link rel="stylesheet" href="<?php echo base_url('assets/app/website/css/bootstrap.5.3.0.css');?>"> -->
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" href="<?php echo base_url('assets/app/website/css/bootstrap.5.3.0.css');?>">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
      
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+
+    <!-- style css -->
+    <link rel="stylesheet" href="<?php echo base_url('assets/app/website/css/base.css');?>">
+    <link rel="stylesheet" href="<?php echo base_url('assets/app/website/css/home.css');?>">
+<!-- https://image.pollinations.ai/prompt/ -->
     <style>
-        :root {
-            --primary: #2E7D32;
-            --secondary: #F5F5F5;
-            --accent: #FF9800;
-            --light-blue: #E3F2FD;
-            --dark-text: #212121;
-            --light-text: #757575;
-            --white: #FFFFFF;
-            --font-size: 1rem;
-        }
-        
-        body {
-            font-family: 'Poppins', sans-serif;
-            color: var(--dark-text);
-            font-size: var(--font-size);
-            line-height: 1.6;
-        }
-        
-        .bg-primary {
-            background-color: var(--primary) !important;
-        }
-        
-        .bg-light-blue {
-            background-color: var(--light-blue) !important;
-        }
-        
-        .btn-primary {
-            background-color: var(--primary);
-            border-color: var(--primary);
-        }
-        
-        .btn-primary:hover {
-            background-color: #1B5E20;
-            border-color: #1B5E20;
-        }
-        
-        .btn-accent {
-            background-color: var(--accent);
-            border-color: var(--accent);
-            color: var(--white);
-        }
-        
-        .btn-accent:hover {
-            background-color: #EF6C00;
-            border-color: #EF6C00;
-            color: var(--white);
-        }
-        
-        .btn-outline-primary {
-            color: var(--primary);
-            border-color: var(--primary);
-        }
-        
-        .btn-outline-primary:hover {
-            background-color: var(--primary);
-            color: var(--white);
-        }
-        
-        .text-primary {
-            color: var(--primary) !important;
-        }
-        
-        .text-accent {
-            color: var(--accent) !important;
-        }
-        
         .hero-section {
-            
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://www.smadwiwarna.sch.id/wp-content/uploads/2024/09/bedanya-sekolah-nasional-plus-dan-internasional-1536x1152.jpg');
-/*             background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('<?php echo base_url('assets/app/website/uploads/slider/1.png');?>'); */
+            /* background-image: url('<?php echo base_url('assets/app/website/uploads/slider/1.png');?>'); */
+            background-image: url('https://image.pollinations.ai/prompt/gambar%20sekolah%20ramah%20difabel%20dengan%20anak-anak%20berkebutuhan%20khusus%20bermain%20dan%20belajar%20di%20taman%20yang%20cerah%20dan%20berwarna-warni');
             background-size: cover;
             background-position: center;
-            padding: 150px 0 100px;
-            color: var(--white);
-        }
-        
-        .feature-icon {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-        }
-        
-        .accessibility-icon {
-            font-size: 1.2rem;
-            color: var(--primary);
-            margin-right: 5px;
-        }
-        
-        .news-card {
-            transition: transform 0.3s;
-            border: none;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        
-        .news-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-        
-        .testimonial-card {
-            border-radius: 10px;
-            overflow: hidden;
-            border: none;
-        }
-        
-        .footer {
-            background-color: var(--primary);
-            color: var(--white);
-            padding: 60px 0 30px;
-        }
-        
-        .social-icon {
-            color: var(--white);
-            font-size: 1.5rem;
-            margin-right: 15px;
-            transition: color 0.3s;
-        }
-        
-        .social-icon:hover {
-            color: var(--accent);
-        }
-        
-        .section-title {
+            background-repeat: no-repeat;
+            /* Overlay for darkening the background */
             position: relative;
-            margin-bottom: 40px;
-            font-weight: 700;
-            color: var(--primary);
         }
-        
-        .section-title::after {
-            content: '';
-            display: block;
-            width: 50px;
-            height: 3px;
-            background: var(--primary);
-            margin-top: 10px;
+        .hero-section::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.5); /* Adjust opacity as needed */
+            z-index: 1;
         }
-        
-        .section-title.text-center::after {
-            margin: 10px auto;
-        }
-        
-        .accessibility-bar {
-            background-color: var(--light-blue);
-            padding: 10px 0;
-            font-size: 0.9rem;
-        }
-        
-        .navbar {
-            padding: 15px 0;
-        }
-        
-        .logo-container {
-            display: flex;
-            align-items: center;
-        }
-        
-        .logo {
-            height: 60px;
-            margin-right: 15px;
-        }
-        
-        .program-card {
-            border-radius: 10px;
-            overflow: hidden;
-            height: 100%;
-            border: none;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            transition: transform 0.3s;
-        }
-        
-        .program-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .counter-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-        
-        .high-contrast {
-            --primary: #000000;
-            --secondary: #000000;
-            --accent: #ffff00;
-            --light-blue: #000000;
-            --dark-text: #ffffff;
-            --light-text: #cccccc;
-            --white: #000000;
-        }
-        
-        @media (max-width: 768px) {
-            .hero-section {
-                padding: 120px 0 80px;
-            }
-            
-            .logo {
-                height: 50px;
-            }
-            
-            .accessibility-buttons .btn {
-                margin-bottom: 5px;
-            }
+        .hero-section > .container {
+            position: relative;
+            z-index: 2;
+            background-position: center;
+            padding: 150px 0 100px;
+            position: relative;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 
-            .nav-tag {
-                display: none;
-            }
         }
     </style>
+    
+    
+    
 </head>
 <body>
     <!-- Accessibility Bar -->
@@ -270,10 +94,10 @@
                         <a class="nav-link" href="#berita">Berita</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#kontak">Kontak</a>
+                        <a class="nav-link" href="#footer">Kontak</a>
                     </li>
                     <li class="nav-item ms-2">
-                        <a class="btn btn-accent" href="<?php echo base_url('auth');?>">login</a>
+                        <a class="btn btn-primary" href="<?php echo base_url('auth');?>">login</a>
                     </li>
                 </ul>
             </div>
@@ -281,7 +105,8 @@
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero-section">
+    <section class="hero-section" style="">
+    <!-- <section class="hero-section" style="backgrund: url('<?php echo base_url('assets/app/website/uploads/slider/1.png');?>')"> -->
         <div class="container text-center">
             <h1 class="display-4 fw-bold mb-4">Pendidikan Inklusif untuk Semua</h1>
             <p class="lead mb-4">Mewadahi anak berkebutuhan khusus dengan pendekatan personalized learning dan lingkungan yang ramah difabel</p>
@@ -313,6 +138,7 @@
                                 <li class="mb-2"><i class="fas fa-check-circle text-primary me-2"></i> Lingkungan Inklusif</li>
                             </ul>
                         </div>
+                        <a href="<?php echo base_url('web/profile');?>" class="read-more">Baca selengkapnya <i class="fas fa-arrow-right ms-1"></i></a>
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -414,7 +240,7 @@
             <div class="row g-4">
                 <div class="col-md-4">
                     <div class="card news-card h-100">
-                        <img src="https://file.data.kemendikdasmen.go.id/sekolahkita/20/2034/20348572-2.jpg" class="card-img-top" alt="Kegiatan Sekolah">
+                        <img src="https://image.pollinations.ai/prompt/Peringatan Hari Disabilitas Internasional" class="card-img-top" alt="Kegiatan Sekolah" loading="lazy">
                         <div class="card-body">
                             <span class="badge bg-primary mb-2">Kegiatan</span>
                             <h5 class="card-title">Peringatan Hari Disabilitas Internasional</h5>
@@ -425,7 +251,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="card news-card h-100">
-                        <img src="https://file.data.kemendikdasmen.go.id/sekolahkita/20/2034/20348572-1.jpg" class="card-img-top" alt="Prestasi">
+                        <img src="https://image.pollinations.ai/prompt/Siswa SLB Wahid Hasyim Raih Juara Olimpiade Khusus" class="card-img-top" alt="Prestasi" loading="lazy">
                         <div class="card-body">
                             <span class="badge bg-success mb-2">Prestasi</span>
                             <h5 class="card-title">Siswa SLB Wahid Hasyim Raih Juara Olimpiade Khusus</h5>
@@ -436,7 +262,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="card news-card h-100">
-                        <img src="https://file.data.kemendikdasmen.go.id/sekolahkita/20/2034/20348572-3.jpg" class="card-img-top" alt="Pengumuman">
+                        <img src="https://image.pollinations.ai/prompt/Penerimaan Peserta Didik Baru" class="card-img-top" alt="Pengumuman" loading="lazy">
                         <div class="card-body">
                             <span class="badge bg-warning text-dark mb-2">Pengumuman</span>
                             <h5 class="card-title">Penerimaan Peserta Didik Baru Tahun Ajaran 2023/2024</h5>
@@ -448,7 +274,8 @@
             </div>
             
             <div class="text-center mt-4">
-                <a href="#" class="btn btn-primary">Lihat Berita Lainnya</a>
+                
+                <a href="<?php echo base_url('web/posts');?>" class="btn btn-primary">Lihat Berita Lainnya</a>
             </div>
         </div>
     </section>
@@ -584,7 +411,7 @@
     </section>
 
     <!-- Footer -->
-    <footer class="footer">
+    <footer class="footer" id="footer">
         <div class="container">
             <div class="row">
                 <div class="col-lg-4 mb-4">
@@ -642,5 +469,3 @@
 
 </body>
 </html>
-
-

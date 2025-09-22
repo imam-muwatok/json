@@ -1,0 +1,176 @@
+
+        .profile-card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            height: 100%;
+        }
+        
+        .welcome-card {
+            background: linear-gradient(135deg, var(--primary) 0%, #1B5E20 100%);
+            border-radius: 10px;
+            padding: 30px;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        .leader-card {
+            text-align: center;
+            padding: 25px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+            height: 100%;
+        }
+        
+        .leader-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .leader-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 20px;
+            border: 5px solid var(--light-blue);
+        }
+        
+        .history-timeline {
+            position: relative;
+            padding-left: 30px;
+            margin-left: 20px;
+        }
+        
+        .history-timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: var(--primary);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -36px;
+            top: 5px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 3px solid white;
+        }
+        
+        .timeline-year {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .value-card {
+            text-align: center;
+            padding: 25px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+            height: 100%;
+        }
+        
+        .value-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .value-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .achievement-badge {
+            display: inline-block;
+            padding: 8px 15px;
+            margin: 0 10px 10px 0;
+            border-radius: 20px;
+            background-color: var(--light-blue);
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+        
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0;
+        }
+        
+        .stats-label {
+            color: var(--light-text);
+            font-size: 0.9rem;
+        }
+        
+        .nav-pills .nav-link.active {
+            background-color: var(--primary);
+        }
+        
+        .nav-pills .nav-link {
+            color: var(--dark-text);
+        }
+        
+        /* Fix untuk masalah collapse */
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        
+        .col-lg-8, .col-lg-4 {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .welcome-card, .profile-card {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .content-fix {
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-tag {
+                display: none;
+            }
+            
+            .history-timeline {
+                padding-left: 20px;
+                margin-left: 10px;
+            }
+            
+            .leader-img {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .row {
+                display: block;
+            }
+            
+            .col-lg-8, .col-lg-4 {
+                display: block;
+            }
+        }

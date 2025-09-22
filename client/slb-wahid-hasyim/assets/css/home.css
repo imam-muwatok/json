@@ -1,0 +1,72 @@
+/* home start */
+
+/* .hero-section {
+   
+    background-size: cover;
+    background-position: center;
+    padding: 150px 0 100px;
+    color: var(--white);
+} */
+
+
+
+.feature-icon {
+    font-size: 2.5rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+.accessibility-icon {
+    font-size: 1.2rem;
+    color: var(--primary);
+    margin-right: 5px;
+}
+
+.news-card {
+    transition: transform 0.3s;
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.news-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.testimonial-card {
+    border-radius: 10px;
+    overflow: hidden;
+    border: none;
+}
+
+.program-card {
+    border-radius: 10px;
+    overflow: hidden;
+    height: 100%;
+    border: none;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    transition: transform 0.3s;
+}
+
+.program-card:hover {
+    transform: translateY(-5px);
+}
+
+.counter-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.high-contrast {
+    --primary: #000000;
+    --secondary: #000000;
+    --accent: #ffff00;
+    --light-blue: #000000;
+    --dark-text: #ffffff;
+    --light-text: #cccccc;
+    --white: #000000;
+}
+
+/* home end */

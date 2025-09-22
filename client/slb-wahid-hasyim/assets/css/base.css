@@ -1,0 +1,143 @@
+/* base start */
+:root {
+    --primary: #2E7D32;
+    --secondary: #F5F5F5;
+    --accent: #FF9800;
+    --light-blue: #E3F2FD;
+    --dark-text: #212121;
+    --light-text: #757575;
+    --white: #FFFFFF;
+    --font-size: 1rem;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    color: var(--dark-text);
+    font-size: var(--font-size);
+    line-height: 1.6;
+}
+
+.bg-primary {
+    background-color: var(--primary) !important;
+}
+
+.bg-light-blue {
+    background-color: var(--light-blue) !important;
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-primary:hover {
+    background-color: #1B5E20;
+    border-color: #1B5E20;
+}
+
+.btn-accent {
+    background-color: var(--accent);
+    border-color: var(--accent);
+    color: var(--white);
+}
+
+.btn-accent:hover {
+    background-color: #EF6C00;
+    border-color: #EF6C00;
+    color: var(--white);
+}
+
+.btn-outline-primary {
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary);
+    color: var(--white);
+}
+
+.text-primary {
+    color: var(--primary) !important;
+}
+
+.text-accent {
+    color: var(--accent) !important;
+}
+
+.footer {
+    background-color: var(--primary);
+    color: var(--white);
+    padding: 60px 0 30px;
+}
+
+.social-icon {
+    color: var(--white);
+    font-size: 1.5rem;
+    margin-right: 15px;
+    transition: color 0.3s;
+}
+
+.social-icon:hover {
+    color: var(--accent);
+}
+
+.section-title {
+    position: relative;
+    margin-bottom: 40px;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.section-title::after {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 3px;
+    background: var(--primary);
+    margin-top: 10px;
+}
+
+.section-title.text-center::after {
+    margin: 10px auto;
+}
+
+.accessibility-bar {
+    background-color: var(--light-blue);
+    padding: 10px 0;
+    font-size: 0.9rem;
+}
+
+.navbar {
+    padding: 5px 0;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    height: 50px;
+    margin-right: 15px;
+}
+
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 120px 0 80px;
+    }
+    
+    .logo {
+        height: 50px;
+    }
+    
+    .accessibility-buttons .btn {
+        margin-bottom: 5px;
+    }
+
+    .nav-tag {
+        display: none;
+    }
+}
+
+/* base end */

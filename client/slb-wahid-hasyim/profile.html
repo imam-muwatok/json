@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Sekolah - SLB Wahid Hasyim</title>
+    <!-- Bootstrap 5 CSS -->
+    <link rel="stylesheet" href="<?php echo base_url('assets/app/website/css/bootstrap.5.3.0.css');?>">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- style css -->
+    <link rel="stylesheet" href="<?php echo base_url('assets/app/website/css/base.css');?>">
+    <link rel="stylesheet" href="<?php echo base_url('assets/app/website/css/profile.css');?>">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
+        <div class="container">
+            <div class="logo-container">
+                <img src="https://cdn-icons-png.flaticon.com/512/3713/3713766.png" alt="Logo SLB Wahid Hasyim" class="logo">
+                <a class="navbar-brand" href="<?php echo base_url(); ?>">
+                    <span class="fw-bold text-primary">SLB WAHID HASYIM</span>
+                    <br>
+                    <small class="text-muted nav-tag">Sekolah Inklusif dan Ramah Difabel</small>
+                </a>
+            </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?php echo base_url(); ?>">Beranda</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="<?php echo base_url('profil'); ?>">Profil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?php echo base_url(); ?>#program">Program</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?php echo base_url(); ?>#berita">Berita</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?php echo base_url('berita'); ?>">Semua Berita</a>
+                    </li>
+                    <li class="nav-item ms-2">
+                        <a class="btn btn-primary" href="<?php echo base_url('auth');?>">Login</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <section class="py-5 bg-light-blue">
+        <div class="container py-4">
+            <div class="row">
+                <div class="col-12">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="<?php echo base_url(); ?>">Beranda</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Profil Sekolah</li>
+                        </ol>
+                    </nav>
+                    <h1 class="section-title">Profil SLB Wahid Hasyim</h1>
+                    <p class="lead">Mengenal lebih dekat sekolah inklusif dan ramah difabel yang telah mencetak generasi mandiri sejak 1995</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="py-5 content-fix">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <!-- Sambutan Ketua Yayasan -->
+                    <div class="welcome-card">
+                        <div class="row align-items-center h-100">
+                            <div class="col-md-3 text-center mb-4 mb-md-0">
+                                <img src="https://randomuser.me/api/portraits/men/67.jpg" alt="Ketua Yayasan" class="leader-img">
+                            </div>
+                            <div class="col-md-9">
+                                <h3>Sambutan Ketua Yayasan</h3>
+                                <p class="fst-italic">"Pendidikan adalah hak setiap anak, tanpa terkecuali. SLB Wahid Hasyim hadir untuk mewujudkan mimpi anak-anak berkebutuhan khusus meraih masa depan cerah."</p>
+                                <p>Atas nama Yayasan Wahid Hasyim, saya menyampaikan apresiasi setinggi-tingginya kepada seluruh tenaga pendidik, orang tua, dan mitra yang telah mendukung perjalanan SLB Wahid Hasyim sejak tahun 1995. Komitmen kami adalah terus memberikan layanan pendidikan terbaik yang ramah difabel dan mengembangkan potensi setiap siswa sesuai bakat dan kemampuannya.</p>
+                                <footer class="mt-4">
+                                    <strong>Dr. H. Ahmad Suripto, M.M.</strong><br>
+                                    <em>Ketua Yayasan Wahid Hasyim</em>
+                                </footer>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sambutan Kepala Sekolah -->
+                    <div class="welcome-card">
+                        <div class="row align-items-center h-100">
+                            <div class="col-md-3 text-center mb-4 mb-md-0">
+                                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Kepala Sekolah" class="leader-img">
+                            </div>
+                            <div class="col-md-9">
+                                <h3>Sambutan Kepala Sekolah</h3>
+                                <p class="fst-italic">"Setiap anak istimewa dengan keunikan masing-masing. Tugas kitalah untuk membantu mereka menemukan dan mengembangkan keistimewaan tersebut."</p>
+                                <p>Selamat datang di SLB Wahid Hasyim, sekolah yang tidak hanya mengajar tetapi juga mendidik dengan hati. Sejak saya memimpin sekolah ini pada tahun 2015, kami terus berkomitmen untuk menciptakan lingkungan belajar yang inklusif, aman, dan nyaman bagi semua siswa. Dengan pendekatan personalized learning dan dukungan terapi yang berkelanjutan, kami yakin setiap siswa dapat mencapai potensi terbaiknya.</p>
+                                <footer class="mt-4">
+                                    <strong>Solihun, S.Pd.</strong><br>
+                                    <em>Kepala SLB Wahid Hasyim</em>
+                                </footer>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sejarah Sekolah -->
+                    <div class="profile-card">
+                        <h2 class="section-title">Sejarah Singkat</h2>
+                        <div class="history-timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-year">1995</div>
+                                <p>SLB Wahid Hasyim didirikan oleh Yayasan Wahid Hasyim dengan 3 guru dan 12 siswa, berlokasi di sebuah rumah sederhana di Bringin, Kabupaten Semarang.</p>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-year">2002</div>
+                                <p>Memperoleh akreditasi pertama dengan peringkat B dari Badan Akreditasi Nasional dan menambah program keterampilan vokasional.</p>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-year">2010</div>
+                                <p>Pindah ke lokasi baru dengan fasilitas yang lebih lengkap dan ramah difabel, serta memperoleh akreditasi A.</p>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-year">2015</div>
+                                <p>Meraih penghargaan sebagai Sekolah Inklusif Terbaik se-Jawa Tengah dari Dinas Pendidikan Provinsi.</p>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-year">2020</div>
+                                <p>Meluncurkan program digital learning dan terapi online untuk menjangkau siswa selama pandemi.</p>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-year">2023</div>
+                                <p>Memperluas program vokasional dengan penambahan 4 jurusan baru dan menjalin kerjasama dengan 15 perusahaan mitra.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Visi Misi -->
+                    <div class="profile-card">
+                        <h2 class="section-title">Visi & Misi</h2>
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="value-card">
+                                    <div class="value-icon">
+                                        <i class="fas fa-eye"></i>
+                                    </div>
+                                    <h4>Visi</h4>
+                                    <p>"Menjadi sekolah inklusif unggulan yang mencetak generasi mandiri, berkarakter, dan berkontribusi positif bagi masyarakat."</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="value-card">
+                                    <div class="value-icon">
+                                        <i class="fas fa-bullseye"></i>
+                                    </div>
+                                    <h4>Misi</h4>
+                                    <ul class="text-start">
+                                        <li>Menyelenggarakan pendidikan inklusif yang ramah difabel</li>
+                                        <li>Mengembangkan potensi siswa melalui pembelajaran individual</li>
+                                        <li>Membangun kemandirian melalui program vokasional</li>
+                                        <li>Menjalin kerjasama dengan orang tua dan masyarakat</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sidebar -->
+                <div class="col-lg-4">
+                    <!-- Profil Singkat -->
+                    <div class="profile-card">
+                        <h2 class="section-title">Profil Singkat</h2>
+                        <div class="text-center mb-4">
+                            <img src="https://file.data.kemendikdasmen.go.id/sekolahkita/20/2034/20348572-3.jpg" alt="Gedung SLB Wahid Hasyim" class="img-fluid rounded">
+                        </div>
+                        <table class="table table-borderless">
+                            <tr>
+                                <td><strong>NPSN</strong></td>
+                                <td>20348572</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Berdiri</strong></td>
+                                <td>15 Juli 1995</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Akreditasi</strong></td>
+                                <td>A (Unggul)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Jenjang</strong></td>
+                                <td>SLB</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Kepala Sekolah</strong></td>
+                                <td>Solihun, S.Pd.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Jumlah Guru</strong></td>
+                                <td>25 orang</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Jumlah Siswa</strong></td>
+                                <td>120 orang</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <!-- Prestasi -->
+                    <div class="profile-card">
+                        <h2 class="section-title">Prestasi</h2>
+                        <div class="achievement-badge">Sekolah Inklusif Terbaik Jateng 2015</div>
+                        <div class="achievement-badge">Akreditasi A 2010 & 2020</div>
+                        <div class="achievement-badge">Sekolah Adiwiyata 2018</div>
+                        <div class="achievement-badge">Penghargaan Inovasi Pembelajaran 2021</div>
+                        <div class="achievement-badge">Sekolah Ramah Anak 2022</div>
+                    </div>
+                    
+                    <!-- Statistik -->
+                    <div class="profile-card">
+                        <h2 class="section-title">Statistik</h2>
+                        <div class="row text-center">
+                            <div class="col-6 mb-4">
+                                <div class="stats-number">28</div>
+                                <div class="stats-label">Tahun</div>
+                            </div>
+                            <div class="col-6 mb-4">
+                                <div class="stats-number">650+</div>
+                                <div class="stats-label">Alumni</div>
+                            </div>
+                            <div class="col-6 mb-4">
+                                <div class="stats-number">98%</div>
+                                <div class="stats-label">Kelulusan</div>
+                            </div>
+                            <div class="col-6 mb-4">
+                                <div class="stats-number">85%</div>
+                                <div class="stats-label">Alumni Mandiri</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Kontak -->
+                    <div class="profile-card">
+                        <h2 class="section-title">Kontak</h2>
+                        <p><i class="fas fa-map-marker-alt me-2 text-primary"></i> Jl. Masjid Besar An Nur Klopo, Bringin, Kec. Bringin, Kab. Semarang Prov. Jawa Tengah</p>
+                        <p><i class="fas fa-phone me-2 text-primary"></i> (0298) 521678</p>
+                        <p><i class="fas fa-envelope me-2 text-primary"></i> info@slbwahidhasyim.sch.id</p>
+                        <p><i class="fas fa-globe me-2 text-primary"></i> www.slbwahidhasyim.sch.id</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Nilai-nilai -->
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="profile-card">
+                        <h2 class="section-title text-center">Nilai-Nilai SLB Wahid Hasyim</h2>
+                        <div class="row">
+                            <div class="col-md-3 col-6 mb-4">
+                                <div class="value-card">
+                                    <div class="value-icon">
+                                        <i class="fas fa-heart"></i>
+                                    </div>
+                                    <h4>Peduli</h4>
+                                    <p>Menumbuhkan rasa empati dan kepedulian terhadap sesama</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-6 mb-4">
+                                <div class="value-card">
+                                    <div class="value-icon">
+                                        <i class="fas fa-handshake"></i>
+                                    </div>
+                                    <h4>Kolaborasi</h4>
+                                    <p>Bekerja sama dengan orang tua dan masyarakat untuk pendidikan terbaik</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-6 mb-4">
+                                <div class="value-card">
+                                    <div class="value-icon">
+                                        <i class="fas fa-lightbulb"></i>
+                                    </div>
+                                    <h4>Inovasi</h4>
+                                    <p>Terus berinovasi dalam metode pembelajaran dan terapi</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-6 mb-4">
+                                <div class="value-card">
+                                    <div class="value-icon">
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <h4>Ekselen</h4>
+                                    <p>Selalu mengutamakan kualitas dalam setiap aspek pendidikan</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h4 class="mb-4">SLB Wahid Hasyim</h4>
+                    <p> Jl. Masjid Besar An Nur Klopo, Bringin, Kec. Bringin, Kab. Semarang Prov. Jawa Tengah<br>Kode Pos: 50772<br>Telp: <br>Email: info@slbwahidhasyim.sch.id</p>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4">
+                    <h5 class="mb-4">Tautan Cepat</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Beranda</a></li>
+                        <li class="mb-2"><a href="#profil" class="text-white text-decoration-none">Profil</a></li>
+                        <li class="mb-2"><a href="#program" class="text-white text-decoration-none">Program</a></li>
+                        <li class="mb-2"><a href="#fasilitas" class="text-white text-decoration-none">Fasilitas</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-4 mb-4">
+                    <h5 class="mb-4">Program</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Pendidikan Individual</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Terapi Berkala</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Program Vokasional</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Konseling Orang Tua</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-4 mb-4">
+                    <h5 class="mb-4">Terhubung dengan Kami</h5>
+                    <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+                    
+                    <h5 class="mt-4 mb-3">Download Brosur</h5>
+                    <a href="#" class="btn btn-outline-light btn-sm me-2">PDF</a>
+                    <a href="#" class="btn btn-outline-light btn-sm">Audio Guide</a>
+                </div>
+            </div>
+            <hr class="my-4 bg-light">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-0">© 2025 SLB Wahid Hasyim. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="#" class="text-white text-decoration-none me-3">Kebijakan Privasi</a>
+                    <a href="#" class="text-white text-decoration-none me-3">Syarat & Ketentuan</a>
+                    <a href="https://imam-muwatok.github.io/portfolio/" class="text-white text-decoration-none me-3" target="_blank">Powered By : Muwatok Project</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap & Popper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semua Berita - SLB Wahid Hasyim</title>
+    <!-- Bootstrap 5 CSS -->
+    <link rel="stylesheet" href="<?php echo base_url('assets/app/website/css/bootstrap.5.3.0.css');?>">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+        <!-- style css -->
+    <link rel="stylesheet" href="<?php echo base_url('assets/app/website/css/base.css');?>">
+    <link rel="stylesheet" href="<?php echo base_url('assets/app/website/css/posts.css');?>">
+    
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
+        <div class="container">
+            <div class="logo-container">
+                <img src="https://cdn-icons-png.flaticon.com/512/3713/3713766.png" alt="Logo SLB Wahid Hasyim" class="logo">
+                <a class="navbar-brand" href="<?php echo base_url(); ?>">
+                    <span class="fw-bold text-primary">SLB WAHID HASYIM</span>
+                    <br>
+                    <small class="text-muted nav-tag">Sekolah Inklusif dan Ramah Difabel</small>
+                </a>
+            </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?php echo base_url(); ?>">Beranda</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?php echo base_url(); ?>#profil">Profil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?php echo base_url(); ?>#program">Program</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?php echo base_url(); ?>#berita">Berita</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="<?php echo base_url('berita'); ?>">Semua Berita</a>
+                    </li>
+                    <li class="nav-item ms-2">
+                        <a class="btn btn-primary" href="<?php echo base_url('auth');?>">Login</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <section class="py-5 bg-light-blue">
+        <div class="container py-4">
+            <div class="row">
+                <div class="col-12">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="<?php echo base_url(); ?>">Beranda</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Semua Berita</li>
+                        </ol>
+                    </nav>
+                    <h1 class="section-title">Semua Berita & Pengumuman</h1>
+                    <p class="lead">Temukan informasi terbaru seputar kegiatan, prestasi, dan pengumuman dari SLB Wahid Hasyim</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-lg-4 order-lg-2 mb-5">
+                    <!-- Filter Widget -->
+                    <div class="sidebar-widget">
+                        <h3 class="sidebar-title">Filter Berita</h3>
+                        
+                        <!-- Tag Filter -->
+                        <h5 class="mt-4">Kategori</h5>
+                        <div class="tags-container mb-4">
+                            <span class="tag-badge active" data-tag="all">Semua</span>
+                            <span class="tag-badge" data-tag="kegiatan">Kegiatan</span>
+                            <span class="tag-badge" data-tag="prestasi">Prestasi</span>
+                            <span class="tag-badge" data-tag="pengumuman">Pengumuman</span>
+                            <span class="tag-badge" data-tag="beasiswa">Beasiswa</span>
+                            <span class="tag-badge" data-tag="ppdb">PPDB</span>
+                        </div>
+                        
+                        <!-- Year Filter -->
+                        <h5>Tahun</h5>
+                        <div class="year-filter mb-4">
+                            <button class="year-btn active" data-year="all">Semua</button>
+                            <button class="year-btn" data-year="2023">2023</button>
+                            <button class="year-btn" data-year="2022">2022</button>
+                            <button class="year-btn" data-year="2021">2021</button>
+                        </div>
+                        
+                        <!-- Reset Filter -->
+                        <button id="resetFilter" class="btn btn-outline-primary btn-sm">Reset Filter</button>
+                    </div>
+                    
+                    <!-- Recent Posts Widget -->
+                    <div class="sidebar-widget">
+                        <h3 class="sidebar-title">Berita Terbaru</h3>
+                        
+                        <div class="recent-post">
+                            <!-- <img src="https://file.data.kemendikdasmen.go.id/sekolahkita/20/2034/20348572-2.jpg" alt="Berita Terbaru" class="recent-post-img"> -->
+                            <img src="https://image.pollinations.ai/prompt/Peringatan-Hari-Disabilitas-Internasional" alt="Berita Terbaru" class="recent-post-img" loading="lazy">
+                            
+                            <div>
+                                <div class="recent-post-title">Peringatan Hari Disabilitas Internasional 2023</div>
+                                <div class="recent-post-date">12 November 2023</div>
+                            </div>
+                        </div>
+                        
+                        <div class="recent-post">
+                            <img src="https://image.pollinations.ai/prompt/Siswa-SLB-Wahid-Hasyim-Raih-Juara-Olimpiade" alt="Berita Terbaru" class="recent-post-img" loading="lazy">
+                            <div>
+                                <div class="recent-post-title">Siswa SLB Wahid Hasyim Raih Juara Olimpiade</div>
+                                <div class="recent-post-date">5 November 2023</div>
+                            </div>
+                        </div>
+                        
+                        <div class="recent-post">
+                            <!-- <img src="https://file.data.kemendikdasmen.go.id/sekolahkita/20/2034/20348572-3.jpg" alt="Berita Terbaru" class="recent-post-img"> -->
+                            <img src="https://image.pollinations.ai/prompt/Penerimaan-Peserta-Didik-Baru" alt="Berita Terbaru" class="recent-post-img" loading="lazy">
+
+                            <div>
+                                <div class="recent-post-title">Penerimaan Peserta Didik Baru 2023/2024</div>
+                                <div class="recent-post-date">1 November 2023</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tags Cloud Widget -->
+                    <div class="sidebar-widget">
+                        <h3 class="sidebar-title">Tag Populer</h3>
+                        <div class="tags-container">
+                            <span class="tag-badge">PPDB</span>
+                            <span class="tag-badge">Beasiswa</span>
+                            <span class="tag-badge">Olimpiade</span>
+                            <span class="tag-badge">Workshop</span>
+                            <span class="tag-badge">Hari Disabilitas</span>
+                            <span class="tag-badge">Vokasional</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- News Content -->
+                <div class="col-lg-8 order-lg-1">
+                    <!-- Filter Section -->
+                    <div class="filter-section mb-4">
+                        <div class="row align-items-center">
+                            <div class="col-md-6 mb-3 mb-md-0">
+                                <h5 class="mb-0">Menampilkan 12 dari 48 berita</h5>
+                            </div>
+                            <div class="col-md-6 text-md-end">
+                                <select class="form-select form-select-sm" style="width: auto; display: inline-block;">
+                                    <option>Terbaru</option>
+                                    <option>Terlama</option>
+                                    <option>A-Z</option>
+                                    <option>Z-A</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- News Grid -->
+                    <div class="row" id="newsContainer">
+                        <!-- News Item 1 -->
+                        <div class="col-md-6 mb-4" data-tags="kegiatan" data-year="2023">
+                            <div class="card news-card h-100">
+                                <img src="https://image.pollinations.ai/prompt/Peringatan-Hari-Disabilitas-Internasional" class="card-img-top" alt="Kegiatan Sekolah" loading="lazy">
+                                <div class="card-body">
+                                    <span class="badge bg-primary mb-2">Kegiatan</span>
+                                    <h5 class="card-title">Peringatan Hari Disabilitas Internasional</h5>
+                                    <div class="news-date mb-2"><i class="far fa-calendar me-1"></i> 3 Desember 2023</div>
+                                    <p class="news-excerpt">Acara akan diselenggarakan pada 3 Desember 2023 dengan berbagai kegiatan menarik untuk siswa dan orang tua.</p>
+                                    <a href="<?php echo base_url('web/post');?>" class="read-more">Baca selengkapnya <i class="fas fa-arrow-right ms-1"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- News Item 2 -->
+                        <div class="col-md-6 mb-4" data-tags="prestasi" data-year="2023">
+                            <div class="card news-card h-100">
+                                <img src="https://image.pollinations.ai/prompt/Siswa SLB Wahid Hasyim Raih Juara Olimpiade Khusus" class="card-img-top" alt="Prestasi" loading="lazy">
+                                <div class="card-body">
+                                    <span class="badge bg-success mb-2">Prestasi</span>
+                                    <h5 class="card-title">Siswa SLB Wahid Hasyim Raih Juara Olimpiade Khusus</h5>
+                                    <div class="news-date mb-2"><i class="far fa-calendar me-1"></i> 28 November 2023</div>
+                                    <p class="news-excerpt">Ananda Rizki meraih medali emas dalam Olimpiade Khusus Nasional 2023 di kategori melukis.</p>
+                                    <a href="<?php echo base_url('web/post');?>" class="read-more">Baca selengkapnya <i class="fas fa-arrow-right ms-1"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- News Item 3 -->
+                        <div class="col-md-6 mb-4" data-tags="pengumuman ppdb" data-year="2023">
+                            <div class="card news-card h-100">
+                                <img src="https://image.pollinations.ai/prompt/Penerimaan Peserta Didik Baru" class="card-img-top" alt="Pengumuman" loading="lazy">
+                                <div class="card-body">
+                                    <span class="badge bg-warning text-dark mb-2">Pengumuman</span>
+                                    <h5 class="card-title">Penerimaan Peserta Didik Baru Tahun Ajaran 2023/2024</h5>
+                                    <div class="news-date mb-2"><i class="far fa-calendar me-1"></i> 15 November 2023</div>
+                                    <p class="news-excerpt">Pendaftaran dibuka mulai 1 Juni hingga 30 Juni 2023. Kuota terbatas untuk 120 siswa.</p>
+                                    <a href="<?php echo base_url('web/post');?>" class="read-more">Baca selengkapnya <i class="fas fa-arrow-right ms-1"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- News Item 4 -->
+                        <div class="col-md-6 mb-4" data-tags="beasiswa" data-year="2023">
+                            <div class="card news-card h-100">
+                                <img src="https://image.pollinations.ai/prompt/Program Beasiswa untuk Siswa Berprestasi" class="card-img-top" alt="Beasiswa" loading="lazy">
+                                <div class="card-body">
+                                    <span class="badge bg-info mb-2">Beasiswa</span>
+                                    <h5 class="card-title">Program Beasiswa untuk Siswa Berprestasi Tahun 2023</h5>
+                                    <div class="news-date mb-2"><i class="far fa-calendar me-1"></i> 10 November 2023</div>
+                                    <p class="news-excerpt">Tersedia 20 beasiswa untuk siswa berprestasi dari yayasan peduli pendidikan difabel.</p>
+                                    <a href="<?php echo base_url('web/post');?>" class="read-more">Baca selengkapnya <i class="fas fa-arrow-right ms-1"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- News Item 5 -->
+                        <div class="col-md-6 mb-4" data-tags="kegiatan" data-year="2022">
+                            <div class="card news-card h-100">
+                                <img src="https://image.pollinations.ai/prompt/Workshop Guru: Metode Pembelajaran Inklusif" class="card-img-top" alt="Kegiatan" loading="lazy">
+                                <div class="card-body">
+                                    <span class="badge bg-primary mb-2">Kegiatan</span>
+                                    <h5 class="card-title">Workshop Guru: Metode Pembelajaran Inklusif</h5>
+                                    <div class="news-date mb-2"><i class="far fa-calendar me-1"></i> 15 Agustus 2022</div>
+                                    <p class="news-excerpt">Pelatihan metode pembelajaran inklusif bagi guru-guru SLB Wahid Hasyim bekerja sama dengan dinas pendidikan.</p>
+                                    <a href="<?php echo base_url('web/post');?>" class="read-more">Baca selengkapnya <i class="fas fa-arrow-right ms-1"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- News Item 6 -->
+                        <div class="col-md-6 mb-4" data-tags="prestasi" data-year="2022">
+                            <div class="card news-card h-100">
+                                <img src="https://image.pollinations.ai/prompt/Tim Basket SLB Wahid Hasyim Juara Turnamen Nasional" class="card-img-top" alt="Prestasi" loading="lazy">
+                                <div class="card-body">
+                                    <span class="badge bg-success mb-2">Prestasi</span>
+                                    <h5 class="card-title">Tim Basket SLB Wahid Hasyim Juara Turnamen Nasional</h5>
+                                    <div class="news-date mb-2"><i class="far fa-calendar me-1"></i> 5 Juli 2022</div>
+                                    <p class="news-excerpt">Tim basket SLB Wahid Hasyim meraih juara 1 dalam turnamen basket difabel se-Jawa Tengah.</p>
+                                    <a href="<?php echo base_url('web/post');?>" class="read-more">Baca selengkapnya <i class="fas fa-arrow-right ms-1"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- News Item 7 -->
+                        <div class="col-md-6 mb-4" data-tags="pengumuman" data-year="2021">
+                            <div class="card news-card h-100">
+                                <img src="https://image.pollinations.ai/prompt/Perubahan Jadwal Pembelajaran Tatap Muka" class="card-img-top" alt="Pengumuman" loading="lazy">
+                                <div class="card-body">
+                                    <span class="badge bg-warning text-dark mb-2">Pengumuman</span>
+                                    <h5 class="card-title">Perubahan Jadwal Pembelajaran Tatap Muka</h5>
+                                    <div class="news-date mb-2"><i class="far fa-calendar me-1"></i> 10 September 2021</div>
+                                    <p class="news-excerpt">Menindaklanjuti instruksi pemerintah, jadwal pembelajaran tatap muka mengalami penyesuaian.</p>
+                                    <a href="<?php echo base_url('web/post');?>" class="read-more">Baca selengkapnya <i class="fas fa-arrow-right ms-1"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- News Item 8 -->
+                        <div class="col-md-6 mb-4" data-tags="kegiatan" data-year="2021">
+                            <div class="card news-card h-100">
+                                <img src="https://image.pollinations.ai/prompt/Pameran Karya Siswa "Aku Bisa Mandiri" class="card-img-top" alt="Kegiatan" loading="lazy">
+                                <div class="card-body">
+                                    <span class="badge bg-primary mb-2">Kegiatan</span>
+                                    <h5 class="card-title">Pameran Karya Siswa "Aku Bisa Mandiri"</h5>
+                                    <div class="news-date mb-2"><i class="far fa-calendar me-1"></i> 20 Mei 2021</div>
+                                    <p class="news-excerpt">Pameran karya siswa SLB Wahid Hasyim menunjukkan berbagai keterampilan dan bakat siswa.</p>
+                                    <a href="<?php echo base_url('web/post');?>" class="read-more">Baca selengkapnya <i class="fas fa-arrow-right ms-1"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- No Results Message (Hidden by default) -->
+                    <div id="noResults" class="no-results" style="display: none;">
+                        <i class="fas fa-search fa-3x mb-3 text-muted"></i>
+                        <h4>Berita tidak ditemukan</h4>
+                        <p class="text-muted">Tidak ada berita yang sesuai dengan filter yang Anda pilih.</p>
+                        <button id="resetFilterBtn" class="btn btn-primary">Reset Filter</button>
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                            </li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h4 class="mb-4">SLB Wahid Hasyim</h4>
+                    <p> Jl. Masjid Besar An Nur Klopo, Bringin, Kec. Bringin, Kab. Semarang Prov. Jawa Tengah<br>Kode Pos: 50772<br>Telp: <br>Email: info@slbwahidhasyim.sch.id</p>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4">
+                    <h5 class="mb-4">Tautan Cepat</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Beranda</a></li>
+                        <li class="mb-2"><a href="#profil" class="text-white text-decoration-none">Profil</a></li>
+                        <li class="mb-2"><a href="#program" class="text-white text-decoration-none">Program</a></li>
+                        <li class="mb-2"><a href="#fasilitas" class="text-white text-decoration-none">Fasilitas</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-4 mb-4">
+                    <h5 class="mb-4">Program</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Pendidikan Individual</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Terapi Berkala</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Program Vokasional</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Konseling Orang Tua</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-4 mb-4">
+                    <h5 class="mb-4">Terhubung dengan Kami</h5>
+                    <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+                    
+                    <h5 class="mt-4 mb-3">Download Brosur</h5>
+                    <a href="#" class="btn btn-outline-light btn-sm me-2">PDF</a>
+                    <a href="#" class="btn btn-outline-light btn-sm">Audio Guide</a>
+                </div>
+            </div>
+            <hr class="my-4 bg-light">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-0">© 2025 SLB Wahid Hasyim. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="#" class="text-white text-decoration-none me-3">Kebijakan Privasi</a>
+                    <a href="#" class="text-white text-decoration-none me-3">Syarat & Ketentuan</a>
+                    <a href="https://imam-muwatok.github.io/portfolio/" class="text-white text-decoration-none me-3" target="_blank">Powered By : Muwatok Project</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap & Popper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    
+    <!-- Custom JavaScript for Filtering -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elements
+            const newsContainer = document.getElementById('newsContainer');
+            const newsItems = newsContainer.querySelectorAll('.col-md-6');
+            const tagBadges = document.querySelectorAll('.tag-badge');
+            const yearButtons = document.querySelectorAll('.year-btn');
+            const resetFilterBtn = document.getElementById('resetFilter');
+            const resetFilterBtn2 = document.getElementById('resetFilterBtn');
+            const noResults = document.getElementById('noResults');
+            
+            // Current filters
+            let currentTag = 'all';
+            let currentYear = 'all';
+            
+            // Filter function
+            function filterNews() {
+                let visibleItems = 0;
+                
+                newsItems.forEach(item => {
+                    const itemTags = item.getAttribute('data-tags').split(' ');
+                    const itemYear = item.getAttribute('data-year');
+                    
+                    const tagMatch = currentTag === 'all' || itemTags.includes(currentTag);
+                    const yearMatch = currentYear === 'all' || itemYear === currentYear;
+                    
+                    if (tagMatch && yearMatch) {
+                        item.style.display = 'block';
+                        visibleItems++;
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+                
+                // Show no results message if no items are visible
+                if (visibleItems === 0) {
+                    noResults.style.display = 'block';
+                    newsContainer.style.display = 'none';
+                } else {
+                    noResults.style.display = 'none';
+                    newsContainer.style.display = 'flex';
+                }
+            }
+            
+            // Tag filter event
+            tagBadges.forEach(badge => {
+                badge.addEventListener('click', function() {
+                    const tag = this.getAttribute('data-tag');
+                    
+                    // Update active state
+                    tagBadges.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    currentTag = tag;
+                    filterNews();
+                });
+            });
+            
+            // Year filter event
+            yearButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const year = this.getAttribute('data-year');
+                    
+                    // Update active state
+                    yearButtons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    currentYear = year;
+                    filterNews();
+                });
+            });
+            
+            // Reset filter event
+            function resetFilters() {
+                // Reset active states
+                tagBadges.forEach(b => b.classList.remove('active'));
+                document.querySelector('.tag-badge[data-tag="all"]').classList.add('active');
+                
+                yearButtons.forEach(b => b.classList.remove('active'));
+                document.querySelector('.year-btn[data-year="all"]').classList.add('active');
+                
+                // Reset filter values
+                currentTag = 'all';
+                currentYear = 'all';
+                
+                // Apply filter
+                filterNews();
+            }
+            
+            resetFilterBtn.addEventListener('click', resetFilters);
+            resetFilterBtn2.addEventListener('click', resetFilters);
+        });
+    </script>
+</body>
+</html>
