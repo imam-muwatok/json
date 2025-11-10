@@ -1,0 +1,93 @@
+{
+    "transactions": [
+        {
+            "name": "Salary",
+            "type": "pemasukan",
+            "amount": 1250000,
+            "description": "",
+            "tag": "Gaji",
+            "date": "2025-11-01 00:00:00"
+        },
+        {
+            "name": "Liquid",
+            "type": "pengeluaran",
+            "amount": 100000,
+            "description": "",
+            "tag": "Liquid",
+            "date": "2025-11-01 00:00:00"
+        },
+        {
+            "name": "Rokok",
+            "type": "pengeluaran",
+            "amount": 18000,
+            "description": "",
+            "tag": "Rokok",
+            "date": "2025-11-01 00:00:00"
+        },
+        {
+            "name": "Rokok",
+            "type": "pengeluaran",
+            "amount": 24000,
+            "description": "",
+            "tag": "Rokok",
+            "date": "2025-11-03 00:00:00"
+        },
+        {
+            "name": "Bensin",
+            "type": "pengeluaran",
+            "amount": 25000,
+            "description": "",
+            "tag": "Transportasi",
+            "date": "2025-11-04 00:00:00"
+        },
+        {
+            "name": "Mbak Nur",
+            "type": "pemasukan",
+            "amount": 25000,
+            "description": "",
+            "tag": "Bansos",
+            "date": "2025-11-05 00:00:00"
+        },
+        {
+            "name": "Rokok",
+            "type": "pengeluaran",
+            "amount": 26000,
+            "description": "",
+            "tag": "Rokok",
+            "date": "2025-11-07 00:00:00"
+        },
+        {
+            "name": "Kabel speedometer",
+            "type": "pengeluaran",
+            "amount": 16000,
+            "description": "",
+            "tag": "Motor",
+            "date": "2025-11-08 00:00:00"
+        },
+        {
+            "name": "Kuota",
+            "type": "pengeluaran",
+            "amount": 15000,
+            "description": "",
+            "tag": "Kuota",
+            "date": "2025-11-09 00:00:00"
+        },
+        {
+            "name": "Rokok",
+            "type": "pengeluaran",
+            "amount": 26000,
+            "description": "",
+            "tag": "Rokok",
+            "date": "2025-11-10 00:00:00"
+        },
+        {
+            "name": "Motor ke 3",
+            "type": "pengeluaran",
+            "amount": 414000,
+            "description": "",
+            "tag": "Tagihan",
+            "date": "2025-11-10 00:00:00"
+        }
+    ],
+    "debts": []
+}

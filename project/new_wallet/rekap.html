@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rekapitulasi Keuangan</title>
+    <style>
+        /* --- Gaya Dasar --- */
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
+        .main-content { max-width: 900px; margin: 0 auto; padding: 20px; background-color: #fff; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); border-radius: 8px; }
+        h1 { text-align: center; color: #333; margin-bottom: 20px; font-size: 28px; }
+        h2 { border-bottom: 2px solid #ccc; padding-bottom: 5px; margin-top: 25px; color: #007bff; }
+
+        /* --- Gaya Navbar --- */
+        .navbar {
+            background-color: #343a40; 
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            margin: 0 5px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            font-weight: bold;
+        }
+        .navbar a:hover {
+            background-color: #007bff; 
+        }
+        .navbar .active {
+            background-color: #28a745; 
+        }
+        
+        /* --- Gaya Tabel Rekap Total (Overall) --- */
+        #overallRecapTable {
+            width: 100%;
+            margin: 20px 0;
+            border-collapse: collapse;
+            font-size: 1.1em;
+        }
+        #overallRecapTable th, #overallRecapTable td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        #overallRecapTable th {
+            background-color: #343a40;
+            color: white;
+            font-weight: bold;
+        }
+        #overallRecapTable td {
+            font-weight: 500;
+        }
+
+        /* --- Gaya Tabel Rekap Bulanan/Tahunan --- */
+        .recap-table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 15px; 
+            /* Tambahkan min-width agar scroll horizontal bekerja */
+            min-width: 500px; 
+        }
+        .recap-table th, .recap-table td { 
+            border: 1px solid #ddd; 
+            padding: 10px; 
+            text-align: right; 
+        }
+        .recap-table th { 
+            background-color: #007bff; 
+            color: white; 
+            text-align: center; 
+        }
+        .recap-table td:first-child { 
+            text-align: left; 
+            font-weight: bold; 
+            width: 120px; 
+        }
+
+        /* --- Gaya Sel Saldo --- */
+        .positive { color: #28a745; font-weight: bold; } 
+        .negative { color: #dc3545; font-weight: bold; } 
+        .pemasukan { color: #28a745; }
+        .pengeluaran { color: #dc3545; }
+        
+        /* --- CONTAINER UNTUK MEMBUAT TABEL RESPONSIVE (Horizontal Scroll) --- */
+        .table-responsive-container {
+            overflow-x: auto; /* Ini kunci membuat scroll horizontal */
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        /* ================================================= */
+        /* --- MEDIA QUERY: UNTUK LAYAR KECIL (HP) --- */
+        /* ================================================= */
+        @media screen and (max-width: 600px) {
+            
+            body { margin: 10px; }
+            .main-content { padding: 15px; }
+            
+            /* Navbar Responsif */
+            .navbar {
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px;
+            }
+            .navbar a {
+                width: 100%;
+                text-align: center;
+                margin: 0;
+            }
+
+            /* Tabel Rekap Total (Ubah tata letak di HP) */
+            #overallRecapTable {
+                display: block;
+                border: none;
+            }
+            #overallRecapTable thead {
+                display: none; /* Sembunyikan header di HP */
+            }
+            #overallRecapTable tr {
+                display: flex;
+                flex-direction: column;
+                border: 1px solid #ddd;
+                margin-bottom: 10px;
+                border-radius: 4px;
+            }
+            #overallRecapTable td {
+                display: flex;
+                justify-content: space-between;
+                text-align: right;
+                border: none;
+                padding: 8px 10px;
+            }
+            #overallRecapTable td::before {
+                /* Menambahkan label di depan data (teknik umum responsive table) */
+                content: attr(data-label);
+                font-weight: bold;
+                color: #555;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <a href="index.html">🏠 Dashboard</a>
+    <div>
+        <a href="rekap.html" class="active">📊 Rekapitulasi</a>
+    </div>
+</div>
+
+<div class="main-content">
+    
+    <h1>📊 Rekapitulasi Keuangan</h1>
+    
+    <div id="recapContent">
+
+        <h2>Total Saldo Keseluruhan</h2>
+        <table id="overallRecapTable">
+            <thead>
+                <tr>
+                    <th>Total Pemasukan</th>
+                    <th>Total Pengeluaran</th>
+                    <th>Saldo Akhir</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr id="overallRecapRow">
+                    </tr>
+            </tbody>
+        </table>
+
+        <h2>Rekap Bulanan</h2>
+        <div class="table-responsive-container"> <table class="recap-table">
+                <thead>
+                    <tr>
+                        <th>Bulan / Tahun</th>
+                        <th>Pemasukan (Rp)</th>
+                        <th>Pengeluaran (Rp)</th>
+                        <th>Saldo (Rp)</th>
+                    </tr>
+                </thead>
+                <tbody id="monthlyRecapBody">
+                    </tbody>
+            </table>
+        </div>
+
+        <h2>Rekap Tahunan</h2>
+        <div class="table-responsive-container"> <table class="recap-table">
+                <thead>
+                    <tr>
+                        <th>Tahun</th>
+                        <th>Pemasukan (Rp)</th>
+                        <th>Pengeluaran (Rp)</th>
+                        <th>Saldo (Rp)</th>
+                    </tr>
+                </thead>
+                <tbody id="yearlyRecapBody">
+                     </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    const STORAGE_KEY = 'financialData';
+    const monthlyRecapBody = document.getElementById('monthlyRecapBody');
+    const yearlyRecapBody = document.getElementById('yearlyRecapBody');
+    const overallRecapRow = document.getElementById('overallRecapRow');
+    
+    // --- Data Konstan ---
+    const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+
+    // --- Helper Function: Get Data ---
+    function getFinancialData() {
+        const storedData = localStorage.getItem(STORAGE_KEY);
+        if (storedData) {
+            try { return JSON.parse(storedData); } 
+            catch (e) { return { transactions: [], debts: [] }; }
+        }
+        return { transactions: [], debts: [] };
+    }
+    
+    // --- Helper Function: Format Amount ---
+    function formatAmount(amount) {
+        return parseFloat(amount).toLocaleString('id-ID');
+    }
+
+    // --- FUNGSI Rekap Total Keseluruhan ---
+    function calculateOverallTotal(transactions) {
+        let totalPemasukan = 0;
+        let totalPengeluaran = 0;
+
+        transactions.forEach(tx => {
+            const amount = parseFloat(tx.amount || 0);
+            if (tx.type === 'pemasukan') {
+                totalPemasukan += amount;
+            } else if (tx.type === 'pengeluaran') {
+                totalPengeluaran += amount;
+            }
+        });
+        
+        const totalSaldo = totalPemasukan - totalPengeluaran;
+        
+        return { totalPemasukan, totalPengeluaran, totalSaldo };
+    }
+    
+    // --- FUNGSI Render Rekap Total Keseluruhan (DIUBAH UNTUK RESPONSIVE) ---
+    function renderOverallRecap(data) {
+        overallRecapRow.innerHTML = '';
+        
+        const columnData = [
+            { label: 'Total Pemasukan', amount: data.totalPemasukan, class: 'positive' },
+            { label: 'Total Pengeluaran', amount: data.totalPengeluaran, class: 'negative' },
+            { label: 'Saldo Akhir', amount: data.totalSaldo, class: data.totalSaldo >= 0 ? 'positive' : 'negative' }
+        ];
+
+        columnData.forEach(item => {
+            const cell = overallRecapRow.insertCell();
+            cell.textContent = formatAmount(item.amount);
+            cell.classList.add(item.class);
+            // Tambahkan data-label untuk tampilan responsive mobile
+            cell.setAttribute('data-label', item.label); 
+        });
+    }
+
+    // --- FUNGSI UTAMA: Menghitung Rekap Bulanan & Tahunan ---
+    function calculateRecap(transactions) {
+        const monthlyRecap = {}; 
+        const yearlyRecap = {};  
+
+        transactions.forEach(tx => {
+            const date = new Date(tx.date);
+            if (isNaN(date.getTime())) return; 
+
+            const year = date.getFullYear();
+            const monthIndex = date.getMonth(); 
+            const yearMonth = `${year}-${String(monthIndex + 1).padStart(2, '0')}`;
+            
+            const amount = parseFloat(tx.amount || 0);
+            
+            if (!monthlyRecap[yearMonth]) {
+                monthlyRecap[yearMonth] = { pemasukan: 0, pengeluaran: 0 };
+            }
+            if (!yearlyRecap[year]) {
+                yearlyRecap[year] = { pemasukan: 0, pengeluaran: 0 };
+            }
+
+            if (tx.type === 'pemasukan') {
+                monthlyRecap[yearMonth].pemasukan += amount;
+                yearlyRecap[year].pemasukan += amount;
+            } else if (tx.type === 'pengeluaran') {
+                monthlyRecap[yearMonth].pengeluaran += amount;
+                yearlyRecap[year].pengeluaran += amount;
+            }
+        });
+
+        return { monthlyRecap, yearlyRecap };
+    }
+    
+    // --- FUNGSI: Render Rekap Bulanan ---
+    function renderMonthlyRecap(monthlyRecap) {
+        monthlyRecapBody.innerHTML = '';
+        
+        const sortedKeys = Object.keys(monthlyRecap).sort().reverse();
+        
+        if (sortedKeys.length === 0) {
+            const row = monthlyRecapBody.insertRow();
+            const cell = row.insertCell(0);
+            cell.colSpan = 4;
+            cell.textContent = "Tidak ada data transaksi yang tercatat.";
+            cell.style.textAlign = 'center';
+            return;
+        }
+
+        sortedKeys.forEach(key => {
+            const [year, monthStr] = key.split('-');
+            const monthIndex = parseInt(monthStr) - 1;
+            const data = monthlyRecap[key];
+            const saldo = data.pemasukan - data.pengeluaran;
+            
+            const row = monthlyRecapBody.insertRow();
+            
+            row.insertCell(0).textContent = `${monthNames[monthIndex]} ${year}`; 
+            
+            const pemasukanCell = row.insertCell(1);
+            pemasukanCell.textContent = formatAmount(data.pemasukan);
+            pemasukanCell.classList.add('pemasukan');
+            
+            const pengeluaranCell = row.insertCell(2);
+            pengeluaranCell.textContent = formatAmount(data.pengeluaran);
+            pengeluaranCell.classList.add('pengeluaran');
+            
+            const saldoCell = row.insertCell(3);
+            saldoCell.textContent = formatAmount(saldo);
+            saldoCell.classList.add(saldo >= 0 ? 'positive' : 'negative');
+        });
+    }
+
+    // --- FUNGSI: Render Rekap Tahunan ---
+    function renderYearlyRecap(yearlyRecap) {
+        yearlyRecapBody.innerHTML = '';
+        
+        const sortedKeys = Object.keys(yearlyRecap).sort().reverse();
+
+        if (sortedKeys.length === 0) {
+            return;
+        }
+
+        sortedKeys.forEach(year => {
+            const data = yearlyRecap[year];
+            const saldo = data.pemasukan - data.pengeluaran;
+            
+            const row = yearlyRecapBody.insertRow();
+            
+            row.insertCell(0).textContent = year; 
+            
+            const pemasukanCell = row.insertCell(1);
+            pemasukanCell.textContent = formatAmount(data.pemasukan);
+            pemasukanCell.classList.add('pemasukan');
+            
+            const pengeluaranCell = row.insertCell(2);
+            pengeluaranCell.textContent = formatAmount(data.pengeluaran);
+            pengeluaranCell.classList.add('pengeluaran');
+            
+            const saldoCell = row.insertCell(3);
+            saldoCell.textContent = formatAmount(saldo);
+            saldoCell.classList.add(saldo >= 0 ? 'positive' : 'negative');
+        });
+    }
+
+    // --- Inisialisasi ---
+    document.addEventListener('DOMContentLoaded', () => {
+        const data = getFinancialData();
+        
+        const overallTotal = calculateOverallTotal(data.transactions);
+        renderOverallRecap(overallTotal);
+
+        const { monthlyRecap, yearlyRecap } = calculateRecap(data.transactions);
+        renderMonthlyRecap(monthlyRecap);
+        renderYearlyRecap(yearlyRecap);
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Transaksi Keuangan</title>
+    <style>
+        /* --- Gaya Dasar --- */
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
+        .main-content { max-width: 900px; margin: 0 auto; padding: 20px; background-color: #fff; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); border-radius: 8px; }
+        h1 { text-align: center; color: #333; margin-bottom: 20px; font-size: 24px; }
+        
+        /* --- Gaya Tombol Aksi Header --- */
+        .action-buttons { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .action-buttons button { flex-grow: 1; min-width: 120px; }
+        #openModalBtn { background-color: #28a745; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        #openImportModalBtn { background-color: #ffc107; color: #333; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        #openModalBtn:hover { background-color: #1e7e34; }
+        #openImportModalBtn:hover { background-color: #e0a800; }
+        #exportDataBtn { 
+            background-color: #007bff; /* Biru */
+            color: white; 
+            padding: 10px 15px; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-size: 16px; 
+        }
+        #exportDataBtn:hover { 
+            background-color: #0056b3; 
+        }
+
+        /* >>> Pengaturan Filter Dinamis (Sama seperti sebelumnya) <<< */
+        .filter-group { 
+            margin-bottom: 15px; 
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 10px; 
+            align-items: flex-end; 
+        }
+        .filter-item {
+            display: flex;
+            flex-direction: column;
+            min-width: 100px; 
+        }
+        .filter-item label { 
+            font-weight: bold; 
+            margin-bottom: 5px; 
+            white-space: nowrap; 
+            font-size: 14px;
+        }
+        .filter-item select, 
+        .filter-item input[type="text"] {
+            padding: 8px; 
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            flex-grow: 1;
+            box-sizing: border-box; 
+        }
+        #nameFilter {
+            max-width: 250px; 
+            min-width: 180px; 
+        }
+
+        /* --- Gaya Card Ringkasan BARU --- */
+        .summary-cards {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+            flex-wrap: wrap; 
+            justify-content: space-between;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            flex: 1;
+            min-width: 180px; 
+            text-align: center;
+        }
+        .card h3 {
+            margin-top: 0;
+            font-size: 16px;
+            color: #555;
+        }
+        .card .amount {
+            font-size: 22px;
+            font-weight: bold;
+            margin: 5px 0 0;
+        }
+        .income-card { border-left: 5px solid #28a745; }
+        .income-card .amount { color: #28a745; } /* Hijau */
+        .expense-card { border-left: 5px solid #dc3545; }
+        .expense-card .amount { color: #dc3545; } /* Merah */
+        .balance-card { border-left: 5px solid #007bff; }
+        .balance-card .amount { color: #007bff; } /* Biru */
+
+        /* --- Gaya Tabel --- */
+        .transaction-table { width: 100%; border-collapse: collapse; margin-top: 10px; table-layout: fixed; }
+        .transaction-table th, .transaction-table td { border: 1px solid #ddd; padding: 8px; text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .transaction-table th { background-color: #007bff; color: white; }
+        .pemasukan { color: #28a745; font-weight: bold; }
+        .pengeluaran { color: #dc3545; font-weight: bold; }
+        .transaction-table td:first-child { white-space: nowrap; } 
+
+        /* --- Gaya Modal --- */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); }
+        .modal-content { background-color: #fefefe; margin: 10% auto; padding: 20px; border: 1px solid #888; width: 90%; max-width: 500px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); position: relative; }
+        .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; }
+        .close:hover, .close:focus { color: black; text-decoration: none; cursor: pointer; }
+
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input[type="text"], input[type="number"], textarea, select, input[type="date"], input[type="file"] { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .radio-group label { display: inline-block; margin-right: 15px; font-weight: normal; }
+        .modal-content button[type="submit"] { background-color: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; margin-top: 10px; }
+        .modal-content button[type="submit"]:hover { background-color: #0056b3; }
+        
+        #importFileInput { display: block; }
+
+        /* --- Gaya Navbar Baru --- */
+        .navbar {
+            background-color: #343a40; /* Dark gray background */
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            /* Mengatur margin horizontal */
+            margin: 0 8px; 
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            font-weight: bold;
+            /* Lebar tombol ditentukan oleh kontennya */
+            white-space: nowrap; 
+            display: inline-block;
+        }
+        .navbar a:hover {
+            background-color: #007bff; /* Blue hover color */
+        }
+        .navbar .active {
+            background-color: #28a745; /* Green for active link */
+        }
+
+        /* ================================================= */
+        /* --- MEDIA QUERY: UNTUK LAYAR KECIL (HP) --- */
+        /* ================================================= */
+
+        /* Penyesuaian Responsif: Navbar di HP */
+        @media screen and (max-width: 600px) {
+            .navbar {
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px;
+            }
+            .navbar a {
+                /* Kembalikan ke flex-grow: 1 untuk mobile agar rata satu baris */
+                flex-grow: 1; 
+                text-align: center;
+                margin: 0;
+            }
+            /* Mengatur container tombol agar sejajar di tengah */
+            .navbar > div {
+                width: 100%;
+                display: flex;
+                justify-content: space-around;
+                gap: 10px;
+            }
+            .navbar > div a {
+                width: auto; /* Membiarkan flex-grow mengambil alih */
+                margin: 0;
+            }
+
+            /* Penyesuaian Responsif: Card di HP */
+            .summary-cards {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .card {
+                min-width: 100%;
+            }
+        }
+        @media screen and (max-width: 600px) {
+            
+            body { margin: 10px; }
+            .main-content { padding: 15px; }
+            
+            .filter-item {
+                width: 100%; 
+                min-width: 100%;
+            }
+            .filter-item select, 
+            .filter-item input[type="text"] {
+                width: 100%; 
+                max-width: 100%; 
+            }
+            #nameFilter {
+                 min-width: 100%;
+                 max-width: 100%;
+            }
+            
+            /* Tabel Responsif (Horizontal Scroll) */
+            .transaction-table-container { 
+                overflow-x: auto; 
+                width: 100%;
+                margin-top: 10px;
+            }
+            .transaction-table {
+                min-width: 700px; 
+                table-layout: auto; 
+            }
+
+            .transaction-table th:nth-child(1), .transaction-table td:nth-child(1) { width: 120px; } 
+            .transaction-table th:nth-child(2), .transaction-table td:nth-child(2) { width: 120px; } 
+            .transaction-table th:nth-child(3), .transaction-table td:nth-child(3) { width: 150px; } 
+            .transaction-table th:nth-child(4), .transaction-table td:nth-child(4) { width: 80px; }  
+            .transaction-table th:nth-child(5), .transaction-table td:nth-child(5) { width: 100px; } 
+            .transaction-table th, .transaction-table td { 
+                white-space: nowrap; 
+            }
+
+            .transaction-table td:first-child button {
+                padding: 4px 6px;
+                font-size: 12px;
+                margin-right: 3px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="navbar">
+    <a href="index.html" class="active">🏠 Dashboard</a>
+    <div>
+        <a href="rekap.html">📊 Rekapitulasi</a>
+        </div>
+</div>
+
+<div class="main-content">
+    <h1>Dashboard Transaksi Keuangan</h1>
+    
+    <div class="action-buttons">
+        <button id="openModalBtn">➕ Transaksi Baru</button>
+        <button id="openImportModalBtn">📤 Import</button>
+        <button id="exportDataBtn">💾 Export Data</button>
+    </div>
+
+    <div class="filter-group">
+        
+        <div class="filter-item">
+            <label for="monthFilter">Bulan:</label>
+            <select id="monthFilter"></select>
+        </div>
+        
+        <div class="filter-item">
+            <label for="yearFilter">Tahun:</label>
+            <select id="yearFilter"></select>
+        </div>
+
+        <div class="filter-item">
+            <label for="nameFilter">Nama Transaksi:</label>
+            <input type="text" id="nameFilter" placeholder="Cari nama transaksi...">
+        </div>
+        
+        <div class="filter-item">
+            <label for="tagFilter">Tag:</label>
+            <select id="tagFilter"></select>
+        </div>
+        
+    </div>
+    
+    
+    <h2 style="margin-top: 20px;">Daftar Transaksi</h2>
+    <div class="transaction-table-container">
+        <table class="transaction-table" id="transactionTable">
+            <thead>
+                <tr>
+                    <th>Aksi</th>
+                    <th>Nama Transaksi</th>
+                    <th>Tanggal</th>
+                    <th>Jenis</th>
+                    <th>Jumlah (Rp)</th>
+                    <th>Tag</th>
+                    <th>Deskripsi</th>
+                </tr>
+            </thead>
+            <tbody>
+                </tbody>
+        </table>
+    </div>
+    <table style="width: 100%; margin-top: 20px; border-collapse: collapse; text-align: center;">
+        <thead>
+            <tr>
+                <td style="color: #28a745;">Pemasukan</td>
+                <td style="color: #dc3545;">Pengeluaran</td>
+                <td>Saldo</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td id="totalIncome" >0</td>
+                <td id="totalExpense" >0</td>
+                <td id="currentBalance">0</td>
+            </tr>   
+        </tbody>
+    </table>
+  
+</div>
+
+
+
+<div id="transactionModal" class="modal">
+    <div class="modal-content">
+        <span class="close transaction-close">&times;</span>
+        <h2 id="modalTitle">Input Data Transaksi</h2>
+        <form id="transactionForm">
+            <input type="hidden" id="editIndex" name="editIndex" value="-1">
+            
+            <div class="form-group">
+                <label for="nama_transaksi">Nama Transaksi:</label>
+                <input type="text" id="nama_transaksi" name="nama_transaksi" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="transaction_date">Tanggal Transaksi:</label>
+                <input type="date" id="transaction_date" name="transaction_date">
+            </div>
+            
+            <div class="form-group">
+                <label>Jenis Transaksi:</label>
+                <div class="radio-group">
+                    <input type="radio" id="pemasukan" name="jenis_transaksi" value="pemasukan" required>
+                    <label for="pemasukan">Pemasukan</label>
+                    <input type="radio" id="pengeluaran" name="jenis_transaksi" value="pengeluaran">
+                    <label for="pengeluaran">Pengeluaran</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="jumlah">Jumlah (Rp):</label>
+                <input type="number" id="jumlah" name="jumlah" min="0" required>
+            </div>
+            <div class="form-group">
+                <label for="deskripsi">Deskripsi:</label>
+                <textarea id="deskripsi" name="deskripsi" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="tag">Tag Transaksi:</label>
+                <select id="tag" name="tag">
+                    </select>
+            </div>
+            <button type="submit" id="submitBtn">Simpan Transaksi</button>
+        </form>
+    </div>
+</div>
+
+<div id="importModal" class="modal">
+    <div class="modal-content">
+        <span class="close import-close">&times;</span>
+        <h2>📤 Import Data (Ganti Data Lama)</h2>
+        <p>Pilih file JSON dengan format <code>{"transactions": [{}], "debts": []}</code> untuk diimpor.</p>
+        <form id="importForm">
+            <div class="form-group">
+                <label for="importFileInput">Pilih File JSON:</label>
+                <input type="file" id="importFileInput" name="importFile" accept=".json" required>
+            </div>
+            <button type="submit">Proses Import & Ganti Data</button>
+        </form>
+    </div>
+</div>
+
+<script src="./data/tags.js"></script>
+<script>
+    const STORAGE_KEY = 'financialData';
+    const tableBody = document.getElementById('transactionTable').getElementsByTagName('tbody')[0];
+    const form = document.getElementById('transactionForm');
+    
+    const transactionModal = document.getElementById("transactionModal");
+    const modalTitle = document.getElementById('modalTitle');
+    const submitBtn = document.getElementById('submitBtn');
+    const openTransactionBtn = document.getElementById("openModalBtn");
+    const closeTransactionSpan = document.querySelector('.transaction-close');
+    const editIndexInput = document.getElementById('editIndex');
+    
+    const monthFilter = document.getElementById('monthFilter');
+    const yearFilter = document.getElementById('yearFilter');
+    const nameFilter = document.getElementById('nameFilter');
+    const tagFilter = document.getElementById('tagFilter');
+    const tagSelectForm = document.getElementById('tag'); // Select Tag di Form Input
+
+    const importModal = document.getElementById("importModal");
+    const openImportModalBtn = document.getElementById("openImportModalBtn");
+    const closeImportSpan = document.querySelector('.import-close');
+    const importForm = document.getElementById('importForm');
+    const importFileInput = document.getElementById('importFileInput');
+
+    // --- Array Konstan BARU untuk Tag ---
+    const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+
+
+    // --- Helper Function: Format Tanggal ke YYYY-MM-DD HH:MM:SS (WIB/Lokal) ---
+    function formatDateTime(dateString) {
+        let dateObj;
+        
+        if (dateString) {
+            const isoString = dateString.replace(' ', 'T');
+            dateObj = new Date(isoString);
+
+            if (dateString.length === 10 || isNaN(dateObj.getTime())) {
+                dateObj = new Date(dateString + 'T00:00:00'); 
+            }
+        } else {
+            dateObj = new Date();
+        }
+
+        if (isNaN(dateObj.getTime())) {
+            dateObj = new Date(); 
+        }
+        
+        const year = dateObj.getFullYear();
+        const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+        const day = String(dateObj.getDate()).padStart(2, '0');
+        const hours = String(dateObj.getHours()).padStart(2, '0');
+        const minutes = String(dateObj.getMinutes()).padStart(2, '0');
+        const seconds = String(dateObj.getSeconds()).padStart(2, '0');
+        
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    }
+
+    // --- Helper Function: Format Tanggal ke YYYY-MM-DD (Untuk input date picker) ---
+    function formatDateToInput(dateString) {
+        if (!dateString) return '';
+        const dateObj = new Date(dateString);
+        if (isNaN(dateObj.getTime())) return '';
+        
+        const year = dateObj.getFullYear();
+        const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+        const day = String(dateObj.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    // --- FUNGSI BARU: Mengisi Tag di Form Input Transaksi ---
+    function populateTagSelect() {
+        tagSelectForm.innerHTML = '';
+        defaultTags.forEach(tag => {
+            const option = document.createElement('option');
+            option.value = tag;
+            option.textContent = tag;
+            tagSelectForm.appendChild(option);
+        });
+    }
+
+
+    // --- 1. Fungsi untuk mendapatkan data dari Local Storage ---
+    function getFinancialData() {
+        const storedData = localStorage.getItem(STORAGE_KEY);
+        if (storedData) {
+            try { return JSON.parse(storedData); } 
+            catch (e) { return { transactions: [], debts: [] }; }
+        }
+        return { transactions: [], debts: [] };
+    }
+
+    // --- 2. Fungsi untuk menyimpan data ke Local Storage ---
+    function saveFinancialData(data) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    const exportBtn = document.getElementById('exportDataBtn');
+    if (exportBtn) {
+        exportBtn.addEventListener('click', exportData);
+    }
+
+    // --- Fungsi untuk export data dari Local Storage ---
+    function exportData() {
+        // 1. Ambil data dari Local Storage
+        const data = localStorage.getItem(STORAGE_KEY);
+        
+        if (!data) {
+            alert('Tidak ada data yang tersimpan untuk diexport.');
+            return;
+        }
+
+        try {
+            // 2. Format data JSON
+            // Pastikan data diformat dengan indentasi agar mudah dibaca
+            const parsedData = JSON.parse(data);
+            const jsonString = JSON.stringify(parsedData, null, 2);
+
+            // 3. Buat Blob (Binary Large Object)
+            const blob = new Blob([jsonString], { type: 'application/json' });
+            
+            // 4. Buat URL objek Blob
+            const url = URL.createObjectURL(blob);
+            
+            // 5. Buat elemen <a> sementara untuk memicu download
+            const a = document.createElement('a');
+            a.href = url;
+            
+            // Atur nama file yang akan diunduh (dengan timestamp)
+            const now = new Date();
+            const timestamp = now.toISOString().slice(0, 19).replace(/[-:T]/g, '_');
+            a.download = `data_keuangan_export_${timestamp}.json`;
+            
+            // 6. Pemicu klik (download)
+            document.body.appendChild(a);
+            a.click();
+            
+            // 7. Bersihkan elemen dan URL
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert('Data berhasil diexport sebagai JSON!');
+
+        } catch (e) {
+            console.error('Gagal memproses data export:', e);
+            alert('Terjadi kesalahan saat mengekspor data. Pastikan data di Local Storage valid.');
+        }
+    }
+    
+    // --- FUNGSI Hapus Transaksi ---
+    function deleteTransaction(indexToDelete) {
+        if (confirm("Apakah Anda yakin ingin menghapus transaksi ini?")) {
+            let data = getFinancialData();
+            
+            const allTransactions = getFinancialData().transactions;
+            const filteredTransactions = filterTransactions(allTransactions);
+            const transactionToDelete = filteredTransactions[indexToDelete];
+            
+            if (transactionToDelete) {
+                const originalIndex = data.transactions.findIndex(tx => 
+                    tx.name === transactionToDelete.name && 
+                    tx.date === transactionToDelete.date &&
+                    tx.amount === transactionToDelete.amount
+                );
+                
+                if (originalIndex > -1) {
+                     data.transactions.splice(originalIndex, 1);
+                } else {
+                    console.error("Original transaction not found!");
+                    return;
+                }
+            }
+            
+            saveFinancialData(data);
+            renderTable(data);
+            alert("Transaksi berhasil dihapus.");
+        }
+    }
+    
+    // --- FUNGSI Edit Transaksi: Mengisi Modal ---
+    function editTransaction(indexToEdit) {
+        const allData = getFinancialData().transactions;
+        const filteredTransactions = filterTransactions(allData);
+        const tx = filteredTransactions[indexToEdit];
+        
+        if (!tx) {
+            alert("Data transaksi tidak ditemukan.");
+            return;
+        }
+        
+        const originalIndex = allData.findIndex(item => 
+            item.name === tx.name && 
+            item.date === tx.date &&
+            item.amount === tx.amount
+        );
+
+        if (originalIndex === -1) {
+            alert("Terjadi kesalahan saat mencari data asli untuk di-edit.");
+            return;
+        }
+
+        editIndexInput.value = originalIndex; 
+        
+        form.nama_transaksi.value = tx.name;
+        form.transaction_date.value = formatDateToInput(tx.date); 
+        form.jumlah.value = tx.amount;
+        form.deskripsi.value = tx.description;
+        form.tag.value = tx.tag;
+        
+        if (tx.type === 'pemasukan') {
+            document.getElementById('pemasukan').checked = true;
+        } else if (tx.type === 'pengeluaran') {
+            document.getElementById('pengeluaran').checked = true;
+        }
+
+        modalTitle.textContent = 'Edit Data Transaksi';
+        submitBtn.textContent = 'Perbarui Transaksi';
+        transactionModal.style.display = "block";
+    }
+
+    // --- FUNGSI Logika Filter ---
+    function filterTransactions(transactions) {
+        const selectedMonth = monthFilter.value;
+        const selectedYear = yearFilter.value;
+        const searchName = nameFilter.value.toLowerCase().trim(); 
+        const selectedTag = tagFilter.value; 
+
+        return transactions.filter(tx => {
+            // 1. Filter Tanggal
+            let isDateMatch = true;
+            if (selectedMonth !== 'all' || selectedYear !== 'all') {
+                const txDate = new Date(tx.date);
+                if (isNaN(txDate.getTime())) return false; 
+                
+                const txMonth = String(txDate.getMonth() + 1).padStart(2, '0'); 
+                const txYear = String(txDate.getFullYear());
+
+                const isMonthMatch = (selectedMonth === 'all' || selectedMonth === txMonth);
+                const isYearMatch = (selectedYear === 'all' || selectedYear === txYear);
+                
+                isDateMatch = isMonthMatch && isYearMatch;
+            }
+            
+            // 2. Filter Nama Transaksi
+            const isNameMatch = searchName === '' || tx.name.toLowerCase().includes(searchName);
+
+            // 3. Filter Tag
+            const isTagMatch = selectedTag === 'all' || tx.tag === selectedTag;
+
+            return isDateMatch && isNameMatch && isTagMatch;
+        });
+    }
+
+    // --- FUNGSI BARU: Menghitung dan Menampilkan Ringkasan Kartu ---
+    function updateSummaryCards(filteredTransactions) {
+        let totalIncome = 0;
+        let totalExpense = 0;
+
+        filteredTransactions.forEach(tx => {
+            if (tx.type === 'pemasukan') {
+                totalIncome += tx.amount;
+            } else if (tx.type === 'pengeluaran') {
+                totalExpense += tx.amount;
+            }
+        });
+
+        const balance = totalIncome - totalExpense;
+
+        document.getElementById('totalIncome').textContent = totalIncome.toLocaleString('id-ID');
+        document.getElementById('totalExpense').textContent = totalExpense.toLocaleString('id-ID');
+        
+        const balanceElement = document.getElementById('currentBalance');
+        balanceElement.textContent = balance.toLocaleString('id-ID');
+        
+        // Opsional: Atur warna saldo berdasarkan nilai
+        if (balance < 0) {
+            balanceElement.style.color = '#dc3545'; // Merah jika negatif
+        } else if (balance > 0) {
+            balanceElement.style.color = '#28a745'; // Hijau jika positif
+        } else {
+            balanceElement.style.color = '#007bff'; // Biru jika nol
+        }
+    }
+
+    // ⛔ --- 3. Fungsi untuk menampilkan data ke tabel --- ⛔
+    function renderTable(data) {
+        tableBody.innerHTML = ''; 
+        
+        const filteredData = filterTransactions(data.transactions);
+
+        // PANGGIL FUNGSI BARU DI SINI
+        updateSummaryCards(filteredData); 
+
+        if (filteredData.length === 0) {
+            const newRow = tableBody.insertRow();
+            const cell = newRow.insertCell(0);
+            cell.colSpan = 7; 
+            cell.style.textAlign = 'center';
+            cell.style.fontStyle = 'italic';
+            cell.textContent = "Tidak ada transaksi yang cocok dengan filter yang dipilih.";
+            return; 
+        }
+        
+        filteredData.forEach((tx, index) => {
+            const newRow = tableBody.insertRow();
+            
+            // KOLOM AKSI PERTAMA
+            const actionCell = newRow.insertCell(0);
+            
+            // Tombol Edit
+            const editButton = document.createElement('button');
+            editButton.textContent = '✏️ Edit';
+            editButton.style.marginRight = '5px';
+            editButton.style.padding = '4px 6px';
+            editButton.style.fontSize = '12px';
+            editButton.style.backgroundColor = '#17a2b8'; 
+            editButton.style.color = 'white';
+            editButton.style.border = 'none';
+            editButton.style.borderRadius = '3px';
+            editButton.style.cursor = 'pointer';
+            editButton.onclick = () => editTransaction(index); 
+            actionCell.appendChild(editButton);
+
+            // Tombol Hapus
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = '🗑️ Hapus';
+            deleteButton.style.padding = '4px 6px';
+            deleteButton.style.fontSize = '12px';
+            deleteButton.style.backgroundColor = '#dc3545';
+            deleteButton.style.color = 'white';
+            deleteButton.style.border = 'none';
+            deleteButton.style.borderRadius = '3px';
+            deleteButton.style.cursor = 'pointer';
+            deleteButton.onclick = () => deleteTransaction(index); 
+            actionCell.appendChild(deleteButton);
+            
+            // Kolom Data 
+            const txDate = new Date(tx.date);
+            const formattedDate = txDate.toLocaleDateString('id-ID', {
+                year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+            });
+            const formattedAmount = parseFloat(tx.amount).toLocaleString('id-ID');
+
+            newRow.insertCell(1).textContent = tx.name;
+            newRow.insertCell(2).textContent = formattedDate;
+            
+            const typeCell = newRow.insertCell(3);
+            typeCell.textContent = tx.type.charAt(0).toUpperCase() + tx.type.slice(1);
+            typeCell.className = tx.type; 
+            
+            newRow.insertCell(4).textContent = formattedAmount;
+            newRow.insertCell(5).textContent = tx.tag;
+            newRow.insertCell(6).textContent = tx.description || '-';
+        });
+    }
+    
+    // --- FUNGSI Inisialisasi Semua Filter ---
+    function initializeFilters() {
+        const now = new Date();
+        const currentMonth = String(now.getMonth() + 1).padStart(2, '0'); 
+        const currentYear = now.getFullYear();
+        
+        // 1. Inisialisasi Filter Bulan (Menggunakan monthNames)
+        monthFilter.innerHTML = '<option value="all">Semua Bulan</option>';
+        monthNames.forEach((name, index) => {
+            const monthValue = String(index + 1).padStart(2, '0');
+            const option = document.createElement('option');
+            option.value = monthValue;
+            option.textContent = name;
+            monthFilter.appendChild(option);
+        });
+
+        // 2. Inisialisasi Filter Tahun
+        yearFilter.innerHTML = '<option value="all">Semua Tahun</option>';
+        const startYear = currentYear + 1;
+        const endYear = currentYear - 10;
+        for (let y = startYear; y >= endYear; y--) {
+            const option = document.createElement('option');
+            option.value = String(y);
+            option.textContent = String(y);
+            yearFilter.appendChild(option);
+        }
+        
+        // 3. Inisialisasi Filter Tag (Menggunakan defaultTags)
+        tagFilter.innerHTML = '<option value="all">Semua Tag</option>';
+        
+        defaultTags.forEach(tag => {
+            const option = document.createElement('option');
+            option.value = tag;
+            option.textContent = tag;
+            tagFilter.appendChild(option);
+        });
+
+        // Set Default ke Bulan Ini dan Tahun Ini
+        monthFilter.value = currentMonth;
+        yearFilter.value = String(currentYear);
+
+        // Tambahkan Event Listener ke SEMUA Filter
+        monthFilter.addEventListener('change', () => renderTable(getFinancialData()));
+        yearFilter.addEventListener('change', () => renderTable(getFinancialData()));
+        nameFilter.addEventListener('input', () => renderTable(getFinancialData())); 
+        tagFilter.addEventListener('change', () => renderTable(getFinancialData()));
+    }
+
+
+    // --- FUNGSI Import File ---
+    function importDataFromFile(file) {
+        const reader = new FileReader();
+
+        reader.onload = function(event) {
+            try {
+                const importedJson = JSON.parse(event.target.result);
+                
+                if (!importedJson || !Array.isArray(importedJson.transactions)) {
+                    throw new Error("Format file tidak valid. Pastikan file JSON memiliki properti 'transactions' berupa array.");
+                }
+                
+                const validatedTransactions = importedJson.transactions.map(tx => {
+                    tx.date = formatDateTime(tx.date);
+                    tx.type = tx.type ? tx.type.toLowerCase() : 'umum'; 
+                    return tx;
+                });
+                
+                const newData = {
+                    transactions: validatedTransactions,
+                    debts: importedJson.debts || [] 
+                };
+
+                saveFinancialData(newData);
+                initializeFilters(); 
+                renderTable(newData);
+                
+                alert(`✅ Data berhasil diimpor! Total ${validatedTransactions.length} transaksi dimuat.`);
+                importModal.style.display = "none";
+            } catch (e) {
+                alert(`❌ Gagal mengimpor data. Error: ${e.message}`);
+                console.error("Import Error:", e);
+            } finally {
+                importFileInput.value = null;
+            }
+        };
+        reader.onerror = function() {
+             alert("Terjadi kesalahan saat membaca file.");
+             importFileInput.value = null;
+        };
+        reader.readAsText(file);
+    }
+    
+    // --- 4. Logika Submit Form Transaksi (Menangani Tambah & Edit) ---
+    form.addEventListener('submit', function(event) {
+        event.preventDefault(); 
+        
+        const index = parseInt(editIndexInput.value);
+        const inputDate = document.getElementById('transaction_date').value;
+        const transactionDateTime = formatDateTime(inputDate);
+        
+        const newTransaction = {
+            name: form.nama_transaksi.value,
+            type: form.jenis_transaksi.value, 
+            amount: parseFloat(form.jumlah.value),
+            description: form.deskripsi.value,
+            tag: form.tag.value,
+            date: transactionDateTime
+        };
+
+        let data = getFinancialData();
+        let message;
+
+        if (index > -1) {
+            data.transactions[index] = newTransaction;
+            message = `Transaksi '${newTransaction.name}' berhasil diperbarui!`;
+        } else {
+            data.transactions.push(newTransaction);
+            message = `Transaksi '${newTransaction.name}' berhasil ditambahkan!`;
+        }
+        
+        saveFinancialData(data);
+        renderTable(data); 
+        
+        form.reset();
+        transactionModal.style.display = "none";
+        alert(message);
+    });
+
+    // --- 5. Logika Submit Form Import ---
+    importForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const file = importFileInput.files[0];
+        
+        if (file) {
+            importDataFromFile(file);
+        } else {
+            alert("Harap pilih file JSON untuk diimpor.");
+        }
+    });
+
+    // --- 6. Logika Modal ---
+    openTransactionBtn.onclick = function() { 
+        form.reset();
+        editIndexInput.value = -1; 
+        modalTitle.textContent = 'Input Data Transaksi';
+        submitBtn.textContent = 'Simpan Transaksi';
+        transactionModal.style.display = "block"; 
+    }
+    closeTransactionSpan.onclick = function() { transactionModal.style.display = "none"; }
+    openImportModalBtn.onclick = function() { importModal.style.display = "block"; }
+    closeImportSpan.onclick = function() { importModal.style.display = "none"; }
+
+    window.onclick = function(event) {
+        if (event.target == transactionModal) { transactionModal.style.display = "none"; }
+        if (event.target == importModal) { importModal.style.display = "none"; }
+    }
+
+    // --- 7. Inisialisasi: Muat dan tampilkan data saat halaman pertama kali dimuat ---
+    document.addEventListener('DOMContentLoaded', () => {
+        // Isi Tag di Form Input Transaksi (Modal)
+        populateTagSelect(); 
+
+        // Inisialisasi Filter
+        initializeFilters();
+        
+        // Muat dan Tampilkan Data
+        const data = getFinancialData();
+        renderTable(data);
+    });
+</script>
+</body>
+</html>
