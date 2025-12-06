@@ -1,5 +1,6 @@
  const defaultTags = [
     "Rokok", 
+    "Jajan", 
     "Liquid", 
     "Kuota", 
     "Transportasi", 
