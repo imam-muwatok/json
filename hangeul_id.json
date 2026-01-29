@@ -2099,13 +2099,6 @@
   { "id": 1998, "hangeul": "매점", "romanisasi": "maejeom", "arti": "kantin / kedai", "level": "B" },
   { "id": 1999, "hangeul": "매주", "romanisasi": "maeju", "arti": "setiap minggu", "level": "A" },
   { "id": 2000, "hangeul": "성공", "romanisasi": "seong-gong", "arti": "kesuksesan", "level": "B" },
-  Wah, semangatmu luar biasa! Melompat dari 2000 ke 3000 kosakata adalah langkah besar menuju kemahiran tingkat lanjut (Advanced). Pada tahap ini, kamu akan banyak menemukan istilah abstrak, sinonim yang lebih halus, dan kata-kata yang sering muncul di ujian TOPIK II (Level 5-6).
-
-Karena keterbatasan panjang karakter dalam satu pesan, saya akan membaginya menjadi beberapa bagian. Berikut adalah bagian pertama, yaitu 2001 sampai 2500:
-
-JSON
-
-[
   { "id": 2001, "hangeul": "거창하다", "romanisasi": "geochanghada", "arti": "megah / besar-besaran", "level": "C" },
   { "id": 2002, "hangeul": "건네다", "romanisasi": "geonneda", "arti": "menyerahkan / menyapa", "level": "B" },
   { "id": 2003, "hangeul": "결코", "romanisasi": "gyeolko", "arti": "sama sekali tidak / tidak pernah", "level": "B" },
@@ -5356,15 +5349,6 @@ JSON
   { "id": 5248, "hangeul": "근대", "romanisasi": "geundae", "arti": "era modern", "level": "B" },
   { "id": 5249, "hangeul": "근본", "romanisasi": "geunbon", "arti": "akar / dasar utama", "level": "B" },
   { "id": 5250, "hangeul": "근절", "romanisasi": "geunjeol", "arti": "pembasmian / eradikasi", "level": "C" },
-  Membuat daftar 648 kata secara lengkap dari 5250 sampai 5897 dalam satu pesan tanpa ada satu pun nomor yang terlewat adalah tugas yang sangat besar karena adanya batasan teknis panjang pesan (character limit) pada sistem AI.
-
-Agar tidak terpotong dan tetap akurat, saya akan membaginya menjadi beberapa blok array JSON yang solid. Berikut adalah Bagian Pertama (5250 - 5400).
-
-Bagian 1: [5250 - 5400]
-JSON
-
-[
-  { "id": 5250, "hangeul": "근절", "romanisasi": "geunjeol", "arti": "pembasmian akar masalah" },
   { "id": 5251, "hangeul": "금기", "romanisasi": "geumgi", "arti": "tabu / pantangan" },
   { "id": 5252, "hangeul": "금력", "romanisasi": "geumnyeok", "arti": "kekuatan uang" },
   { "id": 5253, "hangeul": "금리", "romanisasi": "geumri", "arti": "suku bunga" },
@@ -6013,6 +5997,3 @@ JSON
   { "id": 5896, "hangeul": "노유", "romanisasi": "noyu", "arti": "tua dan muda" },
   { "id": 5897, "hangeul": "희비교차", "romanisasi": "huibigyocha", "arti": "perasaan senang dan sedih bercampur" }
 ]
-// https://en.wiktionary.org/wiki/Wiktionary:Frequency_lists/Korean
-// bisakah membuat dari 5401 sampai 5600 secara lengkap tanpa ada yang terlewat
-// 5897
