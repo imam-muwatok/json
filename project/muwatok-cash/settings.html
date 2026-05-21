@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Settings · Muwatok Cash</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5/dark.css">
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-950 text-gray-800 dark:text-gray-100 antialiased overflow-x-hidden">
+
+  <div id="sidebarBackdrop" class="fixed inset-0 bg-black/50 z-30 hidden transition-opacity duration-300 lg:hidden"></div>
+
+  <div class="flex min-h-screen relative">
+    <!-- ========== SIDEBAR ========== -->
+    <aside id="sidebar" class="fixed lg:sticky top-0 left-0 z-40 w-64 h-screen bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 shadow-xl lg:shadow-none transform -translate-x-full lg:translate-x-0 sidebar-transition flex flex-col">
+      <div class="flex items-center justify-between p-5 border-b border-gray-100 dark:border-gray-800">
+        <div class="flex items-center gap-2">
+          <i class="fas fa-wallet text-indigo-600 dark:text-indigo-400 text-2xl"></i>
+          <span class="font-bold text-xl bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">Muwatok-Cash</span>
+        </div>
+        <button id="closeSidebarBtn" class="lg:hidden text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 text-xl">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <nav id="sidebarNav" class="flex-1 py-6 px-3 space-y-1.5"></nav>
+    </aside>
+
+    <!-- ========== MAIN CONTENT ========== -->
+    <main class="flex-1 w-full transition-all duration-300">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <div class="flex items-center gap-3 mb-8">
+          <button id="openSidebarBtn" class="lg:hidden text-gray-600 dark:text-gray-300 text-2xl focus:outline-none">
+            <i class="fas fa-bars"></i>
+          </button>
+          <h1 class="text-2xl md:text-3xl font-bold">Settings</h1>
+        </div>
+
+        <div class="space-y-6">
+          <!-- Import/Export Card -->
+          <div class="bg-white dark:bg-gray-800/80 rounded-2xl shadow-md border border-gray-100 dark:border-gray-700 p-6">
+            <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+              <i class="fas fa-database text-indigo-500"></i> Data Management
+            </h2>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">
+              Impor data transaksi Anda dari file backup JSON untuk memulihkan riwayat keuangan Anda.
+            </p>
+
+            <div class="space-y-4">
+              <div class="p-4 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-gray-900/50">
+                <label class="block text-sm font-medium mb-2">Pilih File JSON</label>
+                <input type="file" id="importFile" accept=".json" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 dark:file:bg-indigo-900/40 dark:file:text-indigo-300 hover:file:bg-indigo-100 transition">
+              </div>
+              
+              <div class="flex flex-wrap gap-3">
+                <button id="btnImport" class="w-full sm:w-auto px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-xl shadow-lg shadow-indigo-500/20 transition flex items-center justify-center gap-2">
+                  <i class="fas fa-file-import"></i> Impor Data
+                </button>
+                <button id="btnExport" class="w-full sm:w-auto px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-xl shadow-lg shadow-emerald-500/20 transition flex items-center justify-center gap-2">
+                  <i class="fas fa-file-export"></i> Ekspor Data
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Budget Settings Card -->
+          <div class="bg-white dark:bg-gray-800/80 rounded-2xl shadow-md border border-gray-100 dark:border-gray-700 p-6">
+            <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+              <i class="fas fa-chart-pie text-purple-500"></i> Budget Strategy
+            </h2>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">
+              Atur target pengeluaran bulanan Anda. Strategi persentase dihitung otomatis dari total pendapatan bulan ini.
+            </p>
+
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium mb-1.5 text-gray-500 dark:text-gray-400">Pilih Strategi</label>
+                <select id="budgetStrategy" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                  <option value="manual">Persentase Kustom (%)</option>
+                  <option value="503020">Aturan 50/30/20 (80% Batas Pengeluaran)</option>
+                  <option value="702010">Aturan 70/20/10 (70% Batas Pengeluaran)</option>
+                </select>
+              </div>
+
+              <div id="manualBudgetContent">
+                <label class="block text-sm font-medium mb-1.5 text-gray-500 dark:text-gray-400">Target Bulanan (%)</label>
+                <input type="number" id="monthlyBudgetLimit" placeholder="Contoh: 80" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none transition">
+              </div>
+
+              <button id="btnSaveBudget" class="w-full sm:w-auto px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-xl shadow-lg shadow-indigo-500/20 transition flex items-center justify-center gap-2">
+                <i class="fas fa-save"></i> Simpan Target
+              </button>
+            </div>
+          </div>
+
+          <!-- Reset Data Card -->
+          <div class="bg-white dark:bg-gray-800/80 rounded-2xl shadow-md border border-gray-100 dark:border-gray-700 p-6">
+            <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+              <i class="fas fa-exclamation-triangle text-rose-500"></i> Danger Zone
+            </h2>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">
+              Menghapus semua data transaksi dan kustomisasi tag secara permanen dari browser ini. Pastikan Anda memiliki backup jika diperlukan.
+            </p>
+
+            <button id="btnReset" class="w-full sm:w-auto px-6 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-medium rounded-xl shadow-lg shadow-rose-500/20 transition flex items-center justify-center gap-2">
+              <i class="fas fa-trash-alt"></i> Reset Semua Data
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="assets/js/script.js"></script>
+  <script>
+    document.getElementById('btnImport').addEventListener('click', function() {
+      const fileInput = document.getElementById('importFile');
+      const file = fileInput.files[0];
+
+      if (!file) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Oops...',
+          text: 'Silakan pilih file JSON terlebih dahulu!',
+          confirmButtonColor: '#4f46e5'
+        });
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = JSON.parse(e.target.result);
+          
+          // Validasi sederhana struktur data
+          if (!data.transactions) {
+            throw new Error('Format file tidak dikenali.');
+          }
+
+          // AUTO ADD TAGS LOGIC
+          const importedTransactions = data.transactions;
+          const uniqueImportedTags = [...new Set(importedTransactions.map(t => t.tag))];
+          
+          const rawExistingTags = localStorage.getItem('muwatok_cash_tags') || '[]';
+          let existingTags = JSON.parse(rawExistingTags);
+          
+          const colors = [
+            '#ef4444', '#f97316', '#f59e0b', '#eab308', '#84cc16', '#22c55e', '#10b981', '#14b8a6', '#06b6d4', '#0ea5e9',
+            '#3b82f6', '#6366f1', '#8b5cf6', '#a855f7', '#d946ef', '#ec4899', '#f43f5e', '#64748b', '#71717a', '#78716c',
+            '#991b1b', '#9a3412', '#92400e', '#854d0e', '#3f6212', '#166534', '#065f46', '#115e59', '#155e75', '#075985',
+            '#93c5fd', '#a5b4fc', '#c4b5fd', '#d8b4fe', '#f0abfc', '#f9a8d4', '#fda4af', '#cbd5e1', '#d4d4d8', '#d6d3d1'
+          ];
+
+          const icons = [
+            'fa-tag', 'fa-utensils', 'fa-shopping-cart', 'fa-car', 'fa-home', 'fa-heart', 'fa-briefcase', 'fa-graduation-cap', 'fa-dumbbell', 'fa-plane',
+            'fa-gamepad', 'fa-music', 'fa-tv', 'fa-coffee', 'fa-beer', 'fa-gift', 'fa-medkit', 'fa-tools', 'fa-money-bill', 'fa-credit-card',
+            'fa-piggy-bank', 'fa-chart-line', 'fa-laptop', 'fa-mobile-alt', 'fa-camera', 'fa-bicycle', 'fa-bus', 'fa-train', 'fa-ship', 'fa-pills',
+            'fa-umbrella', 'fa-cloud', 'fa-bolt', 'fa-key', 'fa-flask', 'fa-microchip', 'fa-headphones', 'fa-dice', 'fa-puzzle-piece', 'fa-landmark',
+            'fa-smoking', 'fa-motorcycle', 'fa-baby', 'fa-bath', 'fa-bed', 'fa-calculator', 'fa-clock', 'fa-envelope', 'fa-file-invoice-dollar', 'fa-film',
+            'fa-fire', 'fa-fish', 'fa-football-ball', 'fa-glass-cheers', 'fa-hamburger', 'fa-hospital', 'fa-ice-cream', 'fa-palette', 'fa-pizza-slice', 'fa-rocket',
+            'fa-seedling', 'fa-store', 'fa-subway', 'fa-taxi', 'fa-ticket-alt', 'fa-tooth', 'fa-truck', 'fa-wifi', 'fa-wine-glass', 'fa-cloud-meatball'
+          ];
+
+          uniqueImportedTags.forEach(tagName => {
+            const tagExists = existingTags.some(t => t.name.toLowerCase() === tagName.toLowerCase());
+            if (!tagExists) {
+              // Cari warna yang belum digunakan oleh tag yang sudah ada
+              const usedColors = existingTags.map(t => t.color);
+              const availableColors = colors.filter(c => !usedColors.includes(c));
+              
+              // Gunakan warna dari pool yang tersedia, jika habis gunakan random dari semua warna
+              const colorPool = availableColors.length > 0 ? availableColors : colors;
+              const randomColor = colorPool[Math.floor(Math.random() * colorPool.length)];
+              const randomIcon = icons[Math.floor(Math.random() * icons.length)];
+
+              existingTags.push({
+                name: tagName,
+                icon: randomIcon,
+                color: randomColor
+              });
+            }
+          });
+
+          localStorage.setItem('muwatok_cash_tags', JSON.stringify(existingTags));
+
+          localStorage.setItem('muwatok_cash_data', JSON.stringify(data));
+
+          Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: 'Data keuangan telah berhasil diimpor.',
+            confirmButtonColor: '#4f46e5'
+          }).then(() => {
+            window.location.href = 'index.html';
+          });
+
+        } catch (error) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Import Gagal',
+            text: 'Terjadi kesalahan saat membaca file: ' + error.message,
+            confirmButtonColor: '#4f46e5'
+          });
+        }
+      };
+      reader.readAsText(file);
+    });
+
+    // RESET DATA LOGIC
+    document.getElementById('btnReset').addEventListener('click', function() {
+      Swal.fire({
+        title: 'Hapus Semua Data?',
+        text: "Semua transaksi dan kustomisasi tag akan hilang selamanya!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ef4444',
+        cancelButtonColor: '#4f46e5',
+        confirmButtonText: 'Ya, Hapus Semua!',
+        cancelButtonText: 'Batal'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Menghapus data spesifik aplikasi
+          localStorage.removeItem('muwatok_cash_data');
+          localStorage.removeItem('muwatok_cash_tags');
+          
+          Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: 'Semua data telah dibersihkan.',
+            confirmButtonColor: '#4f46e5'
+          }).then(() => {
+            // Kembali ke dashboard
+            window.location.href = 'index.html';
+          });
+        }
+      });
+    });
+
+    // EXPORT DATA LOGIC
+    document.getElementById('btnExport').addEventListener('click', function() {
+      const keys = [
+        'muwatok_cash_data',
+        'muwatok_cash_tags',
+        'muwatok_cash_settings',
+        'muwatok_cash_censored',
+        'muwatok_cash_savings',
+        'muwatok_cash_saving_transactions',
+        'muwatok_cash_investments',
+        'muwatok_cash_investment_transactions'
+      ];
+
+      const fullBackup = {};
+      keys.forEach(key => {
+        const val = localStorage.getItem(key);
+        if (val) fullBackup[key] = JSON.parse(val);
+      });
+
+      if (Object.keys(fullBackup).length === 0) {
+        Swal.fire({
+          icon: 'error', title: 'Ekspor Gagal', text: 'Tidak ada data untuk diekspor.', confirmButtonColor: '#4f46e5'
+        });
+        return;
+      }
+
+      const blob = new Blob([JSON.stringify(fullBackup, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const now = new Date();
+      const dateStr = now.toISOString().split('T')[0];
+      a.href = url;
+      a.download = `muwatok-cash-backup-${dateStr}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Berhasil!',
+        text: 'Data telah berhasil diekspor sebagai file JSON.',
+        timer: 1500,
+        showConfirmButton: false
+      });
+    });
+
+    // BUDGET SETTINGS LOGIC
+    (function() {
+      const strategySelect = document.getElementById('budgetStrategy');
+      const manualContent = document.getElementById('manualBudgetContent');
+      const budgetInput = document.getElementById('monthlyBudgetLimit');
+      const btnSaveBudget = document.getElementById('btnSaveBudget');
+
+      const loadSettings = () => {
+        const settings = JSON.parse(localStorage.getItem('muwatok_cash_settings')) || { strategy: 'manual', limit: 0 };
+        strategySelect.value = settings.strategy;
+        budgetInput.value = settings.limit;
+        manualContent.classList.toggle('hidden', settings.strategy !== 'manual');
+      };
+
+      strategySelect.addEventListener('change', (e) => {
+        manualContent.classList.toggle('hidden', e.target.value !== 'manual');
+      });
+
+      btnSaveBudget.addEventListener('click', () => {
+        const settings = { strategy: strategySelect.value, limit: parseFloat(budgetInput.value) || 0 };
+        localStorage.setItem('muwatok_cash_settings', JSON.stringify(settings));
+        Swal.fire({ icon: 'success', title: 'Saved!', text: 'Target anggaran telah diperbarui.', timer: 1500, showConfirmButton: false });
+      });
+
+      loadSettings();
+    })();
+  </script>
+</body>
+</html>

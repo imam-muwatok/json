@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Transactions · Muwatok Cash</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5/dark.css">
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-950 text-gray-800 dark:text-gray-100 antialiased overflow-x-hidden">
+
+  <div id="sidebarBackdrop" class="fixed inset-0 bg-black/50 z-30 hidden transition-opacity duration-300 lg:hidden"></div>
+
+  <div class="flex min-h-screen relative">
+    <!-- ========== SIDEBAR ========== -->
+    <aside id="sidebar" class="fixed lg:sticky top-0 left-0 z-40 w-64 h-screen bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 shadow-xl lg:shadow-none transform -translate-x-full lg:translate-x-0 sidebar-transition flex flex-col">
+      <div class="flex items-center justify-between p-5 border-b border-gray-100 dark:border-gray-800">
+        <div class="flex items-center gap-2">
+          <i class="fas fa-wallet text-indigo-600 dark:text-indigo-400 text-2xl"></i>
+          <span class="font-bold text-xl bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">Muwatok-Cash</span>
+        </div>
+        <button id="closeSidebarBtn" class="lg:hidden text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 text-xl">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <nav id="sidebarNav" class="flex-1 py-6 px-3 space-y-1.5"></nav>
+    </aside>
+
+    <!-- ========== MAIN CONTENT ========== -->
+    <main class="flex-1 w-full transition-all duration-300">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+          <div class="flex items-center gap-3">
+            <button id="openSidebarBtn" class="lg:hidden text-gray-600 dark:text-gray-300 text-2xl focus:outline-none">
+              <i class="fas fa-bars"></i>
+            </button>
+            <h1 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">All Transactions</h1>
+          </div>
+
+          <div class="flex items-center gap-4">
+            <button id="toggleVisibilityBtn" class="flex items-center justify-center w-11 h-11 bg-white dark:bg-gray-800/60 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:text-indigo-500 transition-all">
+              <i class="fas fa-eye"></i>
+            </button>
+            <!-- Type Filter Button Group -->
+            <div class="inline-flex p-1 bg-gray-100 dark:bg-gray-800/50 rounded-xl" id="typeFilterGroup">
+              <button data-type="all" class="px-4 py-2 text-sm font-medium rounded-lg transition-all bg-white dark:bg-gray-700 shadow-sm text-indigo-600 dark:text-indigo-400">All</button>
+              <button data-type="pemasukan" class="px-4 py-2 text-sm font-medium rounded-lg transition-all text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">Income</button>
+              <button data-type="pengeluaran" class="px-4 py-2 text-sm font-medium rounded-lg transition-all text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">Outcome</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div class="relative">
+            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+            <input type="text" id="filterName" placeholder="Search name..." class="w-full pl-10 pr-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none">
+          </div>
+          <select id="filterTag" class="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none">
+            <option value="">All Tags</option>
+          </select>
+          <select id="filterMonth" class="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none">
+            <option value="">All Months</option>
+            <option value="0">January</option>
+            <option value="1">February</option>
+            <option value="2">March</option>
+            <option value="3">April</option>
+            <option value="4">May</option>
+            <option value="5">June</option>
+            <option value="6">July</option>
+            <option value="7">August</option>
+            <option value="8">September</option>
+            <option value="9">October</option>
+            <option value="10">November</option>
+            <option value="11">December</option>
+          </select>
+          <select id="filterYear" class="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none">
+            <option value="">All Years</option>
+          </select>
+        </div>
+
+        <!-- Summary Cards (Filtered) -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+          <div class="bg-white dark:bg-gray-800/80 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-4">
+            <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Masuk</p>
+            <p id="filteredIncome" class="text-xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">Rp 0</p>
+          </div>
+          <div class="bg-white dark:bg-gray-800/80 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-4">
+            <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Keluar</p>
+            <p id="filteredExpense" class="text-xl font-bold text-rose-600 dark:text-rose-400 mt-1">Rp 0</p>
+          </div>
+          <div class="bg-white dark:bg-gray-800/80 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-4">
+            <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Sisa</p>
+            <p id="filteredBalance" class="text-xl font-bold mt-1 text-indigo-600 dark:text-indigo-400">Rp 0</p>
+          </div>
+        </div>
+
+        <!-- Transactions Table -->
+        <div class="bg-white dark:bg-gray-800/80 rounded-2xl shadow-md border border-gray-100 dark:border-gray-700 overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-gray-50 dark:bg-gray-900/50 border-b border-gray-100 dark:border-gray-700">
+                  <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500">Transaction</th>
+                  <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500">Category</th>
+                  <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500">Date</th>
+                  <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500 text-right">Amount</th>
+                  <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="transactionsTableBody" class="divide-y divide-gray-100 dark:divide-gray-800">
+                <!-- Rendered by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="mt-8 text-center text-xs text-gray-400">
+          <p>© 2025 Muwatok Wallet — Showing all historical data.</p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Reuse Transaction Modal for Edit -->
+  <div id="transactionModal" class="fixed inset-0 z-50 flex items-center justify-center hidden p-4">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" id="modalBackdrop"></div>
+    <div class="bg-white dark:bg-gray-900 w-full max-w-md rounded-2xl shadow-2xl relative z-10 overflow-hidden border border-gray-200 dark:border-gray-800">
+      <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50/50 dark:bg-gray-800/50">
+        <h3 id="modalTitle" class="font-bold text-lg">Add Transaction</h3>
+        <button id="closeModalBtn" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition"><i class="fas fa-times"></i></button>
+      </div>
+      <form id="transactionForm" class="p-6 space-y-4">
+        <input type="hidden" id="editIndex" value="-1">
+        <div>
+          <label class="block text-sm font-medium mb-1.5 text-gray-500 dark:text-gray-400">Transaction Name</label>
+          <input type="text" name="name" required placeholder="e.g. Salary, Groceries" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none transition">
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium mb-1.5 text-gray-500 dark:text-gray-400">Amount</label>
+            <input type="number" name="amount" required placeholder="0" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none transition">
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1.5 text-gray-500 dark:text-gray-400">Type</label>
+            <div class="flex p-1 bg-gray-100 dark:bg-gray-800 rounded-xl" id="modalTypeGroup">
+              <input type="hidden" name="type" value="pengeluaran">
+              <button type="button" data-val="pengeluaran" class="flex-1 py-2 text-sm font-medium rounded-lg transition-all bg-white dark:bg-gray-700 shadow-sm text-indigo-600 dark:text-indigo-400">Outcome</button>
+              <button type="button" data-val="pemasukan" class="flex-1 py-2 text-sm font-medium rounded-lg transition-all text-gray-500 dark:text-gray-400">Income</button>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium mb-1.5 text-gray-500 dark:text-gray-400">Category (Tag)</label>
+            <select name="tag" required class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none transition">
+              <option value="">Select Tag</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1.5 text-gray-500 dark:text-gray-400">Date</label>
+            <input type="date" name="date" required class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none transition">
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1.5 text-gray-500 dark:text-gray-400">Description</label>
+          <textarea name="description" rows="2" placeholder="Add some notes..." class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none transition resize-none"></textarea>
+        </div>
+        <button type="submit" id="submitBtn" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-indigo-500/30 transition-all mt-2">Save Transaction</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="assets/js/script.js"></script>
+</body>
+</html>

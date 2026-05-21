@@ -1,0 +1,92 @@
+* {
+  transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s;
+}
+
+.dark {
+  color-scheme: dark;
+}
+
+/* Menjadikan icon kalender pada input date menjadi putih di dark mode */
+.dark input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+/* custom scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #e2e8f0;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 10px;
+}
+.dark ::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+/* card hover effect */
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 25px -12px rgba(0, 0, 0, 0.1);
+}
+.dark .card-hover:hover {
+  box-shadow: 0 20px 25px -12px rgba(0, 0, 0, 0.4);
+}
+/* sidebar transition for mobile */
+.sidebar-transition {
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Select2 Dark Mode & Custom Styling */
+.select2-container--default .select2-selection--single {
+  background-color: transparent !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 0.75rem !important;
+  height: 42px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+.dark .select2-container--default .select2-selection--single {
+  border-color: #374151 !important;
+  background-color: #1f2937 !important;
+}
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+  color: inherit !important;
+  padding-left: 1rem !important;
+}
+.select2-dropdown {
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 0.75rem !important;
+  z-index: 9999 !important;
+}
+.dark .select2-dropdown {
+  background-color: #111827 !important;
+  border-color: #374151 !important;
+}
+.select2-results__option--highlighted[aria-selected] {
+  background-color: #4f46e5 !important;
+}
+
+/* Coin Search Item Layout */
+.coin-result { display: flex; align-items: center; gap: 10px; }
+.coin-result img { width: 24px; height: 24px; border-radius: 50%; }
+.coin-result .coin-info { display: flex; flex-col; line-height: 1.2; }
+.coin-result .coin-name { font-weight: 600; font-size: 0.875rem; }
+.coin-result .coin-id { font-size: 0.75rem; opacity: 0.6; }
+
+.select2-container--default .select2-search--dropdown .select2-search__field {
+  border-radius: 0.5rem !important;
+}

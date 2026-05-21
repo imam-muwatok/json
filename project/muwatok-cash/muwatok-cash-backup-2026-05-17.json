@@ -1,0 +1,1469 @@
+{
+  "muwatok_cash_data": {
+    "transactions": [
+      {
+        "name": "Salary",
+        "type": "pemasukan",
+        "amount": 1590000,
+        "description": "",
+        "tag": "Gaji",
+        "date": "2025-12-01 00:00:00"
+      },
+      {
+        "name": "Liquid",
+        "type": "pengeluaran",
+        "amount": 100000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2025-12-02 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 17500,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2025-12-02 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 17500,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2025-12-04 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 17500,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2025-12-05 00:00:00"
+      },
+      {
+        "name": "Aqua",
+        "type": "pengeluaran",
+        "amount": 3000,
+        "description": "",
+        "tag": "Jajan",
+        "date": "2025-12-06 00:00:00"
+      },
+      {
+        "name": "Bensin",
+        "type": "pengeluaran",
+        "amount": 37000,
+        "description": "",
+        "tag": "Transportasi",
+        "date": "2025-12-08 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 29000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2025-12-08 00:00:00"
+      },
+      {
+        "name": "Angsuran Fino",
+        "type": "pengeluaran",
+        "amount": 413333,
+        "description": "Angsuran ke 4",
+        "tag": "Tagihan",
+        "date": "2025-12-10 00:00:00"
+      },
+      {
+        "name": "Angsuran oli",
+        "type": "pengeluaran",
+        "amount": 16718,
+        "description": "Ke 1",
+        "tag": "Motor",
+        "date": "2025-12-11 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 17500,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2025-12-10 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 17500,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2025-12-11 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 18000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2025-12-13 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 17500,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2025-12-15 00:00:00"
+      },
+      {
+        "name": "Tebs, pasra gigi, sikat gigi",
+        "type": "pengeluaran",
+        "amount": 18000,
+        "description": "",
+        "tag": "Jajan",
+        "date": "2025-12-16 00:08:26"
+      },
+      {
+        "name": "Bensin",
+        "type": "pengeluaran",
+        "amount": 30000,
+        "description": "",
+        "tag": "Transportasi",
+        "date": "2025-12-19 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 18000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2025-12-19 00:00:00"
+      },
+      {
+        "name": "Brownies",
+        "type": "pengeluaran",
+        "amount": 2000,
+        "description": "",
+        "tag": "Jajan",
+        "date": "2025-12-20 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 17000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2025-12-22 00:00:00"
+      },
+      {
+        "name": "kuota",
+        "type": "pengeluaran",
+        "amount": 15020,
+        "description": "",
+        "tag": "Kuota",
+        "date": "2025-12-23 00:00:00"
+      },
+      {
+        "name": "Iso plus",
+        "type": "pengeluaran",
+        "amount": 6000,
+        "description": "2 pcs",
+        "tag": "Jajan",
+        "date": "2025-12-23 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 17500,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2025-12-24 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 18000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2025-12-26 00:00:00"
+      },
+      {
+        "name": "Linda",
+        "type": "pengeluaran",
+        "amount": 245600,
+        "description": "Bayarin utang",
+        "tag": "Bayar Tagihan Orang",
+        "date": "2025-12-27 00:00:00"
+      },
+      {
+        "name": "Bensin",
+        "type": "pengeluaran",
+        "amount": 25000,
+        "description": "",
+        "tag": "Transportasi",
+        "date": "2025-12-27 15:00:55"
+      },
+      {
+        "name": "Liquid",
+        "type": "pengeluaran",
+        "amount": 100000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2025-12-27 00:00:00"
+      },
+      {
+        "name": "CT",
+        "type": "pengeluaran",
+        "amount": 40000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2025-12-27 00:00:00"
+      },
+      {
+        "name": "Lampu speedo",
+        "type": "pengeluaran",
+        "amount": 4000,
+        "description": "@ 2000",
+        "tag": "Motor",
+        "date": "2025-12-25 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 18000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2025-12-30 00:00:00"
+      },
+      {
+        "name": "Salary",
+        "type": "pemasukan",
+        "amount": 1280000,
+        "description": "Diterima 31 des 25",
+        "tag": "Gaji",
+        "date": "2026-01-01 00:00:00"
+      },
+      {
+        "name": "Dansos",
+        "type": "pengeluaran",
+        "amount": 30000,
+        "tag": "Dana Sosial",
+        "date": "2026-01-01 00:00:00",
+        "description": "Dibayarkan tanggal 31 des 25"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 17000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-01-02 00:00:00"
+      },
+      {
+        "name": "Kuota",
+        "type": "pengeluaran",
+        "amount": 15500,
+        "description": "",
+        "tag": "Kuota",
+        "date": "2026-01-02 00:00:00"
+      },
+      {
+        "name": "Bensin",
+        "type": "pengeluaran",
+        "amount": 32000,
+        "description": "",
+        "tag": "Transportasi",
+        "date": "2026-01-05 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 17500,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-01-06 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 17500,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-01-07 00:00:00"
+      },
+      {
+        "name": "Liquid",
+        "type": "pengeluaran",
+        "amount": 100000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-01-08 18:58:05"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 17500,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-01-09 00:00:00"
+      },
+      {
+        "name": "Kuota",
+        "type": "pengeluaran",
+        "amount": 15500,
+        "description": "",
+        "tag": "Kuota",
+        "date": "2026-01-09 00:00:00"
+      },
+      {
+        "name": "Angsuran Fino",
+        "type": "pengeluaran",
+        "amount": 414000,
+        "description": "Ke-5",
+        "tag": "Tagihan",
+        "date": "2026-01-10 00:00:00"
+      },
+      {
+        "name": "Oli",
+        "type": "pengeluaran",
+        "amount": 17000,
+        "description": "Ke-2",
+        "tag": "Motor",
+        "date": "2026-01-10 00:00:00"
+      },
+      {
+        "name": "Kuota",
+        "type": "pengeluaran",
+        "amount": 15000,
+        "description": "Payletter 5 des 26",
+        "tag": "Kuota",
+        "date": "2026-01-10 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 18000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-01-11 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 17500,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-01-13 00:00:00"
+      },
+      {
+        "name": "Bensin",
+        "type": "pengeluaran",
+        "amount": 30000,
+        "description": "",
+        "tag": "Transportasi",
+        "date": "2026-01-14 00:00:00"
+      },
+      {
+        "name": "Potong Rambut",
+        "type": "pengeluaran",
+        "amount": 12000,
+        "tag": "Kebutuhan",
+        "date": "2026-01-16 00:00:00",
+        "description": ""
+      },
+      {
+        "name": "Pajak",
+        "type": "pemasukan",
+        "amount": 50000,
+        "tag": "Income",
+        "date": "2026-01-18 00:00:00",
+        "description": "Salary bayar pajak scoopy"
+      },
+      {
+        "name": "Kuota",
+        "type": "pengeluaran",
+        "amount": 15500,
+        "description": "Kuota samsung",
+        "tag": "Kuota",
+        "date": "2026-01-18 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 18000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-01-18 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 26000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-01-19 00:00:00"
+      },
+      {
+        "name": "Bensin",
+        "type": "pengeluaran",
+        "amount": 25000,
+        "description": "",
+        "tag": "Transportasi",
+        "date": "2026-01-21 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 17500,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-01-23 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 26000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-01-23 14:49:58"
+      },
+      {
+        "name": "Kuota",
+        "type": "pengeluaran",
+        "amount": 15500,
+        "description": "Poco",
+        "tag": "Kuota",
+        "date": "2026-01-25 00:00:00"
+      },
+      {
+        "name": "Linda",
+        "type": "pengeluaran",
+        "amount": 246000,
+        "description": "",
+        "tag": "Bayar Tagihan Orang",
+        "date": "2026-01-27 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 17500,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-01-28 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 26000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-01-28 00:00:00"
+      },
+      {
+        "name": "Bensin",
+        "type": "pengeluaran",
+        "amount": 34000,
+        "description": "",
+        "tag": "Transportasi",
+        "date": "2026-01-30 00:00:00"
+      },
+      {
+        "name": "Salary",
+        "type": "pemasukan",
+        "amount": 1510000,
+        "description": "Salary January. 30-01-2026",
+        "tag": "Gaji",
+        "date": "2026-02-01 00:00:00"
+      },
+      {
+        "name": "Dansos",
+        "type": "pengeluaran",
+        "amount": 10000,
+        "tag": "Dana Sosial",
+        "date": "2026-02-01 00:00:00",
+        "description": "30-01-2026"
+      },
+      {
+        "name": "Liquid",
+        "type": "pengeluaran",
+        "amount": 100000,
+        "description": "31-01-2026",
+        "tag": "Rokok",
+        "date": "2026-02-01 00:00:00"
+      },
+      {
+        "name": "Ct",
+        "type": "pengeluaran",
+        "amount": 50000,
+        "description": "30-10-2026",
+        "tag": "Rokok",
+        "date": "2026-02-01 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 26000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-02-02 00:00:00"
+      },
+      {
+        "name": "Kuota",
+        "type": "pengeluaran",
+        "amount": 15500,
+        "description": "Kuota samsung m10",
+        "tag": "Kuota",
+        "date": "2026-02-02 00:00:00"
+      },
+      {
+        "name": "Kuota",
+        "type": "pengeluaran",
+        "amount": 15500,
+        "description": "Samsung m10",
+        "tag": "Kuota",
+        "date": "2026-02-07 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 26000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-02-08 00:00:00"
+      },
+      {
+        "name": "Kuota",
+        "type": "pengeluaran",
+        "amount": 15500,
+        "description": "",
+        "tag": "Kuota",
+        "date": "2026-02-09 00:00:00"
+      },
+      {
+        "name": "Angsuran motor",
+        "type": "pengeluaran",
+        "amount": 413333,
+        "description": "",
+        "tag": "Tagihan",
+        "date": "2026-02-10 00:00:00"
+      },
+      {
+        "name": "Angsuran oli",
+        "type": "pengeluaran",
+        "amount": 17000,
+        "description": "",
+        "tag": "Motor",
+        "date": "2026-02-11 00:00:00"
+      },
+      {
+        "name": "Kuota",
+        "type": "pengeluaran",
+        "amount": 15500,
+        "description": "",
+        "tag": "Kuota",
+        "date": "2026-02-14 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 30000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-02-14 00:00:00"
+      },
+      {
+        "name": "Sikat gigi",
+        "type": "pengeluaran",
+        "amount": 3000,
+        "tag": "Kebutuhan",
+        "date": "2026-02-14 00:00:00",
+        "description": ""
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 26000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-02-16 00:00:00"
+      },
+      {
+        "name": "Kuota",
+        "type": "pengeluaran",
+        "amount": 15500,
+        "description": "M10",
+        "tag": "Kuota",
+        "date": "2026-02-17 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 18000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-02-19 00:00:00"
+      },
+      {
+        "name": "Kuota",
+        "type": "pengeluaran",
+        "amount": 15500,
+        "description": "",
+        "tag": "Kuota",
+        "date": "2026-02-20 00:00:00"
+      },
+      {
+        "name": "Liquid",
+        "type": "pengeluaran",
+        "amount": 80000,
+        "description": "Di pakai tgl 23",
+        "tag": "Rokok",
+        "date": "2026-02-21 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 26000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-02-21 00:00:00"
+      },
+      {
+        "name": "Bensin",
+        "type": "pengeluaran",
+        "amount": 26000,
+        "description": "",
+        "tag": "Transportasi",
+        "date": "2026-02-23 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 26000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-02-25 00:00:00"
+      },
+      {
+        "name": "Linda",
+        "type": "pengeluaran",
+        "amount": 246000,
+        "description": "Bayarin hutang ornag",
+        "tag": "Bayar Tagihan Orang",
+        "date": "2026-02-27 00:00:00"
+      },
+      {
+        "name": "Salary",
+        "type": "pemasukan",
+        "amount": 1410000,
+        "description": "Diterima 28-02-2026",
+        "tag": "Gaji",
+        "date": "2026-03-01 00:00:00"
+      },
+      {
+        "name": "Dansos",
+        "type": "pengeluaran",
+        "amount": 10000,
+        "tag": "Dana Sosial",
+        "date": "2026-03-01 00:00:00",
+        "description": "Dibayar 28-02-2026"
+      },
+      {
+        "name": "Kuota",
+        "type": "pengeluaran",
+        "amount": 15500,
+        "description": "",
+        "tag": "Kuota",
+        "date": "2026-02-26 00:00:00"
+      },
+      {
+        "name": "Kuota",
+        "type": "pengeluaran",
+        "amount": 15500,
+        "description": "",
+        "tag": "Kuota",
+        "date": "2026-03-01 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 26500,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-03-01 00:00:00"
+      },
+      {
+        "name": "Bensin",
+        "type": "pengeluaran",
+        "amount": 22000,
+        "description": "",
+        "tag": "Transportasi",
+        "date": "2026-03-03 00:00:00"
+      },
+      {
+        "name": "Liquid",
+        "type": "pengeluaran",
+        "amount": 100000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-03-03 00:00:00"
+      },
+      {
+        "name": "Liquid",
+        "type": "pengeluaran",
+        "amount": 100000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-03-03 00:00:00"
+      },
+      {
+        "name": "Kuota",
+        "type": "pengeluaran",
+        "amount": 15500,
+        "description": "",
+        "tag": "Kuota",
+        "date": "2026-03-05 00:00:00"
+      },
+      {
+        "name": "Kuota",
+        "type": "pengeluaran",
+        "amount": 15500,
+        "description": "",
+        "tag": "Kuota",
+        "date": "2026-03-08 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 53000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-03-04 00:00:00"
+      },
+      {
+        "name": "THR",
+        "type": "pemasukan",
+        "amount": 600000,
+        "description": "",
+        "tag": "Gaji",
+        "date": "2026-03-09 18:41:45"
+      },
+      {
+        "name": "Keyboard titan evi",
+        "type": "pengeluaran",
+        "amount": 53000,
+        "description": "",
+        "tag": "Tagihan",
+        "date": "2026-03-10 00:00:00"
+      },
+      {
+        "name": "Fino",
+        "type": "pengeluaran",
+        "amount": 414000,
+        "description": "",
+        "tag": "Tagihan",
+        "date": "2026-03-10 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 30000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-03-11 22:09:06"
+      },
+      {
+        "name": "Kuota",
+        "type": "pengeluaran",
+        "amount": 15500,
+        "description": "",
+        "tag": "Kuota",
+        "date": "2026-03-11 22:09:18"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 26500,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-03-15 00:00:00"
+      },
+      {
+        "name": "Simbok",
+        "type": "pemasukan",
+        "amount": 300000,
+        "tag": "Income",
+        "date": "2026-03-15 00:00:00",
+        "description": ""
+      },
+      {
+        "name": "Kemeja",
+        "type": "pengeluaran",
+        "amount": 150000,
+        "tag": "Kebutuhan",
+        "date": "2026-03-15 00:00:00",
+        "description": ""
+      },
+      {
+        "name": "Kuota",
+        "type": "pengeluaran",
+        "amount": 30000,
+        "description": "",
+        "tag": "Kuota",
+        "date": "2026-03-16 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 31000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-03-18 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 30000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-03-20 00:00:00"
+      },
+      {
+        "name": "Ibuk",
+        "type": "pengeluaran",
+        "amount": 2000,
+        "tag": "Dana Sosial",
+        "date": "2026-03-20 00:00:00",
+        "description": "Nombok byr kuota"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 26500,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-03-22 00:00:00"
+      },
+      {
+        "name": "THR",
+        "type": "pengeluaran",
+        "amount": 50000,
+        "tag": "THR",
+        "date": "2026-03-20 00:00:00",
+        "description": "Iqbal thr"
+      },
+      {
+        "name": "Kuota",
+        "type": "pengeluaran",
+        "amount": 15000,
+        "description": "",
+        "tag": "Kuota",
+        "date": "2026-03-24 00:00:00"
+      },
+      {
+        "name": "THR",
+        "type": "pengeluaran",
+        "amount": 100000,
+        "tag": "THR",
+        "date": "2026-03-24 00:00:00",
+        "description": "Thr lintang & citra"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 30000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-03-25 00:00:00"
+      },
+      {
+        "name": "THR",
+        "type": "pengeluaran",
+        "amount": 100000,
+        "tag": "THR",
+        "date": "2026-03-26 00:00:00",
+        "description": "Thr haziq & havi"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 18000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-03-28 00:00:00"
+      },
+      {
+        "name": "Kuota",
+        "type": "pengeluaran",
+        "amount": 15000,
+        "description": "",
+        "tag": "Kuota",
+        "date": "2026-03-28 00:00:00"
+      },
+      {
+        "name": "Salary",
+        "type": "pemasukan",
+        "amount": 1250000,
+        "description": "Dibayarkan 31-03-2026",
+        "tag": "Gaji",
+        "date": "2026-04-01 00:00:00"
+      },
+      {
+        "name": "Dansos",
+        "type": "pengeluaran",
+        "amount": 20000,
+        "tag": "Dana Sosial",
+        "date": "2026-04-01 00:00:00",
+        "description": "Dibayarkan 31-03-2026"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 30000,
+        "description": "Dibayarkan 31-03-2026",
+        "tag": "Rokok",
+        "date": "2026-04-01 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 31000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-04-02 00:00:00"
+      },
+      {
+        "name": "Bensin",
+        "type": "pengeluaran",
+        "amount": 25000,
+        "description": "",
+        "tag": "Transportasi",
+        "date": "2026-04-04 00:00:00"
+      },
+      {
+        "name": "Potong Rambut",
+        "type": "pengeluaran",
+        "amount": 12000,
+        "tag": "Kebutuhan",
+        "date": "2026-04-05 00:00:00",
+        "description": ""
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 30000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-04-05 00:00:00"
+      },
+      {
+        "name": "Kuota",
+        "type": "pengeluaran",
+        "amount": 15000,
+        "description": "",
+        "tag": "Kuota",
+        "date": "2026-04-02 00:00:00"
+      },
+      {
+        "name": "Kuota",
+        "type": "pengeluaran",
+        "amount": 15000,
+        "description": "",
+        "tag": "Kuota",
+        "date": "2026-04-07 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 31000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-04-07 00:00:00"
+      },
+      {
+        "name": "Pasta Gigi",
+        "type": "pengeluaran",
+        "amount": 19000,
+        "tag": "Kebutuhan",
+        "date": "2026-04-07 00:00:00",
+        "description": ""
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 26500,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-04-09 00:00:00"
+      },
+      {
+        "name": "Angsuran Fino",
+        "type": "pengeluaran",
+        "amount": 415000,
+        "description": "",
+        "tag": "Tagihan",
+        "date": "2026-04-10 02:28:24"
+      },
+      {
+        "name": "Sandal",
+        "type": "pengeluaran",
+        "amount": 14900,
+        "description": "",
+        "tag": "Tagihan",
+        "date": "2026-04-11 00:00:00"
+      },
+      {
+        "name": "Keyboard titan evo",
+        "type": "pengeluaran",
+        "amount": 52400,
+        "description": "",
+        "tag": "Tagihan",
+        "date": "2026-04-11 00:00:00"
+      },
+      {
+        "name": "TWS",
+        "type": "pengeluaran",
+        "amount": 53000,
+        "description": "",
+        "tag": "Tagihan",
+        "date": "2026-04-11 00:00:00"
+      },
+      {
+        "name": "Liquid",
+        "type": "pengeluaran",
+        "amount": 100000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-04-11 00:00:00"
+      },
+      {
+        "name": "Pak pendi",
+        "type": "pengeluaran",
+        "amount": 50000,
+        "tag": "Dana Sosial",
+        "date": "2026-04-13 00:00:00",
+        "description": ""
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 30000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-04-13 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 30000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-04-13 00:00:00"
+      },
+      {
+        "name": "Kuota",
+        "type": "pengeluaran",
+        "amount": 15000,
+        "description": "",
+        "tag": "Kuota",
+        "date": "2026-04-13 00:00:00"
+      },
+      {
+        "name": "Bensin",
+        "type": "pengeluaran",
+        "amount": 26000,
+        "description": "",
+        "tag": "Transportasi",
+        "date": "2026-04-14 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 30000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-04-18 00:00:00"
+      },
+      {
+        "name": "Kuota",
+        "type": "pengeluaran",
+        "amount": 15000,
+        "description": "",
+        "tag": "Kuota",
+        "date": "2026-04-18 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 30000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-04-20 00:00:00"
+      },
+      {
+        "name": "Bensin",
+        "type": "pengeluaran",
+        "amount": 30000,
+        "description": "",
+        "tag": "Transportasi",
+        "date": "2026-04-23 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 18000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-04-23 00:00:00"
+      },
+      {
+        "name": "Kuota",
+        "type": "pengeluaran",
+        "amount": 15000,
+        "description": "",
+        "tag": "Kuota",
+        "date": "2026-04-23 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 26500,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-04-25 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 26500,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-04-30 00:00:00"
+      },
+      {
+        "name": "Bensin",
+        "type": "pengeluaran",
+        "amount": 22000,
+        "description": "",
+        "tag": "Transportasi",
+        "date": "2026-04-30 00:00:00"
+      },
+      {
+        "name": "Salary",
+        "type": "pemasukan",
+        "amount": 1310000,
+        "description": "",
+        "tag": "Gaji",
+        "date": "2026-05-01 00:00:00"
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 100000,
+        "description": "Beli tanggal 30 april",
+        "tag": "Rokok",
+        "date": "2026-05-01 00:00:00"
+      },
+      {
+        "name": "Dansos",
+        "type": "pengeluaran",
+        "amount": 10000,
+        "tag": "Dana Sosial",
+        "date": "2026-05-01 00:00:00",
+        "description": ""
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 26500,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-05-03 00:00:00"
+      },
+      {
+        "name": "Bensin",
+        "type": "pengeluaran",
+        "amount": 22000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-05-05 00:00:00"
+      },
+      {
+        "name": "Kirim lamaran yau",
+        "type": "pengeluaran",
+        "amount": 13000,
+        "description": "",
+        "tag": "Lainnya",
+        "date": "2026-05-07 00:00:00"
+      },
+      {
+        "name": "Kuota",
+        "type": "pengeluaran",
+        "amount": 15000,
+        "description": "",
+        "tag": "Kuota",
+        "date": "2026-05-07 00:00:00"
+      },
+      {
+        "name": "Ct",
+        "type": "pengeluaran",
+        "amount": 40000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-05-08 00:00:00"
+      },
+      {
+        "name": "Bensin",
+        "type": "pengeluaran",
+        "amount": 25000,
+        "description": "",
+        "tag": "Transportasi",
+        "date": "2026-05-09 00:00:00"
+      },
+      {
+        "name": "Aqua galon",
+        "type": "pengeluaran",
+        "amount": 22000,
+        "description": "",
+        "tag": "Jajan",
+        "date": "2026-05-09 00:00:00"
+      },
+      {
+        "name": "Angsuran Fino",
+        "type": "pengeluaran",
+        "amount": 414000,
+        "description": "",
+        "tag": "Tagihan",
+        "date": "2026-05-10 00:00:00"
+      },
+      {
+        "name": "Bata",
+        "type": "pengeluaran",
+        "amount": 15000,
+        "description": "",
+        "tag": "Tagihan",
+        "date": "2026-05-11 00:00:00"
+      },
+      {
+        "name": "Tws",
+        "type": "pengeluaran",
+        "amount": 53000,
+        "description": "",
+        "tag": "Tagihan",
+        "date": "2026-05-11 00:00:00"
+      },
+      {
+        "name": "Keyboard",
+        "type": "pengeluaran",
+        "amount": 53000,
+        "description": "",
+        "tag": "Tagihan",
+        "date": "2026-05-11 00:00:00"
+      },
+      {
+        "name": "Ngojek",
+        "type": "pemasukan",
+        "amount": 25000,
+        "tag": "Income",
+        "date": "2026-05-13 00:00:00",
+        "description": ""
+      },
+      {
+        "name": "Rokok",
+        "type": "pengeluaran",
+        "amount": 27000,
+        "description": "",
+        "tag": "Rokok",
+        "date": "2026-05-13 00:00:00"
+      },
+      {
+        "name": "Kuota 8GB 14 hari",
+        "type": "pengeluaran",
+        "amount": 25000,
+        "tag": "Kuota",
+        "date": "2026-05-15 00:00:00",
+        "description": ""
+      },
+      {
+        "name": "Kabel speedometer",
+        "type": "pengeluaran",
+        "amount": 20000,
+        "description": "Salah beli punya supra",
+        "tag": "Motor",
+        "date": "2026-05-15 00:00:00"
+      },
+      {
+        "name": "Kabel Speedometer fino",
+        "type": "pengeluaran",
+        "amount": 13500,
+        "tag": "Motor",
+        "date": "2026-05-17 00:00:00",
+        "description": ""
+      },
+      {
+        "name": "Sunscreen",
+        "type": "pengeluaran",
+        "amount": 32000,
+        "tag": "Kebutuhan",
+        "date": "2026-05-17 00:00:00",
+        "description": ""
+      }
+    ],
+    "debts": []
+  },
+  "muwatok_cash_tags": [
+    {
+      "name": "Gaji",
+      "icon": "fa-money-bill",
+      "color": "#eab308"
+    },
+    {
+      "name": "Rokok",
+      "icon": "fa-smoking",
+      "color": "#14b8a6"
+    },
+    {
+      "name": "Jajan",
+      "icon": "fa-utensils",
+      "color": "#6366f1"
+    },
+    {
+      "name": "Transportasi",
+      "icon": "fa-motorcycle",
+      "color": "#854d0e"
+    },
+    {
+      "name": "Tagihan",
+      "icon": "fa-credit-card",
+      "color": "#f43f5e"
+    },
+    {
+      "name": "Motor",
+      "icon": "fa-motorcycle",
+      "color": "#166534"
+    },
+    {
+      "name": "Kuota",
+      "icon": "fa-mobile-alt",
+      "color": "#71717a"
+    },
+    {
+      "name": "Bayar Tagihan Orang",
+      "icon": "fa-paw",
+      "color": "#ef4444"
+    },
+    {
+      "name": "Lainnya",
+      "icon": "fa-tag",
+      "color": "#8b5cf6"
+    },
+    {
+      "name": "Bansos",
+      "icon": "fa-money-bill",
+      "color": "#3b82f6"
+    },
+    {
+      "name": "Hobi",
+      "icon": "fa-gamepad",
+      "color": "#84cc16"
+    },
+    {
+      "name": "Dana Sosial",
+      "icon": "fa-piggy-bank",
+      "color": "#06b6d4"
+    },
+    {
+      "name": "Income",
+      "icon": "fa-chart-line",
+      "color": "#ec4899"
+    },
+    {
+      "name": "THR",
+      "icon": "fa-gift",
+      "color": "#f59e0b"
+    },
+    {
+      "name": "Kebutuhan",
+      "icon": "fa-bolt",
+      "color": "#86efac"
+    }
+  ],
+  "muwatok_cash_settings": {
+    "strategy": "503020",
+    "limit": 0
+  },
+  "muwatok_cash_censored": false,
+  "muwatok_cash_savings": [
+    {
+      "name": "Dana Darurat",
+      "target": 15000000,
+      "current": 130213,
+      "icon": "fa-piggy-bank",
+      "color": "#6366f1",
+      "allocation": 10
+    },
+    {
+      "name": "Dana Pensiun",
+      "target": 2000000000,
+      "current": 259292,
+      "icon": "fa-piggy-bank",
+      "color": "#6366f1",
+      "allocation": 10
+    },
+    {
+      "name": "Dana Tabungan",
+      "target": 50000000,
+      "current": 0,
+      "icon": "fa-piggy-bank",
+      "color": "#6366f1",
+      "allocation": 0
+    },
+    {
+      "name": "Motor",
+      "target": 50000000,
+      "current": 65000,
+      "icon": "fa-motorcycle",
+      "color": "#6366f1",
+      "allocation": 5
+    },
+    {
+      "name": "Dansos",
+      "target": 50000000,
+      "current": 16000,
+      "icon": "fa-gift",
+      "color": "#6366f1",
+      "allocation": 2
+    }
+  ],
+  "muwatok_cash_saving_transactions": [
+    {
+      "name": "Saving: Dana Darurat",
+      "amount": 130213,
+      "date": "2026-05-17 20:08:59",
+      "description": "Manual top-up from wallet balance."
+    },
+    {
+      "name": "Saving: Dana Pensiun",
+      "amount": 259292,
+      "date": "2026-05-17 20:09:29",
+      "description": "Manual top-up from wallet balance."
+    },
+    {
+      "name": "Saving: Motor",
+      "amount": 65000,
+      "date": "2026-05-17 20:09:36",
+      "description": "Manual top-up from wallet balance."
+    },
+    {
+      "name": "Saving: Dansos",
+      "amount": 16000,
+      "date": "2026-05-17 20:09:42",
+      "description": "Manual top-up from wallet balance."
+    }
+  ],
+  "muwatok_cash_investment_transactions": [
+    {
+      "name": "General Portfolio Deposit",
+      "amount": 1000000,
+      "date": "2026-05-17 20:42:34",
+      "description": "Manual deposit from wallet balance."
+    }
+  ]
+}

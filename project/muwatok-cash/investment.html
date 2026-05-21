@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Investment · Muwatok Cash</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5/dark.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- Select2 & jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-950 text-gray-800 dark:text-gray-100 antialiased overflow-x-hidden">
+
+  <div id="sidebarBackdrop" class="fixed inset-0 bg-black/50 z-30 hidden transition-opacity duration-300 lg:hidden"></div>
+
+  <div class="flex min-h-screen relative">
+    <aside id="sidebar" class="fixed lg:sticky top-0 left-0 z-40 w-64 h-screen bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 transform -translate-x-full lg:translate-x-0 sidebar-transition flex flex-col">
+      <div class="p-5 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center">
+        <div class="flex items-center gap-2"><i class="fas fa-wallet text-indigo-600 dark:text-indigo-400 text-2xl"></i><span class="font-bold text-xl bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Muwatok-Cash</span></div>
+        <button id="closeSidebarBtn" class="lg:hidden text-xl"><i class="fas fa-times"></i></button>
+      </div>
+      <nav id="sidebarNav" class="flex-1 py-6 px-3 space-y-1.5"></nav>
+    </aside>
+
+    <main class="flex-1 w-full transition-all duration-300">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex items-center justify-between gap-4 mb-8">
+          <div class="flex items-center gap-3">
+            <button id="openSidebarBtn" class="lg:hidden text-2xl focus:outline-none"><i class="fas fa-bars"></i></button>
+            <h1 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Investment Portfolio</h1>
+          </div>
+          <div class="flex items-center gap-4">
+            <button onclick="syncInvestmentPrices(this)" class="flex items-center justify-center w-11 h-11 bg-white dark:bg-gray-800/60 rounded-2xl border border-gray-200 dark:border-gray-700 hover:text-emerald-500 transition-all" title="Sync Crypto Prices">
+              <i class="fas fa-sync-alt"></i>
+            </button>
+            <button id="toggleVisibilityBtn" class="flex items-center justify-center w-11 h-11 bg-white dark:bg-gray-800/60 rounded-2xl border border-gray-200 dark:border-gray-700 hover:text-indigo-500 transition-all"><i class="fas fa-eye"></i></button>
+            <button id="addInvBtn" class="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-2xl shadow-lg font-medium whitespace-nowrap"><i class="fas fa-plus-circle"></i><span class="hidden sm:inline">Add Asset</span></button>
+          </div>
+        </div>
+
+        <!-- Portfolio Summary -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+          <div class="bg-white dark:bg-gray-800/80 p-5 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm card-hover relative group">
+            <button onclick="addFundsToInvestment(-1)" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-md hover:bg-emerald-600 transition-all" title="Deposit funds">
+              <i class="fas fa-plus text-xs"></i>
+            </button>
+            <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">Dana Investasi (Modal)</p>
+            <p id="totalInvested" class="text-2xl font-bold mt-1 text-indigo-500">Rp 0</p>
+          </div>
+          <div class="bg-white dark:bg-gray-800/80 p-5 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm card-hover">
+            <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">Nilai Pasar Saat Ini</p>
+            <p id="totalCurrentValue" class="text-2xl font-bold mt-1 text-indigo-500">Rp 0</p>
+          </div>
+          <div class="bg-white dark:bg-gray-800/80 p-5 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm card-hover">
+            <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">Total Profit / Loss</p>
+            <div class="flex items-center gap-2 mt-1">
+              <i class="fas fa-caret-up text-emerald-500"></i><p id="totalPL" class="text-2xl font-bold text-emerald-500">Rp 0</p>
+              <span id="totalROI" class="text-xs font-bold px-2 py-0.5 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600">0%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Market Prices Card -->
+        <div class="mb-8">
+          <div class="bg-white dark:bg-gray-800/80 p-5 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm flex items-center justify-between card-hover">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 border border-emerald-500/20">
+                <i class="fas fa-coins text-xl"></i>
+              </div>
+              <div>
+                <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">Tether (USDT / IDR)</p>
+                <div class="flex items-center gap-3">
+                  <p id="usdtPriceValue" class="text-2xl font-bold text-gray-800 dark:text-white">Loading...</p>
+                  <span id="usdtPriceChange" class="text-xs font-bold px-2 py-0.5 rounded-lg"></span>
+                </div>
+              </div>
+            </div>
+            <div class="text-right hidden sm:block">
+              <p class="text-[10px] text-gray-400 uppercase font-bold">Exchange Rate</p>
+              <p id="usdtLastUpdated" class="text-xs text-gray-500 italic">--:--</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="investmentContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Add Investment Modal -->
+  <div id="investmentModal" class="fixed inset-0 z-50 flex items-center justify-center hidden p-4">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" id="invModalBackdrop"></div>
+    <div class="bg-white dark:bg-gray-900 w-full max-w-md rounded-2xl shadow-2xl relative z-10 overflow-hidden border border-gray-100 dark:border-gray-800">
+      <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50/50 dark:bg-gray-800/50">
+        <h3 id="invModalTitle" class="font-bold text-lg">Add Crypto Asset</h3>
+        <button id="closeInvModalBtn" class="text-gray-400 hover:text-gray-200"><i class="fas fa-times"></i></button>
+      </div>
+      <form id="investmentForm" class="p-6 space-y-4">
+        <input type="hidden" id="editInvIndex" value="-1">
+        <div>
+          <label class="block text-sm font-medium mb-1 text-gray-500 dark:text-gray-400">Crypto Name</label>
+          <select id="invName" required class="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none transition">
+            <option value="">Search crypto...</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1 text-gray-500 dark:text-gray-400">CoinGecko ID (Required for Sync)</label>
+          <input type="text" id="invApiId" required placeholder="e.g. bitcoin, ethereum, solana" class="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none transition text-xs">
+        </div>
+        <div id="invSourceContainer">
+          <label class="block text-sm font-medium mb-1.5 text-gray-500 dark:text-gray-400">Source of Funds</label>
+          <div class="flex p-1 bg-gray-100 dark:bg-gray-800 rounded-xl" id="invSourceGroup">
+            <input type="hidden" id="invSource" value="external">
+            <button type="button" data-val="external" class="flex-1 py-2 text-sm font-medium rounded-lg transition-all bg-white dark:bg-gray-700 shadow-sm text-indigo-600 dark:text-indigo-400">External</button>
+            <button type="button" data-val="portfolio" class="flex-1 py-2 text-[10px] sm:text-sm font-medium rounded-lg transition-all text-gray-500 dark:text-gray-400">Modal</button>
+            <button type="button" data-val="usdt" class="flex-1 py-2 text-sm font-medium rounded-lg transition-all text-gray-500 dark:text-gray-400">USDT</button>
+          </div>
+          <p class="text-[10px] text-gray-400 mt-1">Pilih "Modal" untuk dana menganggur, "USDT" untuk swap dari Tether.</p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1 text-gray-500 dark:text-gray-400">Transaction Date</label>
+          <input type="date" id="invDate" required class="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none transition">
+        </div>
+        <!-- New section for CoinGecko data -->
+        <div id="coingeckoDataDisplay" class="hidden bg-gray-50 dark:bg-gray-800/50 p-4 rounded-xl border border-gray-100 dark:border-gray-700 space-y-2">
+          <p class="text-xs font-medium text-gray-500 dark:text-gray-400">CoinGecko Data:</p>
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-medium">Current Price:</span>
+            <span id="cgCurrentPrice" class="text-sm font-semibold text-indigo-500">Loading...</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-medium">24h Change:</span>
+            <span id="cg24hChange" class="text-sm font-semibold">Loading...</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-medium">Market Cap:</span>
+            <span id="cgMarketCap" class="text-sm font-semibold">Loading...</span>
+          </div>
+          <button type="button" id="applyCgPriceBtn" class="w-full py-2 mt-2 bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-medium rounded-lg transition-all hidden">Apply Current Price</button>
+        </div>
+
+        <div class="grid grid-cols-3 gap-4">
+          <div>
+            <label class="block text-sm font-medium mb-1 text-gray-500 dark:text-gray-400">Holdings (Qty)</label>
+            <input type="number" id="invUnits" step="any" required placeholder="0.00" class="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none transition">
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1 text-gray-500 dark:text-gray-400">Invested (Rp)</label>
+            <input type="number" id="invInvested" required placeholder="0" class="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none transition">
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2 text-gray-500 dark:text-gray-400">Choose Color</label>
+          <div id="invColorGrid" class="grid grid-cols-10 gap-2 p-1"></div>
+          <input type="hidden" id="selectedInvColor" value="#6366f1">
+        </div>
+        <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg transition-all mt-2">Save Asset</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="assets/js/script.js"></script>
+</body>
+</html>

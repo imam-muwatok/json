@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Tags · Muwatok Cash</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5/dark.css">
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-950 text-gray-800 dark:text-gray-100 antialiased overflow-x-hidden">
+
+  <div id="sidebarBackdrop" class="fixed inset-0 bg-black/50 z-30 hidden transition-opacity duration-300 lg:hidden"></div>
+
+  <div class="flex min-h-screen relative">
+    <!-- ========== SIDEBAR ========== -->
+    <aside id="sidebar" class="fixed lg:sticky top-0 left-0 z-40 w-64 h-screen bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 shadow-xl lg:shadow-none transform -translate-x-full lg:translate-x-0 sidebar-transition flex flex-col">
+      <div class="flex items-center justify-between p-5 border-b border-gray-100 dark:border-gray-800">
+        <div class="flex items-center gap-2">
+          <i class="fas fa-wallet text-indigo-600 dark:text-indigo-400 text-2xl"></i>
+          <span class="font-bold text-xl bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">Muwatok-Cash</span>
+        </div>
+        <button id="closeSidebarBtn" class="lg:hidden text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 text-xl">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <nav id="sidebarNav" class="flex-1 py-6 px-3 space-y-1.5"></nav>
+    </aside>
+
+    <!-- ========== MAIN CONTENT ========== -->
+    <main class="flex-1 w-full transition-all duration-300">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <div class="flex items-center justify-between gap-4 mb-8">
+          <div class="flex items-center gap-3">
+            <button id="openSidebarBtn" class="lg:hidden text-gray-600 dark:text-gray-300 text-2xl focus:outline-none">
+              <i class="fas fa-bars"></i>
+            </button>
+            <h1 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">Transaction Tags</h1>
+          </div>
+          <div class="flex items-center gap-4">
+            <button id="toggleVisibilityBtn" class="flex items-center justify-center w-11 h-11 bg-white dark:bg-gray-800/60 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:text-indigo-500 transition-all">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button id="addTagBtn" class="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-2xl shadow-lg shadow-indigo-500/20 transition-all font-medium whitespace-nowrap">
+                <i class="fas fa-plus-circle text-sm"></i>
+                <span class="hidden sm:inline">Add Tag</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Tags Grid -->
+        <div id="tagsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <!-- Rendered by JS -->
+        </div>
+
+        <div class="mt-12 text-center text-xs text-gray-400">
+          <p>© 2025 Muwatok Wallet — Analyzing your spending habits via tags.</p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Add Tag Modal -->
+  <div id="tagModal" class="fixed inset-0 z-50 flex items-center justify-center hidden p-4">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" id="modalBackdrop"></div>
+    <div class="bg-white dark:bg-gray-900 w-full max-w-md rounded-2xl shadow-2xl relative z-10 overflow-hidden border border-gray-200 dark:border-gray-800">
+      <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50/50 dark:bg-gray-800/50">
+        <h3 id="tagModalTitle" class="font-bold text-lg">Add New Tag</h3>
+        <button id="closeModalBtn" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition"><i class="fas fa-times"></i></button>
+      </div>
+      <form id="tagForm" class="p-6 space-y-5">
+        <input type="hidden" id="editTagIndex" value="-1">
+        <div>
+          <label class="block text-sm font-medium mb-1.5 text-gray-500 dark:text-gray-400">Tag Name</label>
+          <input type="text" id="tagName" required placeholder="e.g. Health, Entertainment" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none transition">
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium mb-2.5 text-gray-500 dark:text-gray-400">Choose Icon</label>
+          <div id="iconGrid" class="grid grid-cols-6 gap-2 max-h-32 overflow-y-auto p-1">
+            <!-- Icons will be rendered by JS -->
+          </div>
+          <input type="hidden" id="selectedIcon" value="fa-tag">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium mb-2.5 text-gray-500 dark:text-gray-400">Choose Color</label>
+          <div id="colorGrid" class="grid grid-cols-10 gap-2 p-1">
+            <!-- Colors will be rendered by JS -->
+          </div>
+          <input type="hidden" id="selectedColor" value="#6366f1">
+        </div>
+
+        <button type="submit" id="tagSubmitBtn" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-indigo-500/30 transition-all mt-4">Create Tag</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="assets/js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "transactions": [
+    {
+      "name": "Salary",
+      "type": "pemasukan",
+      "amount": 1590000,
+      "description": "",
+      "tag": "Gaji",
+      "date": "2025-12-01 00:00:00"
+    }
+  ],
+  "debts": []
+}

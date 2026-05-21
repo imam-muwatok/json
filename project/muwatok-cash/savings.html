@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Savings Goals · Muwatok Cash</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5/dark.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-950 text-gray-800 dark:text-gray-100 antialiased overflow-x-hidden">
+
+  <div id="sidebarBackdrop" class="fixed inset-0 bg-black/50 z-30 hidden transition-opacity duration-300 lg:hidden"></div>
+
+  <div class="flex min-h-screen relative">
+    <aside id="sidebar" class="fixed lg:sticky top-0 left-0 z-40 w-64 h-screen bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 transform -translate-x-full lg:translate-x-0 sidebar-transition flex flex-col">
+      <div class="p-5 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center">
+        <div class="flex items-center gap-2"><i class="fas fa-wallet text-indigo-600 dark:text-indigo-400 text-2xl"></i><span class="font-bold text-xl bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Muwatok-Cash</span></div>
+        <button id="closeSidebarBtn" class="lg:hidden text-xl"><i class="fas fa-times"></i></button>
+      </div>
+      <nav id="sidebarNav" class="flex-1 py-6 px-3 space-y-1.5"></nav>
+    </aside>
+
+    <main class="flex-1 w-full transition-all duration-300">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex items-center justify-between gap-4 mb-8">
+          <div class="flex items-center gap-3">
+            <button id="openSidebarBtn" class="lg:hidden text-2xl focus:outline-none"><i class="fas fa-bars"></i></button>
+            <h1 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Savings Goals</h1>
+          </div>
+          <div class="flex items-center gap-4">
+            <button id="toggleVisibilityBtn" class="flex items-center justify-center w-11 h-11 bg-white dark:bg-gray-800/60 rounded-2xl border border-gray-200 dark:border-gray-700 hover:text-indigo-500 transition-all"><i class="fas fa-eye"></i></button>
+            <button id="addSavingsBtn" class="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-2xl shadow-lg font-medium whitespace-nowrap"><i class="fas fa-plus-circle"></i><span class="hidden sm:inline">New Goal</span></button>
+          </div>
+        </div>
+
+        <div id="savingsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Add Saving Modal -->
+  <div id="savingsModal" class="fixed inset-0 z-50 flex items-center justify-center hidden p-4">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" id="savingsModalBackdrop"></div>
+    <div class="bg-white dark:bg-gray-900 w-full max-w-md rounded-2xl shadow-2xl relative z-10 overflow-hidden border border-gray-100 dark:border-gray-800">
+      <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50/50 dark:bg-gray-800/50">
+        <h3 id="savingsModalTitle" class="font-bold text-lg">Add Saving Goal</h3>
+        <button id="closeSavingsModalBtn" class="text-gray-400 hover:text-gray-200"><i class="fas fa-times"></i></button>
+      </div>
+      <form id="savingsForm" class="p-6 space-y-4">
+        <input type="hidden" id="editSavingsIndex" value="-1">
+        <div>
+          <label class="block text-sm font-medium mb-1 text-gray-500 dark:text-gray-400">Saving Purpose</label>
+          <input type="text" id="savingsName" required placeholder="e.g. Dream House, New Car" class="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none transition">
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium mb-1 text-gray-500 dark:text-gray-400">Target Amount</label>
+            <input type="number" id="savingsTarget" required placeholder="0" class="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none transition">
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1 text-gray-500 dark:text-gray-400">Current Balance</label>
+            <input type="number" id="savingsCurrent" placeholder="0" class="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none transition">
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1 text-gray-500 dark:text-gray-400">Auto Allocation (%)</label>
+          <input type="number" id="savingsAllocation" placeholder="0" min="0" max="100" class="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none transition">
+          <p class="text-[10px] text-gray-400 mt-1">Persentase dari setiap pemasukan yang akan otomatis masuk ke tabungan ini.</p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2 text-gray-500 dark:text-gray-400">Choose Icon</label>
+          <div id="savingsIconGrid" class="grid grid-cols-5 gap-2 max-h-32 overflow-y-auto p-1"></div>
+          <input type="hidden" id="selectedSavingsIcon" value="fa-piggy-bank">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2 text-gray-500 dark:text-gray-400">Choose Color</label>
+          <div id="savingsColorGrid" class="grid grid-cols-10 gap-2 p-1"></div>
+          <input type="hidden" id="selectedSavingsColor" value="#6366f1">
+        </div>
+        <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg transition-all mt-2">Save Goal</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="assets/js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Dashboard · Muwatok Cash</title>
+  <!-- Tailwind CSS v3 + Inter Font + Font Awesome -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5/dark.css">
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-950 text-gray-800 dark:text-gray-100 antialiased overflow-x-hidden">
+
+  <!-- mobile sidebar backdrop -->
+  <div id="sidebarBackdrop" class="fixed inset-0 bg-black/50 z-30 hidden transition-opacity duration-300 lg:hidden"></div>
+
+  <div class="flex min-h-screen relative">
+    
+    <!-- ========== SIDEBAR ========== -->
+    <aside id="sidebar" class="fixed lg:sticky top-0 left-0 z-40 w-64 h-screen bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 shadow-xl lg:shadow-none transform -translate-x-full lg:translate-x-0 sidebar-transition flex flex-col">
+      <!-- sidebar header with logo & close (mobile only) -->
+      <div class="flex items-center justify-between p-5 border-b border-gray-100 dark:border-gray-800">
+        <div class="flex items-center gap-2">
+          <i class="fas fa-wallet text-indigo-600 dark:text-indigo-400 text-2xl"></i>
+          <span class="font-bold text-xl bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">Muwatok-Cash</span>
+        </div>
+        <button id="closeSidebarBtn" class="lg:hidden text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 text-xl">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <!-- navigation menu -->
+      <nav id="sidebarNav" class="flex-1 py-6 px-3 space-y-1.5">
+        <!-- Rendered by JS -->
+      </nav>
+
+      <!-- user profile section -->
+      <div class="p-4 border-t border-gray-100 dark:border-gray-800 mt-auto">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white font-semibold shadow-md">
+            MS
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-medium truncate">Muwatok Sama</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 truncate">Muwatok@Muwatok.me</p>
+          </div>
+          <i class="fas fa-chevron-right text-gray-400 text-xs"></i>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ========== MAIN CONTENT ========== -->
+    <main class="flex-1 w-full lg:ml-0 transition-all duration-300">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
+        
+        <!-- header with menu button (mobile) + dark mode toggle & date -->
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+          <div class="flex items-center gap-3">
+            <button id="openSidebarBtn" class="lg:hidden text-gray-600 dark:text-gray-300 text-2xl focus:outline-none">
+              <i class="fas fa-bars"></i>
+            </button>
+            <div>
+              <h1 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">
+                Dashboard
+              </h1>
+              <p class="text-gray-500 dark:text-gray-400 text-sm hidden sm:block">Welcome back, Muwatok 👋</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-4">
+            <button id="toggleVisibilityBtn" class="flex items-center justify-center w-11 h-11 bg-white dark:bg-gray-800/60 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:text-indigo-500 transition-all">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button id="addTransactionBtn" class="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-2xl shadow-lg shadow-indigo-500/20 transition-all font-medium whitespace-nowrap">
+              <i class="fas fa-plus text-sm"></i>
+              <span class="hidden sm:inline">Add Transaction</span>
+            </button>
+            <div class="hidden md:flex items-center gap-2 bg-white dark:bg-gray-800/60 backdrop-blur-sm px-4 py-2 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
+              <i class="far fa-calendar-alt text-gray-400 dark:text-white text-sm"></i>
+              <span class="text-sm font-medium" id="currentDate"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- stats cards (balance / income / expense) same as before -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <!-- balance card -->
+          <div class="bg-gradient-to-br from-indigo-500 to-indigo-700 dark:from-indigo-800 dark:to-indigo-950 rounded-2xl shadow-xl p-5 text-white relative overflow-hidden card-hover">
+            <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 rounded-full bg-white/10 blur-2xl"></div>
+            <div class="relative z-10">
+              <div class="flex items-center justify-between">
+                <span class="text-indigo-100 text-sm font-medium tracking-wide">TOTAL BALANCE</span>
+                <i class="fas fa-wallet text-2xl text-white/70"></i>
+              </div>
+              <p id="totalBalance" class="text-3xl md:text-4xl font-bold mt-3 tracking-tight">Rp 0</p>
+              <div class="flex items-center gap-2 mt-2 text-indigo-100 text-sm">
+                <i class="fas fa-arrow-up text-xs"></i>
+                <span>+2.5% from last month</span>
+              </div>
+            </div>
+          </div>
+          <!-- income card -->
+          <div class="bg-white dark:bg-gray-800/90 rounded-2xl shadow-lg p-5 border border-gray-100 dark:border-gray-700 card-hover">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-gray-500 dark:text-gray-400 text-sm font-medium">Monthly Income</p>
+                <p id="monthlyIncome" class="text-2xl md:text-3xl font-bold mt-1 text-gray-800 dark:text-white">Rp 0</p>
+                <span class="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400 text-xs font-medium mt-2"><i class="fas fa-trend-up"></i> +8.2%</span>
+              </div>
+              <div class="h-12 w-12 rounded-full bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+                <i class="fas fa-arrow-down text-xl"></i>
+              </div>
+            </div>
+          </div>
+          <!-- expense card -->
+          <div class="bg-white dark:bg-gray-800/90 rounded-2xl shadow-lg p-5 border border-gray-100 dark:border-gray-700 card-hover">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-gray-500 dark:text-gray-400 text-sm font-medium">Monthly Expenses</p>
+                <p id="monthlyExpenses" class="text-2xl md:text-3xl font-bold mt-1 text-gray-800 dark:text-white">Rp 0</p>
+                <span class="inline-flex items-center gap-1 text-rose-600 dark:text-rose-400 text-xs font-medium mt-2"><i class="fas fa-trend-down"></i> -3.1%</span>
+              </div>
+              <div class="h-12 w-12 rounded-full bg-rose-100 dark:bg-rose-900/40 flex items-center justify-center text-rose-600 dark:text-rose-400">
+                <i class="fas fa-credit-card text-xl"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- main grid: recent transactions + spending categories -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- left: recent transactions + quick actions (2/3 col) -->
+          <div class="lg:col-span-2 space-y-6">
+            <!-- recent transactions -->
+            <div class="bg-white dark:bg-gray-800/80 rounded-2xl shadow-md border border-gray-100 dark:border-gray-700 overflow-hidden">
+              <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-700">
+                <div>
+                  <h2 class="text-lg font-semibold flex items-center gap-2"><i class="fas fa-history text-indigo-500 dark:text-indigo-400"></i> Recent Transactions</h2>
+                  <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Last 5 activities</p>
+                </div>
+                <a href="transactions.html" class="text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:underline">View all <i class="fas fa-arrow-right ml-1 text-xs"></i></a>
+              </div>
+              <div id="recentTransactionsList" class="divide-y divide-gray-100 dark:divide-gray-700/60">
+                <!-- Rendered by JS -->
+              </div>
+            </div>
+            <!-- quick actions card -->
+            <div class="bg-white dark:bg-gray-800/80 rounded-2xl shadow-md border border-gray-100 dark:border-gray-700 p-5">
+              <h3 class="text-md font-semibold mb-3 flex items-center gap-2"><i class="fas fa-bolt text-yellow-500"></i> Quick Actions</h3>
+              <div class="grid grid-cols-3 gap-3">
+                <button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-gray-50 dark:bg-gray-700/40 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition group">
+                  <i class="fas fa-paper-plane text-indigo-500 text-xl group-hover:scale-110"></i><span class="text-xs font-medium">Send</span>
+                </button>
+                <button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-gray-50 dark:bg-gray-700/40 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition group">
+                  <i class="fas fa-download text-emerald-500 text-xl group-hover:scale-110"></i><span class="text-xs font-medium">Receive</span>
+                </button>
+                <button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-gray-50 dark:bg-gray-700/40 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition group">
+                  <i class="fas fa-chart-line text-purple-500 text-xl group-hover:scale-110"></i><span class="text-xs font-medium">Analytics</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- right column: spending categories + savings insight -->
+          <div class="space-y-6">
+            <!-- savings goal card -->
+            <div class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800/70 dark:to-gray-800/50 rounded-2xl p-5 border border-gray-200 dark:border-gray-700">
+              <div class="flex justify-between items-start">
+                <div><p class="text-xs uppercase tracking-wide text-gray-500" id="budgetTitle">Budget Target</p><p class="text-xl font-bold mt-1" id="budgetTarget">Rp 0</p><div class="flex items-center gap-2 mt-2"><div class="w-24 h-1.5 bg-gray-300 dark:bg-gray-600 rounded-full overflow-hidden"><div id="budgetProgress" class="h-full bg-indigo-500 rounded-full transition-all duration-500" style="width: 0%"></div></div><span id="budgetPercent" class="text-xs font-medium text-indigo-600">0%</span></div><p id="budgetDetail" class="text-xs text-gray-500 mt-2">Rp 0 of Rp 0 spent</p></div>
+                <i class="fas fa-piggy-bank text-3xl text-indigo-400/60"></i>
+              </div>
+              <a href="settings.html" class="block mt-3 w-full py-2 text-center text-sm font-medium rounded-xl bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-indigo-50 transition">Adjust Budget</a>
+            </div>
+            <!-- spending categories -->
+            <div class="bg-white dark:bg-gray-800/80 rounded-2xl shadow-md border border-gray-100 dark:border-gray-700 p-5">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="font-semibold flex items-center gap-2"><i class="fas fa-chart-pie text-indigo-500"></i> Spending categories</h3>
+                <span class="text-xs text-gray-400">this month</span>
+              </div>
+              <div id="spendingCategoriesList" class="space-y-4">
+                <!-- Rendered by JS -->
+              </div>
+              <div class="mt-5 pt-3 border-t border-gray-100 dark:border-gray-700">
+                <div class="flex justify-between text-sm"><span class="text-gray-500">Total spent</span><span id="totalSpentLabel" class="font-bold">Rp 0</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-12 text-center text-xs text-gray-400 border-t border-gray-200 dark:border-gray-800 pt-6">
+          <p>© 2025 Muwatok Wallet — secure & real-time insights. All transactions are demo data.</p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Add Transaction Modal -->
+  <div id="transactionModal" class="fixed inset-0 z-50 flex items-center justify-center hidden p-4">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" id="modalBackdrop"></div>
+    <div class="bg-white dark:bg-gray-900 w-full max-w-md rounded-2xl shadow-2xl relative z-10 overflow-hidden border border-gray-200 dark:border-gray-800">
+      <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50/50 dark:bg-gray-800/50">
+        <h3 id="modalTitle" class="font-bold text-lg">Add Transaction</h3>
+        <button id="closeModalBtn" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition"><i class="fas fa-times"></i></button>
+      </div>
+      <form id="transactionForm" class="p-6 space-y-4">
+        <input type="hidden" id="editIndex" value="-1">
+        <div>
+          <label class="block text-sm font-medium mb-1.5 text-gray-500 dark:text-gray-400">Transaction Name</label>
+          <input type="text" name="name" required placeholder="e.g. Salary, Groceries" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none transition">
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium mb-1.5 text-gray-500 dark:text-gray-400">Amount</label>
+            <input type="number" name="amount" required placeholder="0" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none transition">
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1.5 text-gray-500 dark:text-gray-400">Type</label>
+            <div class="flex p-1 bg-gray-100 dark:bg-gray-800 rounded-xl" id="modalTypeGroup">
+              <input type="hidden" name="type" value="pengeluaran">
+              <button type="button" data-val="pengeluaran" class="flex-1 py-2 text-sm font-medium rounded-lg transition-all bg-white dark:bg-gray-700 shadow-sm text-indigo-600 dark:text-indigo-400">Outcome</button>
+              <button type="button" data-val="pemasukan" class="flex-1 py-2 text-sm font-medium rounded-lg transition-all text-gray-500 dark:text-gray-400">Income</button>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium mb-1.5 text-gray-500 dark:text-gray-400">Category (Tag)</label>
+            <select name="tag" required class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none transition">
+              <option value="">Select Tag</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1.5 text-gray-500 dark:text-gray-400">Date</label>
+            <input type="date" name="date" required class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none transition">
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1.5 text-gray-500 dark:text-gray-400">Description</label>
+          <textarea name="description" rows="2" placeholder="Add some notes..." class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none transition resize-none"></textarea>
+        </div>
+        <button type="submit" id="submitBtn" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-indigo-500/30 transition-all mt-2">Save Transaction</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="assets/js/script.js"></script>
+</body>
+</html>
