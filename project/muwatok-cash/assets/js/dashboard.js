@@ -18,6 +18,18 @@ window.renderDashboard = () => {
       }
     });
 
+    const prevMonthDate = new Date(year, month - 1, 1);
+    const pMonth = prevMonthDate.getMonth(), pYear = prevMonthDate.getFullYear();
+    let prevStats = { inc: 0, exp: 0 };
+    transactions.forEach(t => {
+      const amt = parseFloat(t.amount);
+      const d = new Date(t.date);
+      if (d.getMonth() === pMonth && d.getFullYear() === pYear) {
+        if (t.type === 'pemasukan') prevStats.inc += amt;
+        else if (!t.excludeFromBudget) prevStats.exp += amt;
+      }
+    });
+
     const savingTrans = AppData.get('muwatok_cash_saving_transactions');
     savingTrans.forEach(st => { stats.bal -= parseFloat(st.amount) || 0; });
 
@@ -25,6 +37,7 @@ window.renderDashboard = () => {
     investmentTrans.forEach(it => { stats.bal -= parseFloat(it.amount) || 0; });
 
     const totalSavingsAmount = savings.reduce((acc, s) => acc + (parseFloat(s.current) || 0), 0);
+    const totalSavingsTarget = savings.reduce((acc, s) => acc + (parseFloat(s.target) || 0), 0);
 
     const updateEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = AppData.formatIDR(val); };
     updateEl('totalBalance', stats.bal);
@@ -32,6 +45,33 @@ window.renderDashboard = () => {
     updateEl('monthlyExpenses', stats.exp);
     updateEl('totalSavings', totalSavingsAmount);
     updateEl('totalSpentLabel', stats.exp);
+
+    // Update Savings Progress
+    const sPercent = document.getElementById('savingsPercent');
+    const sBar = document.getElementById('savingsProgressBar');
+    const sTargetLabel = document.getElementById('savingsTargetLabel');
+    if (sPercent && sBar && sTargetLabel) {
+        const p = totalSavingsTarget > 0 ? Math.min((totalSavingsAmount / totalSavingsTarget) * 100, 100).toFixed(1) : 0;
+        sPercent.textContent = `${p}%`;
+        sBar.style.width = `${p}%`;
+        sTargetLabel.textContent = `Goal: ${AppData.formatIDR(totalSavingsTarget)}`;
+    }
+
+    const updateTrend = (id, current, previous) => {
+      const container = document.getElementById(id);
+      const icon = document.getElementById(id + 'Icon');
+      const value = document.getElementById(id + 'Value');
+      if (!container || !icon || !value) return;
+      
+      let pct = previous > 0 ? ((current - previous) / previous) * 100 : (current > 0 ? 100 : 0);
+      const isPositive = pct >= 0;
+      container.className = `inline-flex items-center gap-1 text-xs font-medium mt-2 ${isPositive ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`;
+      icon.className = `fas fa-arrow-trend-${isPositive ? 'up' : 'down'}`;
+      value.textContent = `${isPositive ? '+' : ''}${pct.toFixed(1)}%`;
+    };
+
+    updateTrend('incomeTrend', stats.inc, prevStats.inc);
+    updateTrend('expenseTrend', stats.exp, prevStats.exp);
 
     const recentList = document.getElementById('recentTransactionsList');
     if (recentList) {
@@ -72,9 +112,22 @@ window.renderDashboard = () => {
 
     const budgetSettings = JSON.parse(localStorage.getItem('muwatok_cash_settings')) || { strategy: 'manual', limit: 0 };
     let targetExp = 0;
-    if (budgetSettings.strategy === 'manual') targetExp = stats.inc * (budgetSettings.limit / 100);
-    else if (budgetSettings.strategy === '503020') targetExp = stats.inc * 0.8;
-    else if (budgetSettings.strategy === '702010') targetExp = stats.inc * 0.7;
+
+    const strategyRatios = {
+      'extreme': 0.3,
+      'hard': 0.5,
+      'medium': 0.7,
+      'normal': 0.8,
+      'easy': 0.9,
+      '503020': 0.8, // Fallback untuk versi lama
+      '702010': 0.7  // Fallback untuk versi lama
+    };
+
+    if (budgetSettings.strategy === 'manual') {
+      targetExp = stats.inc * (budgetSettings.limit / 100);
+    } else {
+      targetExp = stats.inc * (strategyRatios[budgetSettings.strategy] || 0);
+    }
 
     const bTitle = document.getElementById('budgetTitle'), bTarget = document.getElementById('budgetTarget');
     const bProgress = document.getElementById('budgetProgress'), bPercent = document.getElementById('budgetPercent'), bDetail = document.getElementById('budgetDetail');
@@ -82,11 +135,21 @@ window.renderDashboard = () => {
     if (bTarget) {
       bTitle.textContent = budgetSettings.strategy === 'manual' ? 'Monthly Budget' : 'Spending Limit';
       bTarget.textContent = AppData.formatIDR(targetExp);
-      const p = targetExp > 0 ? Math.min((stats.exp / targetExp) * 100, 100).toFixed(0) : 0;
-      bProgress.style.width = `${p}%`;
-      bProgress.className = `h-full rounded-full transition-all duration-500 ${p >= 90 ? 'bg-rose-500' : 'bg-indigo-500'}`;
-      bPercent.textContent = `${p}%`;
-      bDetail.textContent = `${AppData.formatIDR(stats.exp)} of ${AppData.formatIDR(targetExp)} spent`;
+
+      const pRaw = targetExp > 0 ? (stats.exp / targetExp) * 100 : 0;
+      const pVisual = Math.min(pRaw, 100).toFixed(0);
+      const excess = stats.exp - targetExp;
+
+      bProgress.style.width = `${pVisual}%`;
+      bProgress.className = `h-full rounded-full transition-all duration-500 ${pRaw >= 90 ? 'bg-rose-500' : 'bg-indigo-500'}`;
+      bPercent.textContent = `${pRaw.toFixed(0)}%`;
+      bPercent.className = `text-xs font-medium ${pRaw > 100 ? 'text-rose-500' : 'text-indigo-600'}`;
+
+      if (excess > 0) {
+        bDetail.innerHTML = `${AppData.formatIDR(stats.exp)} of ${AppData.formatIDR(targetExp)} spent <span class="text-rose-500 font-bold block mt-1">(Over by ${AppData.formatIDR(excess)})</span>`;
+      } else {
+        bDetail.textContent = `${AppData.formatIDR(stats.exp)} of ${AppData.formatIDR(targetExp)} spent`;
+      }
     }
 };
 

@@ -31,7 +31,7 @@ window.renderAnalytics = () => {
     const fYear = document.getElementById('filterYear')?.value || '';
 
     // Calculations
-    const monthLabels = [], incData = [], expData = [];
+    const monthLabels = [], incData = [], expData = [], budgetExpData = [];
     
     if (fYear === '') {
       // Default: Last 6 months
@@ -43,6 +43,7 @@ window.renderAnalytics = () => {
         const filtered = transactions.filter(t => { const td = new Date(t.date); return td.getMonth() === m && td.getFullYear() === y; });
         incData.push(filtered.filter(t => t.type === 'pemasukan').reduce((acc, t) => acc + parseFloat(t.amount), 0));
         expData.push(filtered.filter(t => t.type === 'pengeluaran').reduce((acc, t) => acc + parseFloat(t.amount), 0));
+        budgetExpData.push(filtered.filter(t => t.type === 'pengeluaran' && !t.excludeFromBudget).reduce((acc, t) => acc + parseFloat(t.amount), 0));
       }
     } else {
       // Full Year trend
@@ -53,6 +54,7 @@ window.renderAnalytics = () => {
         const filtered = transactions.filter(t => { const td = new Date(t.date); return td.getMonth() === m && td.getFullYear() === y; });
         incData.push(filtered.filter(t => t.type === 'pemasukan').reduce((acc, t) => acc + parseFloat(t.amount), 0));
         expData.push(filtered.filter(t => t.type === 'pengeluaran').reduce((acc, t) => acc + parseFloat(t.amount), 0));
+        budgetExpData.push(filtered.filter(t => t.type === 'pengeluaran' && !t.excludeFromBudget).reduce((acc, t) => acc + parseFloat(t.amount), 0));
       }
     }
 
@@ -141,11 +143,18 @@ window.renderAnalytics = () => {
                 label: 'Sisa Pot Pemasukan', 
                 data: potData, 
                 borderColor: '#6366f1', 
-                backgroundColor: 'rgba(99, 102, 241, 0.1)', 
-                fill: true, 
+                segment: {
+                  borderColor: ctx => ctx.p1.parsed.y < 0 ? '#f43f5e' : '#6366f1',
+                },
+                fill: {
+                  target: 'origin',
+                  above: 'rgba(99, 102, 241, 0.1)', // Warna biru transparan di atas 0
+                  below: 'rgba(244, 63, 94, 0.1)'   // Warna merah transparan di bawah 0
+                },
                 tension: 0.3, 
                 pointRadius: 3,
-                pointBackgroundColor: '#6366f1'
+                pointBackgroundColor: ctx => ctx.parsed.y < 0 ? '#f43f5e' : '#6366f1',
+                pointBorderColor: ctx => ctx.parsed.y < 0 ? '#f43f5e' : '#6366f1'
               }
             ]
           },
@@ -168,6 +177,75 @@ window.renderAnalytics = () => {
       } else {
         dailyContainer.classList.add('hidden');
       }
+    }
+
+    // Budget vs Actual Chart Logic
+    const bvaCtx = document.getElementById('budgetVsActualChart')?.getContext('2d');
+    if (bvaCtx) {
+      const budgetSettings = JSON.parse(localStorage.getItem('muwatok_cash_settings')) || { strategy: 'manual', limit: 0 };
+      const strategyRatios = {
+        'extreme': 0.3, 'hard': 0.5, 'medium': 0.7, 'normal': 0.8, 'easy': 0.9, '503020': 0.8, '702010': 0.7
+      };
+
+      const targetData = incData.map(inc => {
+        const ratio = budgetSettings.strategy === 'manual' ? (budgetSettings.limit / 100) : (strategyRatios[budgetSettings.strategy] || 0);
+        return inc * ratio;
+      });
+
+      if (activeCharts.budgetVsActual) activeCharts.budgetVsActual.destroy();
+      activeCharts.budgetVsActual = new Chart(bvaCtx, {
+        type: 'bar',
+        data: {
+          labels: monthLabels,
+          datasets: [
+            {
+              label: 'Budget Target',
+              data: targetData,
+              backgroundColor: 'rgba(148, 163, 184, 0.2)',
+              borderColor: '#94a3b8',
+              borderWidth: 1,
+              borderRadius: 4,
+              barPercentage: 0.8,
+              categoryPercentage: 0.7
+            },
+            {
+              label: 'Actual Spending',
+              data: budgetExpData,
+              backgroundColor: (ctx) => {
+                const idx = ctx.dataIndex;
+                return budgetExpData[idx] > targetData[idx] ? '#f43f5e' : '#10b981';
+              },
+              borderRadius: 4,
+              barPercentage: 0.8,
+              categoryPercentage: 0.7
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { labels: { color: '#94a3b8' } },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => {
+                  const val = AppData.formatIDR(ctx.parsed.y);
+                  if (ctx.datasetIndex === 1) {
+                    const target = targetData[ctx.dataIndex];
+                    const diff = ctx.parsed.y - target;
+                    return `${ctx.dataset.label}: ${val} (${diff > 0 ? 'Over' : 'Under'} ${AppData.formatIDR(Math.abs(diff))})`;
+                  }
+                  return `${ctx.dataset.label}: ${val}`;
+                }
+              }
+            }
+          },
+          scales: {
+            y: { ticks: { color: '#94a3b8', callback: (val) => AppData.formatIDR(val) }, grid: { color: '#334155' } },
+            x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+          }
+        }
+      });
     }
 
     const barCtx = document.getElementById('monthlyBarChart')?.getContext('2d');

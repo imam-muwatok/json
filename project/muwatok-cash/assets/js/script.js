@@ -31,7 +31,8 @@ const AppData = {
     pie: null,
     bar: null,
     daily: null,
-    yearly: null
+    yearly: null,
+    budgetVsActual: null
   };
 
   // Expose AppData globally

@@ -128,6 +128,12 @@ window.initSettingsPage = () => {
           localStorage.removeItem('muwatok_cash_investment_transactions');
           localStorage.removeItem('muwatok_cash_settings');
           localStorage.removeItem('muwatok_cash_censored');
+          // Menghapus semua data yang berkaitan dengan prefix muwatok_cash_
+          Object.keys(localStorage).forEach(key => {
+            if (key.startsWith('muwatok_cash_')) {
+              localStorage.removeItem(key);
+            }
+          });
           
           Swal.fire({
             icon: 'success',
