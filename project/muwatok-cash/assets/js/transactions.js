@@ -171,10 +171,14 @@ window.initTransactionModal = () => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    if (document.getElementById('transactionsTableBody')) { 
+    if (document.getElementById('transactionsTableBody')) {
         initTransactionsPage(); 
         renderTransactionsPage(); 
-        initTransactionModal(); 
+    }
+    // Initialize the transaction modal if its HTML structure is present on the current page.
+    // This covers both the dashboard (for adding) and the transactions page (for editing).
+    if (document.getElementById('transactionModal')) {
+        initTransactionModal();
     }
 });
 
