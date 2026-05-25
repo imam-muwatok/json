@@ -36,6 +36,31 @@ window.renderDashboard = () => {
     const investmentTrans = AppData.get('muwatok_cash_investment_transactions');
     investmentTrans.forEach(it => { stats.bal -= parseFloat(it.amount) || 0; });
 
+    // Calculate previous month's total balance
+    let prevMonthTotalBalance = 0;
+    const endOfPrevMonth = new Date(year, month, 0, 23, 59, 59, 999); // Last millisecond of previous month
+
+    transactions.forEach(t => {
+        const amt = parseFloat(t.amount);
+        const d = new Date(t.date);
+        if (d <= endOfPrevMonth) { // Only consider transactions up to the end of the previous month
+            if (t.type === 'pemasukan') {
+                prevMonthTotalBalance += amt;
+            } else {
+                prevMonthTotalBalance -= amt;
+            }
+        }
+    });
+
+    savingTrans.forEach(st => {
+        const d = new Date(st.date);
+        if (d <= endOfPrevMonth) { prevMonthTotalBalance -= parseFloat(st.amount) || 0; }
+    });
+
+    investmentTrans.forEach(it => {
+        const d = new Date(it.date);
+        if (d <= endOfPrevMonth) { prevMonthTotalBalance -= parseFloat(it.amount) || 0; }
+    });
     const totalSavingsAmount = savings.reduce((acc, s) => acc + (parseFloat(s.current) || 0), 0);
     const totalSavingsTarget = savings.reduce((acc, s) => acc + (parseFloat(s.target) || 0), 0);
 
@@ -72,6 +97,7 @@ window.renderDashboard = () => {
 
     updateTrend('incomeTrend', stats.inc, prevStats.inc);
     updateTrend('expenseTrend', stats.exp, prevStats.exp);
+    updateTrend('balanceTrend', stats.bal, prevMonthTotalBalance);
 
     const recentList = document.getElementById('recentTransactionsList');
     if (recentList) {
