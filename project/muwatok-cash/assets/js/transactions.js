@@ -83,6 +83,45 @@ window.initTransactionModal = () => {
     if (!modal || !form) return;
 
     const tagSelect = form.querySelector('[name="tag"]');
+    const transactionSourceInput = document.getElementById('transactionSource');
+    const sourceOfFundsGroup = document.getElementById('sourceOfFundsGroup');
+    const savingsGoalSelection = document.getElementById('savingsGoalSelection');
+    const savingsGoalDropdown = document.getElementById('savingsGoalDropdown');
+
+    const populateSavingsGoalsDropdown = () => {
+        if (!savingsGoalDropdown) return;
+        const savings = AppData.get('muwatok_cash_savings');
+        savingsGoalDropdown.innerHTML = '<option value="">-- Select a goal --</option>';
+        
+        savings.forEach((s, index) => {
+            const balance = parseFloat(s.current) || 0;
+            // Tampilkan hanya saving yang memiliki saldo tidak nol
+            if (balance > 0) {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = `${s.name} (${AppData.formatIDR(balance)})`;
+                savingsGoalDropdown.appendChild(option);
+            }
+        });
+    };
+
+    const updateSourceUI = (val) => {
+        if (!transactionSourceInput || !sourceOfFundsGroup) return;
+        transactionSourceInput.value = val;
+        sourceOfFundsGroup.querySelectorAll('button').forEach(btn => {
+            const isActive = btn.dataset.val === val;
+            btn.className = `flex-1 py-2 text-sm font-medium rounded-lg transition-all ${isActive ? 'bg-white dark:bg-gray-700 shadow-sm text-indigo-600 dark:text-indigo-400' : 'text-gray-500 dark:text-gray-400'}`;
+        });
+        if (val === 'savings') {
+            savingsGoalSelection.classList.remove('hidden');
+            populateSavingsGoalsDropdown();
+        } else {
+            savingsGoalSelection.classList.add('hidden');
+        }
+    };
+
+    sourceOfFundsGroup?.querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => updateSourceUI(btn.dataset.val)));
+
     const populateTags = () => {
       if (!tagSelect) return;
       const transactions = AppData.get('muwatok_cash_data').transactions || [];
@@ -112,10 +151,14 @@ window.initTransactionModal = () => {
         document.getElementById('editIndex').value = "-1";
         document.getElementById('modalTitle').textContent = "Add Transaction";
         updateTypeUI('pengeluaran');
+        updateSourceUI('wallet'); // Set default ke wallet saat modal ditutup
       } else {
         populateTags();
         updateTypeUI('pengeluaran');
-        if (document.getElementById('editIndex').value === "-1") form.querySelector('[name="date"]').value = new Date().toISOString().split('T')[0];
+        if (document.getElementById('editIndex').value === "-1") {
+          form.querySelector('[name="date"]').value = new Date().toISOString().split('T')[0];
+          updateSourceUI('wallet'); // Set default ke wallet saat menambah transaksi baru
+        }
       }
     };
 
@@ -130,6 +173,12 @@ window.initTransactionModal = () => {
       form.querySelector('[name="date"]').value = t.date.split(' ')[0];
       form.querySelector('[name="description"]').value = t.description || "";
       updateTypeUI(t.type);
+      if (t.source === 'savings') {
+        updateSourceUI('savings');
+        savingsGoalDropdown.value = t.savingsGoalIndex;
+      } else {
+        updateSourceUI('wallet');
+      }
     };
 
     document.getElementById('addTransactionBtn')?.addEventListener('click', () => toggle(true));
@@ -139,15 +188,74 @@ window.initTransactionModal = () => {
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       const f = new FormData(form), eIdx = parseInt(document.getElementById('editIndex').value);
-      const nt = { name: f.get('name'), type: f.get('type'), amount: parseFloat(f.get('amount')), tag: f.get('tag'), date: f.get('date') + " 00:00:00", description: f.get('description') || "" };
+      const source = transactionSourceInput.value;
+      const savingsGoalIndex = (source === 'savings' && savingsGoalDropdown.value !== '') ? parseInt(savingsGoalDropdown.value) : undefined;
+
+      const nt = { 
+        name: f.get('name'), 
+        type: f.get('type'), 
+        amount: parseFloat(f.get('amount')), 
+        tag: f.get('tag'), 
+        date: f.get('date') + " 00:00:00", 
+        description: f.get('description') || "",
+        source: source,
+        savingsGoalIndex: savingsGoalIndex
+      };
+
       const d = AppData.get('muwatok_cash_data');
-      if (eIdx > -1) d.transactions[eIdx] = nt; else d.transactions.push(nt);
+      let savings = AppData.get('muwatok_cash_savings');
+      let savingLogs = AppData.get('muwatok_cash_saving_transactions');
+
+      if (source === 'savings') {
+        if (savingsGoalIndex === undefined) return Swal.fire({ icon: 'error', title: 'Error', text: 'Pilih tujuan tabungan!' });
+        if (nt.type === 'pengeluaran') {
+          const sGoal = savings[savingsGoalIndex];
+          if (nt.amount > (parseFloat(sGoal.current) || 0)) return Swal.fire({ icon: 'error', title: 'Error', text: 'Saldo tabungan tidak mencukupi!' });
+        }
+      }
+
+      if (eIdx > -1) {
+        const ot = d.transactions[eIdx];
+        if (ot.source === 'savings' && ot.savingsGoalIndex !== undefined) {
+          const oldS = savings[ot.savingsGoalIndex];
+          if (oldS) {
+            if (ot.type === 'pengeluaran') {
+              oldS.current = (parseFloat(oldS.current) || 0) + ot.amount;
+              const lIdx = savingLogs.findIndex(l => l.name === `Withdrawal: ${ot.name}` && l.date === ot.date);
+              if (lIdx > -1) savingLogs.splice(lIdx, 1);
+            } else {
+              oldS.current = (parseFloat(oldS.current) || 0) - ot.amount;
+              const lIdx = savingLogs.findIndex(l => l.name === `Deposit: ${ot.name}` && l.date === ot.date);
+              if (lIdx > -1) savingLogs.splice(lIdx, 1);
+            }
+          }
+        }
+        d.transactions[eIdx] = nt;
+      } else {
+        d.transactions.push(nt);
+      }
+
+      if (nt.source === 'savings' && nt.savingsGoalIndex !== undefined) {
+        const newS = savings[nt.savingsGoalIndex];
+        if (newS) {
+          if (nt.type === 'pengeluaran') {
+            newS.current = (parseFloat(newS.current) || 0) - nt.amount;
+            savingLogs.push({ name: `Withdrawal: ${nt.name}`, amount: -nt.amount, date: nt.date, description: `Paid for "${nt.name}" from savings goal "${newS.name}".` });
+          } else {
+            newS.current = (parseFloat(newS.current) || 0) + nt.amount;
+            savingLogs.push({ name: `Deposit: ${nt.name}`, amount: nt.amount, date: nt.date, description: `Direct deposit of "${nt.name}" into savings goal "${newS.name}".` });
+          }
+        }
+      }
+
+      AppData.save('muwatok_cash_savings', savings);
+      AppData.save('muwatok_cash_saving_transactions', savingLogs);
       AppData.save('muwatok_cash_data', d);
 
       // Logic Auto-Allocation Savings
       if (nt.type === 'pemasukan' && eIdx === -1) { // Only for new income transactions
-        let savings = AppData.get('muwatok_cash_savings');
-        let savingLogs = AppData.get('muwatok_cash_saving_transactions');
+        savings = AppData.get('muwatok_cash_savings');
+        savingLogs = AppData.get('muwatok_cash_saving_transactions');
         let wasUpdated = false;
         savings.forEach(s => {
           if (s.allocation && s.allocation > 0) {
@@ -164,6 +272,7 @@ window.initTransactionModal = () => {
           if (typeof renderSavingsPage === 'function') renderSavingsPage(); // Update savings page if open
         }
       }
+
       toggle(false); renderTransactionsPage();
       if (typeof renderDashboard === 'function') renderDashboard();
       Swal.fire({ icon: 'success', title: 'Saved', timer: 1500, showConfirmButton: false });
@@ -184,6 +293,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
 window.deleteTransaction = (idx) => {
     Swal.fire({ title: 'Hapus?', icon: 'warning', showCancelButton: true, confirmButtonColor: '#ef4444' }).then(r => {
-      if (r.isConfirmed) { const d = AppData.get('muwatok_cash_data'); d.transactions.splice(idx, 1); AppData.save('muwatok_cash_data', d); renderTransactionsPage(); if (typeof renderDashboard === 'function') renderDashboard(); }
+      if (r.isConfirmed) { 
+        const d = AppData.get('muwatok_cash_data'); 
+        const t = d.transactions[idx];
+        if (t.source === 'savings' && t.savingsGoalIndex !== undefined) {
+          let savings = AppData.get('muwatok_cash_savings');
+          let savingLogs = AppData.get('muwatok_cash_saving_transactions');
+          const sGoal = savings[t.savingsGoalIndex];
+          if (sGoal) {
+            if (t.type === 'pengeluaran') {
+              sGoal.current = (parseFloat(sGoal.current) || 0) + t.amount;
+              const lIdx = savingLogs.findIndex(l => l.name === `Withdrawal: ${t.name}` && l.date === t.date);
+              if (lIdx > -1) savingLogs.splice(lIdx, 1);
+            } else {
+              sGoal.current = (parseFloat(sGoal.current) || 0) - t.amount;
+              const lIdx = savingLogs.findIndex(l => l.name === `Deposit: ${t.name}` && l.date === t.date);
+              if (lIdx > -1) savingLogs.splice(lIdx, 1);
+            }
+            AppData.save('muwatok_cash_savings', savings);
+            AppData.save('muwatok_cash_saving_transactions', savingLogs);
+          }
+        }
+        d.transactions.splice(idx, 1); 
+        AppData.save('muwatok_cash_data', d); 
+        renderTransactionsPage(); 
+        if (typeof renderDashboard === 'function') renderDashboard();
+        if (typeof renderSavingsPage === 'function') renderSavingsPage();
+      }
     });
 };
