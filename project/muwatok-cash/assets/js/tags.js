@@ -74,6 +74,65 @@ window.renderTagsPage = () => {
     }).join('');
 };
 
+window.renderTagComparisonChart = () => {
+    const chartCanvas = document.getElementById('tagComparisonChart');
+    if (!chartCanvas || typeof Chart === 'undefined') return;
+
+    const transactions = AppData.get('muwatok_cash_data').transactions || [];
+    const customTags = AppData.get('muwatok_cash_tags');
+
+    const fYear = document.getElementById('filterYear')?.value || '';
+    const fRange = document.getElementById('filterRange')?.value || '';
+
+    let filteredTransactions = [...transactions];
+    const now = new Date();
+
+    if (fYear !== '') {
+      filteredTransactions = filteredTransactions.filter(t => new Date(t.date).getFullYear() === parseInt(fYear));
+    }
+    if (fRange !== '') {
+      const monthsAgo = parseInt(fRange);
+      const cutoffDate = new Date();
+      cutoffDate.setMonth(now.getMonth() - monthsAgo);
+      filteredTransactions = filteredTransactions.filter(t => new Date(t.date) >= cutoffDate);
+    }
+
+    const expenseByTag = {};
+    filteredTransactions.filter(t => t.type === 'pengeluaran').forEach(t => {
+        expenseByTag[t.tag] = (expenseByTag[t.tag] || 0) + parseFloat(t.amount);
+    });
+
+    const chartLabels = Object.keys(expenseByTag);
+    const chartData = Object.values(expenseByTag);
+    const totalExpense = chartData.reduce((acc, val) => acc + val, 0);
+    const chartLabelsFormatted = chartLabels.map((tag, i) => {
+        const percent = totalExpense > 0 ? ((chartData[i] / totalExpense) * 100).toFixed(1) : 0;
+        return `${tag} (${percent}%)`;
+    });
+
+    const chartColors = chartLabels.map(tag => {
+        const customTag = customTags.find(ct => ct.name === tag);
+        return customTag ? customTag.color : '#6366f1'; // Default color if not found
+    });
+
+    const ctx = chartCanvas.getContext('2d');
+    if (window.activeCharts.tagComparison) {
+        window.activeCharts.tagComparison.destroy();
+    }
+    window.activeCharts.tagComparison = new Chart(ctx, {
+        type: 'doughnut',
+        data: { labels: chartLabelsFormatted, datasets: [{ data: chartData, backgroundColor: chartColors, borderWidth: 0 }] },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'right', labels: { color: '#94a3b8', padding: 20, usePointStyle: true } },
+                tooltip: { callbacks: { label: (context) => `${context.label}: ${AppData.formatIDR(context.raw)}` } }
+            },
+            cutout: '70%'
+        }
+    });
+};
+
 window.initTagsPage = () => {
     const transactions = AppData.get('muwatok_cash_data').transactions || [];
     const years = [...new Set(transactions.map(t => new Date(t.date).getFullYear()))].sort((a, b) => b - a);
@@ -84,7 +143,10 @@ window.initTagsPage = () => {
 
     // Tambahkan listener untuk setiap elemen filter
     ['filterYear', 'filterRange', 'sortTags'].forEach(id => {
-      document.getElementById(id)?.addEventListener('change', renderTagsPage);
+      document.getElementById(id)?.addEventListener('change', () => {
+        renderTagsPage();
+        renderTagComparisonChart(); // Render chart juga saat filter berubah
+      });
     });
 };
 
@@ -288,6 +350,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('tagsContainer')) {
         initTagsPage();
         renderTagsPage();
+        renderTagComparisonChart(); // Initial render for the chart
         initTagModal();
     }
 });

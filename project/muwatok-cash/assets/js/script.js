@@ -32,7 +32,9 @@ const AppData = {
     bar: null,
     daily: null,
     yearly: null,
-    budgetVsActual: null
+    budgetVsActual: null,
+    tagComparison: null,
+    tagDetail: null
   };
 
   // Expose AppData globally
@@ -92,6 +94,7 @@ const AppData = {
       if (typeof renderDashboard === 'function' && document.getElementById('totalBalance')) renderDashboard();
       if (typeof renderTransactionsPage === 'function' && document.getElementById('transactionsTableBody')) renderTransactionsPage();
       if (typeof renderTagsPage === 'function' && document.getElementById('tagsContainer')) renderTagsPage();
+      if (typeof renderTagComparisonChart === 'function' && document.getElementById('tagComparisonChart')) renderTagComparisonChart(); // Re-render tag comparison chart
       if (typeof renderAnalytics === 'function' && document.getElementById('totalTransCount')) renderAnalytics();
       if (typeof renderSavingsPage === 'function' && document.getElementById('savingsContainer')) renderSavingsPage();
       if (typeof renderInvestmentPage === 'function' && document.getElementById('investmentContainer')) renderInvestmentPage();
