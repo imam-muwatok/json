@@ -8,17 +8,46 @@ window.renderTagsPage = () => {
     if (!container) return;
     const transactions = AppData.get('muwatok_cash_data').transactions || [];
     const customTags = AppData.get('muwatok_cash_tags');
+
+    // Ambil nilai filter dari UI
+    const fYear = document.getElementById('filterYear')?.value || '';
+    const fRange = document.getElementById('filterRange')?.value || '';
+    const fSort = document.getElementById('sortTags')?.value || 'count';
+
+    let filteredTransactions = [...transactions];
+    const now = new Date();
+
+    // Filter berdasarkan Tahun
+    if (fYear !== '') {
+      filteredTransactions = filteredTransactions.filter(t => new Date(t.date).getFullYear() === parseInt(fYear));
+    }
+
+    // Filter berdasarkan Rentang Bulan Terakhir
+    if (fRange !== '') {
+      const monthsAgo = parseInt(fRange);
+      const cutoffDate = new Date();
+      cutoffDate.setMonth(now.getMonth() - monthsAgo);
+      filteredTransactions = filteredTransactions.filter(t => new Date(t.date) >= cutoffDate);
+    }
     
     const map = {};
     customTags.forEach((ct, i) => map[ct.name] = { inc: 0, exp: 0, count: 0, color: ct.color, icon: ct.icon, oIdx: i });
-    transactions.forEach(t => {
+    filteredTransactions.forEach(t => {
       if (!map[t.tag]) map[t.tag] = { inc: 0, exp: 0, count: 0, color: '#6366f1', icon: 'fa-tag' };
       const a = parseFloat(t.amount);
       if (t.type === 'pemasukan') map[t.tag].inc += a; else map[t.tag].exp += a;
       map[t.tag].count++;
     });
 
-    const sorted = Object.entries(map).sort((a,b) => b[1].count - a[1].count);
+    let sorted = Object.entries(map);
+
+    // Logika Pengurutan
+    if (fSort === 'asc') sorted.sort((a, b) => a[0].localeCompare(b[0]));
+    else if (fSort === 'desc') sorted.sort((a, b) => b[0].localeCompare(a[0]));
+    else if (fSort === 'exp_high') sorted.sort((a, b) => b[1].exp - a[1].exp);
+    else if (fSort === 'exp_low') sorted.sort((a, b) => a[1].exp - b[1].exp);
+    else sorted.sort((a, b) => b[1].count - a[1].count); // Default: Terbanyak digunakan
+
     if (!sorted.length) { container.innerHTML = '<div class="col-span-full py-10 text-center text-gray-500">No tags.</div>'; return; }
 
     container.innerHTML = sorted.map(([tag, s]) => {
@@ -43,6 +72,20 @@ window.renderTagsPage = () => {
           </div>
         </div>`;
     }).join('');
+};
+
+window.initTagsPage = () => {
+    const transactions = AppData.get('muwatok_cash_data').transactions || [];
+    const years = [...new Set(transactions.map(t => new Date(t.date).getFullYear()))].sort((a, b) => b - a);
+    const elYear = document.getElementById('filterYear');
+    if (elYear) {
+      elYear.innerHTML = '<option value="">All Years</option>' + years.map(y => `<option value="${y}">${y}</option>`).join('');
+    }
+
+    // Tambahkan listener untuk setiap elemen filter
+    ['filterYear', 'filterRange', 'sortTags'].forEach(id => {
+      document.getElementById(id)?.addEventListener('change', renderTagsPage);
+    });
 };
 
 window.initTagModal = () => {
@@ -243,6 +286,7 @@ document.getElementById('tagDetailModalBackdrop')?.addEventListener('click', () 
 
 document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('tagsContainer')) {
+        initTagsPage();
         renderTagsPage();
         initTagModal();
     }

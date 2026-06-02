@@ -55,6 +55,30 @@
           </div>
         </div>
 
+        <!-- Filters -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+          <select id="filterYear" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none transition">
+            <option value="">All Years</option>
+          </select>
+
+          <select id="filterRange" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none transition">
+            <option value="">All Time</option>
+            <option value="1">Last 1 Month</option>
+            <option value="2">Last 2 Months</option>
+            <option value="3">Last 3 Months</option>
+            <option value="4">Last 4 Months</option>
+            <option value="6">Last 6 Months</option>
+          </select>
+
+          <select id="sortTags" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none transition">
+            <option value="count">Most Used</option>
+            <option value="asc">Name (A-Z)</option>
+            <option value="desc">Name (Z-A)</option>
+            <option value="exp_high">Highest Spending</option>
+            <option value="exp_low">Lowest Spending</option>
+          </select>
+        </div>
+
         <!-- Tags Grid -->
         <div id="tagsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           <!-- Rendered by JS -->
