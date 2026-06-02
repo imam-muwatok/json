@@ -7,6 +7,47 @@ window.renderSavingsPage = () => {
     const container = document.getElementById('savingsContainer');
     if (!container) return;
     const savings = AppData.get('muwatok_cash_savings');
+    const savingTrans = AppData.get('muwatok_cash_saving_transactions');
+    
+    // 1. Hitung Ringkasan Distribusi Otomatis Bulan Ini
+    const now = new Date();
+    const month = now.getMonth(), year = now.getFullYear();
+    
+    const monthlyAutoTrans = savingTrans.filter(st => {
+      const d = new Date(st.date);
+      return d.getMonth() === month && d.getFullYear() === year && st.name.startsWith('Auto Saving:');
+    });
+
+    const totalAutoMonthly = monthlyAutoTrans.reduce((acc, t) => acc + (parseFloat(t.amount) || 0), 0);
+    
+    const summaryEl = document.getElementById('autoSavingSummary');
+    const totalAutoEl = document.getElementById('totalMonthlyAutoSaved');
+    if (summaryEl && totalAutoEl) {
+      if (totalAutoMonthly > 0) {
+        summaryEl.classList.remove('hidden');
+        totalAutoEl.textContent = AppData.formatIDR(totalAutoMonthly);
+      } else {
+        summaryEl.classList.add('hidden');
+      }
+    }
+
+    // 2. Render Tabel Riwayat Distribusi
+    const historySection = document.getElementById('savingsHistorySection');
+    const historyBody = document.getElementById('savingsHistoryBody');
+    if (historySection && historyBody) {
+      if (monthlyAutoTrans.length > 0) {
+        historySection.classList.remove('hidden');
+        historyBody.innerHTML = monthlyAutoTrans.sort((a,b) => new Date(b.date) - new Date(a.date)).slice(0, 10).map(t => `
+          <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-800/30 transition">
+            <td class="px-6 py-4 text-sm font-semibold">${t.name.replace('Auto Saving: ', '')}</td>
+            <td class="px-6 py-4 text-xs text-gray-500">${new Date(t.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}</td>
+            <td class="px-6 py-4 text-right font-bold text-emerald-600 dark:text-emerald-400">+${AppData.formatIDR(t.amount)}</td>
+          </tr>
+        `).join('');
+      } else {
+        historySection.classList.add('hidden');
+      }
+    }
     
     if (!savings.length) { 
       container.innerHTML = '<div class="col-span-full py-20 text-center text-gray-500"><i class="fas fa-piggy-bank text-5xl mb-4 opacity-20"></i><p>No savings goals yet. Start planning your future!</p></div>'; 
