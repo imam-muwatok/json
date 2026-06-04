@@ -9,6 +9,7 @@ link : https://imam-muwatok.github.io/json/
 - Crypto-dash : https://imam-muwatok.github.io/json/project/crypto-dash/
 - Crypto Journey : https://imam-muwatok.github.io/json/project/crypto-journey/
 - Muwatok-Cash  : https://imam-muwatok.github.io/json/project/muwatok-cash/
+- Muwatok-Farm  : https://imam-muwatok.github.io/json/project/Muwatok-Farm/
 
 -- Client :
 - SLB WAHID HASYIM : https://imam-muwatok.github.io/json/client/slb-wahid-hasyim/index.html
