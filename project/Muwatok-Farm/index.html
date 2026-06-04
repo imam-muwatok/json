@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Muwatok-Farm · Dashboard + Analytics</title>
+    <!-- Google Fonts + Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0c10;
+            color: #eef2ff;
+            overflow-x: hidden;
+        }
+
+        /* DASHBOARD LAYOUT */
+        .dashboard-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 280px;
+            background: rgba(12, 16, 22, 0.96);
+            backdrop-filter: blur(4px);
+            border-right: 1px solid #1f2a38;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            transition: all 0.2s;
+        }
+
+        .logo-area {
+            padding: 2rem 1.5rem 1.5rem;
+            border-bottom: 1px solid #1e2a36;
+        }
+
+        .logo-area h2 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #B9FBC0, #4ade80);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-area p {
+            font-size: 0.7rem;
+            color: #6f8faa;
+            margin-top: 6px;
+        }
+
+        .nav-menu {
+            padding: 0 1rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 0.85rem 1.2rem;
+            margin-bottom: 0.5rem;
+            border-radius: 1.2rem;
+            font-weight: 600;
+            color: #b9cef0;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .nav-item i {
+            width: 26px;
+            font-size: 1.2rem;
+        }
+
+        .nav-item.active {
+            background: #1e2f3c;
+            color: #4ade80;
+            border-left: 3px solid #4ade80;
+        }
+
+        .nav-item:hover:not(.active) {
+            background: #18212b;
+            color: #c0e0d0;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            flex: 1;
+            padding: 1.8rem 2rem;
+            overflow-y: auto;
+        }
+
+        /* PAGES */
+        .page {
+            display: none;
+            animation: fadeIn 0.25s ease;
+        }
+
+        .page.active-page {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* CARDS */
+        .card-dash {
+            background: #0f131c;
+            border-radius: 1.5rem;
+            border: 1px solid #202a36;
+            padding: 1.3rem 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: #10161f;
+            border-radius: 1.3rem;
+            padding: 1.2rem;
+            border-left: 4px solid #4ade80;
+        }
+
+        .stat-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #9db4d0;
+        }
+
+        .stat-number {
+            font-size: 1.9rem;
+            font-weight: 800;
+            margin-top: 8px;
+            word-break: break-word;
+        }
+
+        .btn-primary {
+            background: #1e3a2f;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            color: #dcfce7;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            background: #2b5a44;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #3a4b5e;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            color: #cbddee;
+            cursor: pointer;
+        }
+
+        /* SWITCH */
+        .switch-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .switch-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            color: #bdd4f0;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 52px;
+            height: 26px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #2d3e4e;
+            transition: 0.3s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #4ade80;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .switch-text {
+            display: flex;
+            gap: 12px;
+            font-size: 0.8rem;
+            margin-top: 6px;
+        }
+
+        .switch-text span {
+            opacity: 0.6;
+        }
+
+        .switch-text .active-text {
+            opacity: 1;
+            font-weight: 600;
+            color: #4ade80;
+        }
+
+        /* MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(6px);
+            z-index: 1050;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-dialog {
+            max-width: 550px;
+            width: 90%;
+            margin: 1.75rem auto;
+        }
+
+        .modal-content {
+            background: #121822;
+            border-radius: 1.5rem;
+            border: 1px solid #2a3a48;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 1.5rem;
+            border-bottom: 1px solid #232e3a;
+        }
+
+        .modal-header h5 {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #232e3a;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: #9bb3cc;
+        }
+
+        /* FORM */
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: #bdd4f0;
+        }
+
+        input,
+        select {
+            background: #0b0f17;
+            border: 1px solid #2a3746;
+            border-radius: 1rem;
+            padding: 0.75rem 1rem;
+            color: #f0f6ff;
+            width: 100%;
+            font-family: 'Inter', monospace;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #4ade80;
+        }
+
+        .tag-input-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .tag-input-group select {
+            flex: 1;
+        }
+
+        .btn-icon {
+            background: #1e2a36;
+            border: none;
+            border-radius: 2rem;
+            width: 38px;
+            height: 38px;
+            color: #4ade80;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-icon:hover {
+            background: #2e3f4e;
+        }
+
+        /* TABLES */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 12px 8px;
+            text-align: left;
+            border-bottom: 1px solid #222e3a;
+        }
+
+        th {
+            color: #9ab3d0;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        .badge {
+            background: #1f2a33;
+            padding: 4px 10px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .badge-cash {
+            background: #1e3a2f;
+            color: #84e0a8;
+        }
+
+        .badge-debt {
+            background: #5e3a2e;
+            color: #ffbc8c;
+        }
+
+        .badge-tag {
+            background: #2d3748;
+            color: #b9fbc0;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: #9bb3cc;
+            cursor: pointer;
+            margin: 0 4px;
+            font-size: 1rem;
+            transition: 0.2s;
+        }
+
+        .action-btn.edit-btn:hover {
+            color: #4ade80;
+        }
+
+        .action-btn.delete-btn:hover {
+            color: #f97373;
+        }
+
+        .total-ringkasan {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 1rem;
+        }
+
+        /* FILTER & ANALYTICS */
+        .filter-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-group .form-group {
+            margin-bottom: 0;
+        }
+
+        .analytics-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        canvas {
+            max-height: 220px;
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 780px) {
+            .sidebar {
+                width: 90px;
+            }
+            .logo-area h2 span,
+            .logo-area p {
+                display: none;
+            }
+            .logo-area h2 i {
+                font-size: 1.8rem;
+            }
+            .nav-item span {
+                display: none;
+            }
+            .nav-item i {
+                margin: 0 auto;
+            }
+            .main-content {
+                padding: 1rem;
+            }
+        }
+
+        @media print {
+            .sidebar, #openModalBtn, #printTableBtn, #resetTableFilter, 
+            .action-btn, .modal, .logo-area p, .nav-menu, 
+            input, select, label, .close-modal {
+                display: none !important;
+            }
+            body { background: white !important; color: black !important; }
+            .main-content { padding: 0 !important; margin: 0 !important; width: 100% !important; }
+            .dashboard-wrapper { display: block !important; }
+            .card-dash { 
+                background: white !important; 
+                color: black !important; 
+                border: 1px solid #ddd !important; 
+                box-shadow: none !important; 
+                margin-bottom: 10px !important; 
+                border-radius: 0 !important;
+            }
+            .page { display: none !important; }
+            .page.active-page { display: block !important; }
+            table { border-collapse: collapse !important; width: 100% !important; }
+            th, td { border: 1px solid #eee !important; color: black !important; padding: 8px !important; font-size: 0.8rem; }
+            th:last-child, td:last-child { display: none !important; }
+            .badge { background: #f8f9fa !important; color: #333 !important; border: 1px solid #ccc !important; }
+            .badge-tag { background: #f0fdf4 !important; color: #166534 !important; }
+            .total-ringkasan { color: black !important; }
+            .total-ringkasan strong { color: black !important; }
+            h2 { color: black !important; margin-bottom: 5px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <div class="logo-area">
+                <h2><i class="fas fa-tractor"></i> <span>Muwatok-Farm</span></h2>
+                <p>🐔 Smart Poultry</p>
+            </div>
+            <div class="nav-menu">
+                <div class="nav-item" data-page="dashboard">
+                    <i class="fas fa-chalkboard-user"></i> <span>Dashboard</span>
+                </div>
+                <div class="nav-item" data-page="ayam">
+                    <i class="fas fa-kiwi-bird"></i> <span>Manajemen Ayam</span>
+                </div>
+                <div class="nav-item" data-page="tags">
+                    <i class="fas fa-tags"></i> <span>Tags</span>
+                </div>
+                <div class="nav-item active" data-page="analytics">
+                    <i class="fas fa-chart-line"></i> <span>Analytics</span>
+                </div>
+                <div class="nav-item" data-page="dummy">
+                    <i class="fas fa-chart-pie"></i> <span>Laporan (Dummy)</span>
+                </div>
+            </div>
+            <div style="padding: 1.5rem; font-size: 0.7rem; color: #4f6e8a; text-align: center;">
+                <i class="fas fa-leaf"></i> cash · hutang · tag
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+            <!-- DASHBOARD PAGE -->
+            <div id="dashboardPage" class="page">
+                <div class="card-dash">
+                    <h2><i class="fas fa-chart-simple"></i> Ringkasan Keuangan Farm</h2>
+                    <p style="color:#93adc7">Data tersimpan di localstorage (default kosong)</p>
+                </div>
+                <div class="stat-grid">
+                    <div class="stat-card">
+                        <div class="stat-title"><i class="fas fa-arrow-up"></i> Total Pemasukan</div>
+                        <div class="stat-number" id="dashTotalIncome">Rp0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title"><i class="fas fa-arrow-down"></i> Total Pengeluaran</div>
+                        <div class="stat-number" id="dashTotalExpense">Rp0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title"><i class="fas fa-coins"></i> Saldo Bersih</div>
+                        <div class="stat-number" id="dashNetBalance">Rp0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title"><i class="fas fa-handshake"></i> Hutang Berlaku</div>
+                        <div class="stat-number" id="dashTotalDebt">Rp0</div>
+                    </div>
+                </div>
+                <div class="card-dash">
+                    <h3><i class="fas fa-chart-column"></i> Preview Grafik (30 hari terakhir)</h3>
+                    <canvas id="previewChart" height="180"></canvas>
+                </div>
+            </div>
+
+            <!-- MANAJEMEN AYAM PAGE (Transaksi) -->
+            <div id="ayamPage" class="page">
+                <div class="card-dash">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                        <h2><i class="fas fa-chicken"></i> Transaksi Ayam</h2>
+                        <div style="display: flex; gap: 10px;">
+                            <button id="printTableBtn" class="btn-outline" style="padding: 0.6rem 1.2rem;"><i class="fas fa-print"></i> Cetak</button>
+                            <button id="openModalBtn" class="btn-primary"><i class="fas fa-plus-circle"></i> Tambah Transaksi</button>
+                        </div>
+                    </div>
+                    <p style="font-size:0.8rem; margin-top:8px;">Qty default 1, Tag dapat ditambah, Nominal format titik. Edit dan hapus tersedia.</p>
+                    
+                    <!-- Filter Tag & Rentang Tanggal untuk Tabel -->
+                    <div style="margin-top: 1.2rem; display: flex; align-items: center; gap: 15px; border-top: 1px solid #1e2a36; padding-top: 1rem; flex-wrap: wrap;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <label style="margin-bottom: 0; white-space: nowrap; color: #9db4d0; font-size: 0.85rem;"><i class="fas fa-filter"></i> Tag:</label>
+                            <select id="tableTagFilter" style="max-width: 150px; padding: 0.5rem 0.8rem; height: auto;">
+                                <option value="all">Semua Tag</option>
+                            </select>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <label style="margin-bottom: 0; white-space: nowrap; color: #9db4d0; font-size: 0.85rem;"><i class="fas fa-calendar-day"></i> Dari:</label>
+                            <input type="date" id="filterStartDate" style="max-width: 150px; padding: 0.4rem 0.8rem; height: auto;">
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <label style="margin-bottom: 0; white-space: nowrap; color: #9db4d0; font-size: 0.85rem;">Sampai:</label>
+                            <input type="date" id="filterEndDate" style="max-width: 150px; padding: 0.4rem 0.8rem; height: auto;">
+                        </div>
+                        <button id="resetTableFilter" class="btn-outline" style="padding: 0.4rem 1rem; font-size: 0.8rem;"><i class="fas fa-undo"></i> Reset</button>
+                    </div>
+                </div>
+                <div class="card-dash">
+                    <div class="total-ringkasan">
+                        <div><span>💚 Total Pemasukan: </span><strong id="summaryIncome">Rp0</strong></div>
+                        <div><span>❤️ Total Pengeluaran: </span><strong id="summaryExpense">Rp0</strong></div>
+                        <div><span>⚖️ Saldo: </span><strong id="summaryBalance">Rp0</strong></div>
+                        <div><span>📌 Hutang Belum Lunas: </span><strong id="summaryOutstandingDebt">Rp0</strong></div>
+                    </div>
+                    <div style="overflow-x: auto; margin-top: 1rem;">
+                        <table id="transactionsTable">
+                            <thead>
+                                <tr>
+                                    <th>Tanggal</th><th>Jenis</th><th>Deskripsi</th><th>Qty</th><th>Tag</th><th>Nominal</th><th>Status</th><th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody">
+                                <tr><td colspan="8" style="text-align:center;">Memuat data...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAGS MANAGEMENT PAGE -->
+            <div id="tagsPage" class="page">
+                <div class="card-dash">
+                    <h2><i class="fas fa-tags"></i> Manajemen Tag & Kategori</h2>
+                    <p style="color:#93adc7">Tambah tag baru dan analisis performa per kategori transaksi.</p>
+                </div>
+                
+                <div class="card-dash">
+                    <h3><i class="fas fa-plus-circle"></i> Tambah Tag Baru</h3>
+                    <div class="tag-input-group" style="margin-top:1rem; max-width: 500px;">
+                        <input type="text" id="newTagInput" placeholder="Masukkan nama kategori baru (misal: Gaji, Listrik)...">
+                        <button id="submitTagBtn" class="btn-primary">Tambah Tag</button>
+                    </div>
+                </div>
+
+                <div class="card-dash">
+                    <h3><i class="fas fa-chart-bar"></i> Analitik Per Tag</h3>
+                    <canvas id="tagsComparisonChart" height="200"></canvas>
+                    <div style="overflow-x: auto; margin-top: 1.5rem;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nama Tag</th>
+                                    <th>Total Pemasukan</th>
+                                    <th>Total Pengeluaran</th>
+                                    <th>Saldo Bersih</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tagsTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ANALYTICS PAGE -->
+            <div id="analyticsPage" class="page active-page">
+                <div class="card-dash">
+                    <h2><i class="fas fa-chart-line"></i> Analisis Keuangan & Tren</h2>
+                    <p style="color:#93adc7">Filter berdasarkan periode dan lihat statistik per tag</p>
+                </div>
+                <div class="card-dash">
+                    <div class="filter-group">
+                        <div class="form-group"><label>Bulan</label><select id="filterMonth"><option value="all">Semua Bulan</option></select></div>
+                        <div class="form-group"><label>Tahun</label><select id="filterYear"><option value="all">Semua Tahun</option></select></div>
+                        <div><button id="applyFilterBtn" class="btn-primary"><i class="fas fa-filter"></i> Terapkan Filter</button></div>
+                    </div>
+                    <div class="analytics-row">
+                        <div><h3><i class="fas fa-chart-bar"></i> Pemasukan vs Pengeluaran</h3><canvas id="incomeExpenseChart" height="200"></canvas></div>
+                        <div><h3><i class="fas fa-tags"></i> Top 5 Tag (Pengeluaran)</h3><canvas id="topExpenseTagChart" height="200"></canvas></div>
+                    </div>
+                    <div class="analytics-row">
+                        <div><h3><i class="fas fa-chart-line"></i> Tren Bulanan (Pemasukan)</h3><canvas id="monthlyTrendChart" height="200"></canvas></div>
+                        <div><h3><i class="fas fa-chart-line"></i> Tren Bulanan (Pengeluaran)</h3><canvas id="monthlyExpenseTrendChart" height="200"></canvas></div>
+                        <div><h3><i class="fas fa-chart-pie"></i> Proporsi Status (Cash vs Hutang)</h3><canvas id="statusPieChart" height="200"></canvas></div>
+                    </div>
+                    <div class="card-dash" style="margin-top:1rem;">
+                        <h3><i class="fas fa-list"></i> Ringkasan per Tag</h3>
+                        <div style="overflow-x: auto;">
+                            <table style="width:100%" id="tagSummaryTable">
+                                <thead><tr><th>Tag</th><th>Total Pemasukan</th><th>Total Pengeluaran</th><th>Saldo</th></tr></thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DUMMY PAGE -->
+            <div id="dummyPage" class="page">
+                <div class="card-dash">
+                    <h2><i class="fas fa-chart-pie"></i> Halaman Preview (Dummy)</h2>
+                    <p>Menu ini hanya preview untuk keperluan tampilan dashboard.</p>
+                    <div style="background:#0e131c; border-radius:1rem; padding:1.5rem; margin-top:1rem;">
+                        <i class="fas fa-robot"></i> Rencana pengembangan: Laporan laba rugi, proyeksi panen, analisis BEP.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL TRANSAKSI (Tambah & Edit) -->
+    <div id="transactionModal" class="modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="modalTitle"><i class="fas fa-exchange-alt"></i> Tambah Transaksi</h5>
+                    <button type="button" class="close-modal" id="closeModalBtn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="switch-group">
+                        <div class="switch-label">Jenis Transaksi</div>
+                        <div style="display: flex; align-items: center; gap: 20px;">
+                            <label class="switch"><input type="checkbox" id="typeSwitch"><span class="slider"></span></label>
+                            <div class="switch-text"><span id="typeIncomeLabel" class="active-text">💚 Pemasukan</span><span id="typeExpenseLabel">❤️ Pengeluaran</span></div>
+                        </div>
+                    </div>
+                    <div class="form-group"><label>Deskripsi</label><input type="text" id="modalDesc" placeholder="contoh: jual ayam pedaging"></div>
+                    <div class="form-group"><label>Jumlah (Qty)</label><input type="number" id="modalQty" value="1" min="1" step="1"></div>
+                    <div class="form-group">
+                        <label>Tag / Kategori</label>
+                        <div class="tag-input-group">
+                            <select id="modalTagSelect"></select>
+                            <button type="button" id="addTagBtn" class="btn-icon" title="Tambah Tag Baru"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                    <div class="form-group"><label>Nominal (Rp)</label><input type="text" id="modalAmount" placeholder="0" inputmode="numeric"></div>
+                    <div class="switch-group">
+                        <div class="switch-label">Status Pembayaran</div>
+                        <div style="display: flex; align-items: center; gap: 20px;">
+                            <label class="switch"><input type="checkbox" id="statusSwitch"><span class="slider"></span></label>
+                            <div class="switch-text"><span id="statusCashLabel" class="active-text">💵 Cash (Lunas)</span><span id="statusDebtLabel">📝 Hutang / Piutang</span></div>
+                        </div>
+                    </div>
+                    <div class="form-group"><label>Tanggal</label><input type="date" id="modalDate"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-outline" id="cancelModalBtn">Batal</button>
+                    <button type="button" class="btn-primary" id="saveModalBtn"><i class="fas fa-save"></i> Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ---------- STORAGE & DATA (DEFAULT KOSONG) ----------
+        let transactions = [];
+        let tagsList = ["Pakan", "DOC", "Obat", "Telur", "Ayam Pedaging", "Lainnya"];
+        let editingId = null;
+        const STORAGE_TRX = "muwatok_farm_trx";
+        const STORAGE_TAGS = "muwatok_farm_tags";
+
+        function getTodayString() { return new Date().toISOString().slice(0, 10); }
+        function formatRp(amount) { return "Rp" + Math.floor(amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
+        function parseRupiahToNumber(str) { let cleaned = str.replace(/\./g, '').replace(/^Rp/, ''); let num = parseInt(cleaned, 10); return isNaN(num) ? 0 : num; }
+        function escapeHtml(str) { return str.replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+
+        function loadData() {
+            const storedTrx = localStorage.getItem(STORAGE_TRX);
+            transactions = storedTrx ? JSON.parse(storedTrx) : [];
+            const storedTags = localStorage.getItem(STORAGE_TAGS);
+            if (storedTags) tagsList = JSON.parse(storedTags);
+            else saveTags();
+        }
+        function saveTransactions() { localStorage.setItem(STORAGE_TRX, JSON.stringify(transactions)); }
+        function saveTags() { localStorage.setItem(STORAGE_TAGS, JSON.stringify(tagsList)); }
+
+        function refreshAllUI() {
+            renderTable();
+            updateSummaryCards();
+            if (typeof updateAnalyticsCharts === 'function') updateAnalyticsCharts();
+            populateFilterOptions();
+        }
+
+        // ------------------ TABEL TRANSAKSI ------------------
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            
+            // Terapkan Filter
+            let filtered = [...transactions];
+            const filterVal = document.getElementById('tableTagFilter')?.value || 'all';
+            const startDate = document.getElementById('filterStartDate')?.value;
+            const endDate = document.getElementById('filterEndDate')?.value;
+
+            if (filterVal !== 'all') filtered = filtered.filter(tx => (tx.tag || 'Umum') === filterVal);
+            if (startDate) filtered = filtered.filter(tx => tx.date >= startDate);
+            if (endDate) filtered = filtered.filter(tx => tx.date <= endDate);
+
+            if (!filtered.length) { 
+                tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;">📭 Tidak ada transaksi yang sesuai filter.</td></tr>`; 
+                return; 
+            }
+
+            let html = '';
+            filtered.sort((a, b) => b.id - a.id).forEach(tx => {
+                const jenisLabel = tx.type === 'pemasukan' ? '<span style="color:#4ade80;">💚 Pemasukan</span>' : '<span style="color:#f97373;">❤️ Pengeluaran</span>';
+                const statusLabel = tx.status === 'cash' ? '<span class="badge badge-cash">💰 Cash</span>' : '<span class="badge badge-debt">📋 Hutang</span>';
+                const tagLabel = `<span class="badge badge-tag">${escapeHtml(tx.tag || 'Umum')}</span>`;
+                html += `<tr>
+                            <td>${tx.date || '-'}</td>
+                            <td>${jenisLabel}</td>
+                            <td>${escapeHtml(tx.desc)}</td>
+                            <td style="text-align:center;">${tx.qty || 1}</td>
+                            <td>${tagLabel}</td>
+                            <td>${formatRp(tx.amount)}</td>
+                            <td>${statusLabel}</td>
+                            <td>
+                                <button class="action-btn edit-btn" data-id="${tx.id}"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn delete-btn" data-id="${tx.id}"><i class="fas fa-trash-alt"></i></button>
+                            </td>
+                         </tr>`;
+            });
+            tbody.innerHTML = html;
+            document.querySelectorAll('.edit-btn').forEach(btn => btn.addEventListener('click', () => openEditModal(parseInt(btn.dataset.id))));
+            document.querySelectorAll('.delete-btn').forEach(btn => btn.addEventListener('click', () => { if(confirm("Yakin hapus transaksi ini?")) deleteTransaction(parseInt(btn.dataset.id)); }));
+        }
+
+        function deleteTransaction(id) {
+            transactions = transactions.filter(t => t.id !== id);
+            saveTransactions();
+            refreshAllUI();
+        }
+
+        function updateSummaryCards() {
+            let totalIncome = 0, totalExpense = 0, debt = 0;
+            let filteredIncome = 0, filteredExpense = 0, filteredDebt = 0;
+            
+            const filterVal = document.getElementById('tableTagFilter')?.value || 'all';
+            const startDate = document.getElementById('filterStartDate')?.value;
+            const endDate = document.getElementById('filterEndDate')?.value;
+
+            for (let t of transactions) {
+                // Hitung total global untuk Dashboard
+                if (t.type === 'pemasukan') totalIncome += t.amount;
+                else totalExpense += t.amount;
+                if (t.status === 'hutang') debt += t.amount;
+
+                // Hitung total terfilter untuk halaman Ayam
+                const matchTag = (filterVal === 'all' || (t.tag || 'Umum') === filterVal);
+                const matchStart = (!startDate || t.date >= startDate);
+                const matchEnd = (!endDate || t.date <= endDate);
+
+                if (matchTag && matchStart && matchEnd) {
+                    if (t.type === 'pemasukan') filteredIncome += t.amount;
+                    else filteredExpense += t.amount;
+                    if (t.status === 'hutang') filteredDebt += t.amount;
+                }
+            }
+            
+            const saldo = totalIncome - totalExpense;
+            const filteredSaldo = filteredIncome - filteredExpense;
+
+            document.getElementById('summaryIncome').innerText = formatRp(filteredIncome);
+            document.getElementById('summaryExpense').innerText = formatRp(filteredExpense);
+            document.getElementById('summaryBalance').innerText = formatRp(filteredSaldo);
+            document.getElementById('summaryOutstandingDebt').innerText = formatRp(filteredDebt);
+            
+            document.getElementById('dashTotalIncome').innerText = formatRp(totalIncome);
+            document.getElementById('dashTotalExpense').innerText = formatRp(totalExpense);
+            document.getElementById('dashNetBalance').innerText = formatRp(saldo);
+            document.getElementById('dashTotalDebt').innerText = formatRp(debt);
+            updatePreviewChart(totalIncome, totalExpense);
+        }
+
+        // ------------------ TAGS MANAGEMENT & ANALYTICS ------------------
+        let tagsComparisonChart = null;
+        function renderTagsPage() {
+            const tagSummary = {};
+            // Inisialisasi dengan semua tag yang ada
+            tagsList.forEach(tag => tagSummary[tag] = { income: 0, expense: 0 });
+            
+            // Hitung akumulasi dari transaksi
+            transactions.forEach(t => {
+                const tag = t.tag || 'Umum';
+                if (!tagSummary[tag]) tagSummary[tag] = { income: 0, expense: 0 };
+                if (t.type === 'pemasukan') tagSummary[tag].income += t.amount;
+                else tagSummary[tag].expense += t.amount;
+            });
+
+            const tbody = document.getElementById('tagsTableBody');
+            tbody.innerHTML = '';
+            const labels = [], incData = [], expData = [];
+
+            Object.entries(tagSummary).forEach(([tag, vals]) => {
+                labels.push(tag);
+                incData.push(vals.income);
+                expData.push(vals.expense);
+                const saldo = vals.income - vals.expense;
+                
+                tbody.innerHTML += `<tr>
+                    <td><span class="badge-tag">${escapeHtml(tag)}</span></td>
+                    <td>${formatRp(vals.income)}</td>
+                    <td>${formatRp(vals.expense)}</td>
+                    <td style="color:${saldo >= 0 ? '#4ade80' : '#f97373'}">${formatRp(saldo)}</td>
+                    <td>
+                        <button class="action-btn edit-tag-btn" data-tag="${escapeHtml(tag)}" title="Edit Nama Tag"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn delete-tag-btn" data-tag="${escapeHtml(tag)}"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                </tr>`;
+            });
+
+            // Event listener untuk edit tag
+            document.querySelectorAll('.edit-tag-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const oldName = btn.dataset.tag;
+                    let newName = prompt("Ubah nama tag:", oldName);
+                    if (newName && newName.trim() !== "" && newName !== oldName) {
+                        newName = newName.trim();
+                        if (tagsList.includes(newName)) {
+                            alert("Tag dengan nama tersebut sudah ada!");
+                            return;
+                        }
+                        
+                        // Update daftar tag
+                        const idx = tagsList.indexOf(oldName);
+                        if (idx !== -1) tagsList[idx] = newName;
+                        
+                        // Update semua transaksi yang menggunakan tag ini
+                        transactions.forEach(t => { if (t.tag === oldName) t.tag = newName; });
+                        
+                        saveTags();
+                        saveTransactions();
+                        renderTagsPage();
+                        populateTagSelect();
+                        renderTable(); // Refresh tabel transaksi utama
+                    }
+                });
+            });
+
+            // Event listener untuk hapus tag
+            document.querySelectorAll('.delete-tag-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tName = btn.dataset.tag;
+                    if (confirm(`Hapus tag "${tName}"?`)) {
+                        tagsList = tagsList.filter(t => t !== tName);
+                        saveTags();
+                        renderTagsPage();
+                        populateTagSelect();
+                    }
+                });
+            });
+
+            // Update Grafik Perbandingan
+            const ctx = document.getElementById('tagsComparisonChart')?.getContext('2d');
+            if (!ctx) return;
+            if (tagsComparisonChart) tagsComparisonChart.destroy();
+            tagsComparisonChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label: 'Pemasukan', data: incData, backgroundColor: '#4ade80' },
+                        { label: 'Pengeluaran', data: expData, backgroundColor: '#f97373' }
+                    ]
+                },
+                options: { 
+                    responsive: true,
+                    scales: { y: { beginAtZero: true, ticks: { color: '#b0c4de' }, grid: { color: '#253141' } }, x: { ticks: { color: '#e0edf5' } } }
+                }
+            });
+        }
+
+        let previewChart = null;
+        function updatePreviewChart(income, expense) {
+            const ctx = document.getElementById('previewChart')?.getContext('2d');
+            if (!ctx) return;
+            if (previewChart) previewChart.destroy();
+            previewChart = new Chart(ctx, {
+                type: 'bar',
+                data: { labels: ['Pemasukan', 'Pengeluaran'], datasets: [{ label: 'Total (Rp)', data: [income, expense], backgroundColor: ['#4ade80', '#f97373'] }] },
+                options: { responsive: true, maintainAspectRatio: true }
+            });
+        }
+
+        // ------------------ ANALYTICS ------------------
+        let currentFilterMonth = "all", currentFilterYear = "all";
+        let incomeExpenseChart, topExpenseTagChart, monthlyTrendChart, monthlyExpenseTrendChart, statusPieChart;
+
+        function populateFilterOptions() {
+            const years = [...new Set(transactions.map(t => t.date ? t.date.split('-')[0] : null).filter(y => y))];
+            const months = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+            const monthSelect = document.getElementById('filterMonth');
+            const yearSelect = document.getElementById('filterYear');
+            monthSelect.innerHTML = '<option value="all">Semua Bulan</option>';
+            for (let i = 0; i < 12; i++) monthSelect.innerHTML += `<option value="${i+1}">${months[i]}</option>`;
+            yearSelect.innerHTML = '<option value="all">Semua Tahun</option>';
+            years.sort().forEach(y => yearSelect.innerHTML += `<option value="${y}">${y}</option>`);
+            monthSelect.value = currentFilterMonth;
+            yearSelect.value = currentFilterYear;
+        }
+
+        function getFilteredTransactions() {
+            let filtered = [...transactions];
+            if (currentFilterYear !== 'all') filtered = filtered.filter(t => t.date && t.date.startsWith(currentFilterYear));
+            if (currentFilterMonth !== 'all') filtered = filtered.filter(t => t.date && parseInt(t.date.split('-')[1]) === parseInt(currentFilterMonth));
+            return filtered;
+        }
+
+        function updateAnalyticsCharts() {
+            const filtered = getFilteredTransactions();
+            let totalIncome = 0, totalExpense = 0;
+            filtered.forEach(t => { if (t.type === 'pemasukan') totalIncome += t.amount; else totalExpense += t.amount; });
+            if (incomeExpenseChart) incomeExpenseChart.destroy();
+            const ctx1 = document.getElementById('incomeExpenseChart').getContext('2d');
+            incomeExpenseChart = new Chart(ctx1, { type: 'bar', data: { labels: ['Pemasukan', 'Pengeluaran'], datasets: [{ label: 'Total (Rp)', data: [totalIncome, totalExpense], backgroundColor: ['#4ade80', '#f97373'] }] }, options: { responsive: true } });
+
+            const expenseByTag = {};
+            filtered.filter(t => t.type === 'pengeluaran').forEach(t => { const tag = t.tag || 'Umum'; expenseByTag[tag] = (expenseByTag[tag] || 0) + t.amount; });
+            const sortedExpense = Object.entries(expenseByTag).sort((a, b) => b[1] - a[1]).slice(0, 5);
+            if (topExpenseTagChart) topExpenseTagChart.destroy();
+            const ctx2 = document.getElementById('topExpenseTagChart').getContext('2d');
+            topExpenseTagChart = new Chart(ctx2, { type: 'bar', data: { labels: sortedExpense.map(e => e[0]), datasets: [{ label: 'Pengeluaran (Rp)', data: sortedExpense.map(e => e[1]), backgroundColor: '#f97373' }] }, options: { responsive: true } });
+
+            const monthlyIncome = {};
+            filtered.filter(t => t.type === 'pemasukan' && t.date).forEach(t => { const month = t.date.slice(0, 7); monthlyIncome[month] = (monthlyIncome[month] || 0) + t.amount; });
+            const sortedMonths = Object.keys(monthlyIncome).sort();
+            if (monthlyTrendChart) monthlyTrendChart.destroy();
+            const ctx3 = document.getElementById('monthlyTrendChart').getContext('2d');
+            monthlyTrendChart = new Chart(ctx3, { type: 'line', data: { labels: sortedMonths, datasets: [{ label: 'Pemasukan per Bulan', data: sortedMonths.map(m => monthlyIncome[m]), borderColor: '#4ade80', fill: false, tension: 0.3 }] }, options: { responsive: true } });
+
+            const monthlyExpense = {};
+            filtered.filter(t => t.type === 'pengeluaran' && t.date).forEach(t => { const month = t.date.slice(0, 7); monthlyExpense[month] = (monthlyExpense[month] || 0) + t.amount; });
+            const sortedExpMonths = Object.keys(monthlyExpense).sort();
+            if (monthlyExpenseTrendChart) monthlyExpenseTrendChart.destroy();
+            const ctxExpTrend = document.getElementById('monthlyExpenseTrendChart').getContext('2d');
+            monthlyExpenseTrendChart = new Chart(ctxExpTrend, { type: 'line', data: { labels: sortedExpMonths, datasets: [{ label: 'Pengeluaran per Bulan', data: sortedExpMonths.map(m => monthlyExpense[m]), borderColor: '#f97373', fill: false, tension: 0.3 }] }, options: { responsive: true } });
+
+            let cashTotal = 0, hutangTotal = 0;
+            filtered.forEach(t => { if (t.status === 'cash') cashTotal += t.amount; else hutangTotal += t.amount; });
+            if (statusPieChart) statusPieChart.destroy();
+            const ctx4 = document.getElementById('statusPieChart').getContext('2d');
+            statusPieChart = new Chart(ctx4, { type: 'pie', data: { labels: ['Cash', 'Hutang'], datasets: [{ data: [cashTotal, hutangTotal], backgroundColor: ['#4ade80', '#f97373'] }] }, options: { responsive: true } });
+
+            const tagSummary = {};
+            filtered.forEach(t => { const tag = t.tag || 'Umum'; if (!tagSummary[tag]) tagSummary[tag] = { income: 0, expense: 0 }; if (t.type === 'pemasukan') tagSummary[tag].income += t.amount; else tagSummary[tag].expense += t.amount; });
+            const tagTableBody = document.querySelector('#tagSummaryTable tbody');
+            tagTableBody.innerHTML = '';
+            for (const [tag, vals] of Object.entries(tagSummary)) {
+                const saldo = vals.income - vals.expense;
+                tagTableBody.innerHTML += `<tr><td><span class="badge-tag">${escapeHtml(tag)}</span></td><td>${formatRp(vals.income)}</td><td>${formatRp(vals.expense)}</td><td style="color:${saldo >= 0 ? '#4ade80' : '#f97373'}">${formatRp(saldo)}</td></tr>`;
+            }
+            if (Object.keys(tagSummary).length === 0) tagTableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Tidak ada data</td></tr>';
+        }
+
+        // ------------------ MODAL (Tambah & Edit) ------------------
+        function openEditModal(id) {
+            const tx = transactions.find(t => t.id === id);
+            if (!tx) return;
+            editingId = id;
+            document.getElementById('modalTitle').innerHTML = '<i class="fas fa-edit"></i> Edit Transaksi';
+            document.getElementById('modalDesc').value = tx.desc;
+            document.getElementById('modalQty').value = tx.qty || 1;
+            populateTagSelect(); document.getElementById('modalTagSelect').value = tx.tag || "Umum";
+            document.getElementById('modalAmount').value = tx.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            document.getElementById('typeSwitch').checked = (tx.type === "pengeluaran");
+            document.getElementById('statusSwitch').checked = (tx.status === "hutang");
+            updateTypeSwitchUI(); updateStatusSwitchUI();
+            document.getElementById('modalDate').value = tx.date || getTodayString();
+            document.getElementById('transactionModal').classList.add('show');
+        }
+
+        function resetModalNew() {
+            editingId = null;
+            document.getElementById('modalTitle').innerHTML = '<i class="fas fa-exchange-alt"></i> Tambah Transaksi';
+            document.getElementById('modalDesc').value = '';
+            document.getElementById('modalQty').value = 1;
+            document.getElementById('modalAmount').value = '';
+            document.getElementById('typeSwitch').checked = false;
+            document.getElementById('statusSwitch').checked = false;
+            updateTypeSwitchUI(); updateStatusSwitchUI();
+            document.getElementById('modalDate').value = getTodayString();
+            populateTagSelect();
+        }
+
+        function updateTypeSwitchUI() { const isIncome = !document.getElementById('typeSwitch').checked; document.getElementById('typeIncomeLabel').classList.toggle('active-text', isIncome); document.getElementById('typeExpenseLabel').classList.toggle('active-text', !isIncome); }
+        function updateStatusSwitchUI() { const isCash = !document.getElementById('statusSwitch').checked; document.getElementById('statusCashLabel').classList.toggle('active-text', isCash); document.getElementById('statusDebtLabel').classList.toggle('active-text', !isCash); }
+        document.getElementById('typeSwitch').addEventListener('change', updateTypeSwitchUI);
+        document.getElementById('statusSwitch').addEventListener('change', updateStatusSwitchUI);
+
+        function populateTagSelect() { 
+            const sel = document.getElementById('modalTagSelect'); 
+            sel.innerHTML = ''; 
+            tagsList.forEach(t => { const opt = document.createElement('option'); opt.value = t; opt.text = t; sel.appendChild(opt); }); 
+            if (tagsList.length === 0) sel.innerHTML = '<option>Umum</option>'; 
+
+            // Sinkronisasi dropdown filter di tabel Manajemen Ayam
+            const filterSel = document.getElementById('tableTagFilter');
+            if (filterSel) {
+                const current = filterSel.value;
+                filterSel.innerHTML = '<option value="all">Semua Tag</option>';
+                tagsList.forEach(t => { const opt = document.createElement('option'); opt.value = t; opt.text = t; filterSel.appendChild(opt); });
+                filterSel.value = tagsList.includes(current) ? current : 'all';
+            }
+        }
+
+        // Event listener untuk filter di tabel
+        ['tableTagFilter', 'filterStartDate', 'filterEndDate'].forEach(id => {
+            document.getElementById(id).addEventListener('change', () => {
+                renderTable();
+                updateSummaryCards();
+            });
+        });
+
+        // Event listener untuk tombol cetak
+        document.getElementById('printTableBtn').addEventListener('click', () => window.print());
+
+        document.getElementById('resetTableFilter').addEventListener('click', () => {
+            document.getElementById('tableTagFilter').value = 'all';
+            document.getElementById('filterStartDate').value = '';
+            document.getElementById('filterEndDate').value = '';
+            renderTable();
+            updateSummaryCards();
+        });
+
+        // Handle tambah tag dari halaman Tags
+        document.getElementById('submitTagBtn').addEventListener('click', () => {
+            const input = document.getElementById('newTagInput');
+            const val = input.value.trim();
+            if (val && !tagsList.includes(val)) {
+                tagsList.push(val);
+                saveTags();
+                input.value = '';
+                renderTagsPage();
+                populateTagSelect();
+            } else if (val) alert("Tag sudah ada!");
+        });
+
+        function addNewTag() { let newTag = prompt("Masukkan nama tag baru:", ""); if (newTag && newTag.trim() && !tagsList.includes(newTag.trim())) { tagsList.push(newTag.trim()); saveTags(); populateTagSelect(); document.getElementById('modalTagSelect').value = newTag.trim(); } else if (newTag && newTag.trim()) alert("Tag sudah ada!"); }
+        document.getElementById('addTagBtn').addEventListener('click', addNewTag);
+        document.getElementById('openModalBtn').addEventListener('click', () => { resetModalNew(); document.getElementById('transactionModal').classList.add('show'); });
+        document.getElementById('closeModalBtn').addEventListener('click', () => document.getElementById('transactionModal').classList.remove('show'));
+        document.getElementById('cancelModalBtn').addEventListener('click', () => document.getElementById('transactionModal').classList.remove('show'));
+        document.getElementById('saveModalBtn').addEventListener('click', () => {
+            const type = document.getElementById('typeSwitch').checked ? "pengeluaran" : "pemasukan";
+            const desc = document.getElementById('modalDesc').value.trim();
+            let qty = parseInt(document.getElementById('modalQty').value);
+            if (isNaN(qty) || qty < 1) qty = 1;
+            const tag = document.getElementById('modalTagSelect').value;
+            const amountRaw = document.getElementById('modalAmount').value;
+            let amountNumber = parseRupiahToNumber(amountRaw);
+            if (amountNumber <= 0) { alert("Nominal harus lebih dari 0"); return; }
+            const status = document.getElementById('statusSwitch').checked ? "hutang" : "cash";
+            let date = document.getElementById('modalDate').value;
+            if (!desc) { alert("Deskripsi harus diisi"); return; }
+            if (!date) date = getTodayString();
+            if (editingId !== null) {
+                const idx = transactions.findIndex(t => t.id === editingId);
+                if (idx !== -1) transactions[idx] = { ...transactions[idx], type, desc, qty, tag, amount: amountNumber, status, date };
+            } else {
+                transactions.push({ id: Date.now(), type, desc, qty, tag, amount: amountNumber, status, date });
+            }
+            saveTransactions();
+            refreshAllUI();
+            document.getElementById('transactionModal').classList.remove('show');
+        });
+
+        // ------------------ NAVIGATION ------------------
+        function setActivePage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+            document.getElementById(`${pageId}Page`).classList.add('active-page');
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+            document.querySelector(`.nav-item[data-page="${pageId}"]`).classList.add('active');
+            if (pageId === 'analytics') { updateAnalyticsCharts(); populateFilterOptions(); }
+            if (pageId === 'tags') renderTagsPage();
+            if (pageId === 'dashboard') updateSummaryCards();
+        }
+        document.querySelectorAll('.nav-item').forEach(nav => nav.addEventListener('click', () => setActivePage(nav.dataset.page)));
+
+        document.getElementById('applyFilterBtn').addEventListener('click', () => {
+            currentFilterMonth = document.getElementById('filterMonth').value;
+            currentFilterYear = document.getElementById('filterYear').value;
+            updateAnalyticsCharts();
+        });
+
+        // Format Rupiah on input
+        const modalAmountInput = document.getElementById('modalAmount');
+        modalAmountInput.addEventListener('input', function(e) {
+            let digits = e.target.value.replace(/\D/g, '');
+            if (digits === '') { e.target.value = ''; return; }
+            let number = parseInt(digits, 10);
+            e.target.value = number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        });
+
+        // INITIAL LOAD (default kosong)
+        loadData();
+        populateTagSelect();
+        refreshAllUI();
+        setActivePage('analytics');
+    </script>
+</body>
+</html>
