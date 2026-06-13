@@ -7,9 +7,35 @@ const AppData = {
     get: (key) => JSON.parse(localStorage.getItem(key)) || (['muwatok_cash_tags', 'muwatok_cash_savings', 'muwatok_cash_investments', 'muwatok_cash_saving_transactions', 'muwatok_cash_investment_transactions'].includes(key) ? [] : { transactions: [] }),
     save: (key, data) => localStorage.setItem(key, JSON.stringify(data)),
     formatIDR: (num) => {
-      const isCensored = localStorage.getItem('muwatok_cash_censored') === 'true';
-      if (isCensored) return 'Rp ••••••';
-      return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(num || 0);
+        const isCensored = localStorage.getItem('muwatok_cash_censored') === 'true';
+        if (isCensored) return 'Rp ••••••';
+        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(num || 0);
+    },
+    // New utility for formatting number inputs as Rupiah
+    formatInputRupiah: (inputElement) => {
+        let value = inputElement.value;
+        // Hanya izinkan angka dan satu koma desimal
+        let cleanValue = value.replace(/[^\d,]/g, '');
+        let parts = cleanValue.split(',');
+        
+        let integerPart = parts[0];
+        let decimalPart = parts.length > 1 ? ',' + parts.slice(1).join('').substring(0, 2) : '';
+
+        if (integerPart === '' && decimalPart === '') {
+            inputElement.value = '';
+            return;
+        }
+
+        let formattedInteger = integerPart === '' ? '0' : new Intl.NumberFormat('id-ID').format(parseInt(integerPart, 10));
+        inputElement.value = formattedInteger + decimalPart;
+    },
+    // New utility for parsing formatted Rupiah string back to a number
+    parseRupiah: (formattedString) => {
+        if (!formattedString) return 0;
+        if (typeof formattedString !== 'string') return parseFloat(formattedString) || 0;
+        // Hapus titik ribuan dan ganti koma desimal dengan titik standar agar bisa di-parse
+        let normalized = formattedString.replace(/\./g, '').replace(',', '.');
+        return parseFloat(normalized) || 0;
     }
   };
   window.menuItems = [

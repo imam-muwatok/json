@@ -186,10 +186,14 @@ window.initSettingsPage = () => {
     const budgetInput = document.getElementById('monthlyBudgetLimit');
     const btnSaveBudget = document.getElementById('btnSaveBudget');
 
+    if (budgetInput) {
+      budgetInput.addEventListener('input', () => AppData.formatInputRupiah(budgetInput));
+    }
+
     const loadSettings = () => {
       const settings = JSON.parse(localStorage.getItem('muwatok_cash_settings')) || { strategy: 'manual', limit: 0 };
       if (strategySelect) strategySelect.value = settings.strategy;
-      if (budgetInput) budgetInput.value = settings.limit;
+      if (budgetInput) budgetInput.value = new Intl.NumberFormat('id-ID').format(settings.limit); // Format for display
       if (manualContent) manualContent.classList.toggle('hidden', settings.strategy !== 'manual');
     };
 
@@ -198,7 +202,7 @@ window.initSettingsPage = () => {
     });
 
     btnSaveBudget?.addEventListener('click', () => {
-      const settings = { strategy: strategySelect.value, limit: parseFloat(budgetInput.value) || 0 };
+      const settings = { strategy: strategySelect.value, limit: AppData.parseRupiah(budgetInput.value) }; // Use parseRupiah
       localStorage.setItem('muwatok_cash_settings', JSON.stringify(settings));
       Swal.fire({ icon: 'success', title: 'Saved!', text: 'Target anggaran telah diperbarui.', timer: 1500, showConfirmButton: false });
       if (typeof renderDashboard === 'function') renderDashboard(); // Update dashboard budget info

@@ -13,10 +13,12 @@ window.renderSavingsPage = () => {
     const now = new Date();
     const month = now.getMonth(), year = now.getFullYear();
     
-    const monthlyAutoTrans = savingTrans.filter(st => {
-      const d = new Date(st.date);
-      return d.getMonth() === month && d.getFullYear() === year && st.name.startsWith('Auto Saving:');
-    });
+    const monthlyAutoTrans = savingTrans
+      .map((st, index) => ({ ...st, originalIndex: index }))
+      .filter(st => {
+        const d = new Date(st.date);
+        return d.getMonth() === month && d.getFullYear() === year && st.name.startsWith('Auto Saving:');
+      });
 
     const totalAutoMonthly = monthlyAutoTrans.reduce((acc, t) => acc + (parseFloat(t.amount) || 0), 0);
     
@@ -42,6 +44,9 @@ window.renderSavingsPage = () => {
             <td class="px-6 py-4 text-sm font-semibold">${t.name.replace('Auto Saving: ', '')}</td>
             <td class="px-6 py-4 text-xs text-gray-500">${new Date(t.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}</td>
             <td class="px-6 py-4 text-right font-bold text-emerald-600 dark:text-emerald-400">+${AppData.formatIDR(t.amount)}</td>
+            <td class="px-6 py-4 text-right">
+              <button onclick="deleteSavingTransaction(${t.originalIndex})" class="text-rose-400 hover:text-rose-600 transition"><i class="fas fa-trash-alt text-xs"></i></button>
+            </td>
           </tr>
         `).join('');
       } else {
@@ -96,6 +101,10 @@ window.initSavingsModal = () => {
     const modal = document.getElementById('savingsModal'), form = document.getElementById('savingsForm');
     if (!modal || !form) return;
 
+    const savingsTargetInput = document.getElementById('savingsTarget');
+    const savingsCurrentInput = document.getElementById('savingsCurrent');
+    const savingsAllocationInput = document.getElementById('savingsAllocation'); // This is percentage, not Rupiah
+
     const colors = [
       '#ef4444', '#f97316', '#f59e0b', '#eab308', '#84cc16', '#22c55e', '#10b981', '#14b8a6', '#06b6d4', '#0ea5e9',
       '#3b82f6', '#6366f1', '#8b5cf6', '#a855f7', '#d946ef', '#ec4899', '#f43f5e', '#64748b', '#71717a', '#78716c'
@@ -110,6 +119,11 @@ window.initSavingsModal = () => {
         document.getElementById('savingsModalTitle').textContent = "Add Saving Goal";
       }
     };
+    
+    // Add event listeners for Rupiah formatting
+    if (savingsTargetInput) savingsTargetInput.addEventListener('input', () => AppData.formatInputRupiah(savingsTargetInput));
+    if (savingsCurrentInput) savingsCurrentInput.addEventListener('input', () => AppData.formatInputRupiah(savingsCurrentInput));
+    // savingsAllocationInput is percentage, no Rupiah formatting
 
     const renderPickers = () => {
       const iGrid = document.getElementById('savingsIconGrid'), cGrid = document.getElementById('savingsColorGrid');
@@ -136,10 +150,10 @@ window.initSavingsModal = () => {
       const savings = AppData.get('muwatok_cash_savings');
       const s = savings[idx];
       document.getElementById('editSavingsIndex').value = idx;
-      document.getElementById('savingsModalTitle').textContent = "Edit Saving Goal";
-      document.getElementById('savingsName').value = s.name;
-      document.getElementById('savingsTarget').value = s.target;
-      document.getElementById('savingsCurrent').value = s.current;
+      document.getElementById('savingsModalTitle').textContent = "Edit Saving Goal"; // Title is text
+      document.getElementById('savingsName').value = s.name; // Name is text
+      savingsTargetInput.value = new Intl.NumberFormat('id-ID').format(s.target); // Format for display
+      savingsCurrentInput.value = new Intl.NumberFormat('id-ID').format(s.current); // Format for display
       document.getElementById('selectedSavingsIcon').value = s.icon;
       document.getElementById('selectedSavingsColor').value = s.color;
       document.getElementById('savingsAllocation').value = s.allocation || 0;
@@ -153,8 +167,8 @@ window.initSavingsModal = () => {
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       const name = document.getElementById('savingsName').value.trim();
-      const target = parseFloat(document.getElementById('savingsTarget').value) || 0;
-      const current = parseFloat(document.getElementById('savingsCurrent').value) || 0;
+      const target = AppData.parseRupiah(document.getElementById('savingsTarget').value); // Use parseRupiah
+      const current = AppData.parseRupiah(document.getElementById('savingsCurrent').value); // Use parseRupiah
       const allocation = parseFloat(document.getElementById('savingsAllocation').value) || 0;
       const icon = document.getElementById('selectedSavingsIcon').value;
       const color = document.getElementById('selectedSavingsColor').value;
@@ -187,18 +201,23 @@ window.addFundsToSaving = (idx) => {
     Swal.fire({
       title: `Top Up: ${s.name}`,
       text: `Masukkan nominal dari Saldo Utama untuk ditabung. Tersedia: ${AppData.formatIDR(currentBalance)}`,
-      input: 'number',
-      inputAttributes: { min: 0, step: 1000 },
+      input: 'text',
+      inputAttributes: { inputmode: 'numeric' },
+      didOpen: () => {
+        const input = Swal.getInput();
+        input.addEventListener('input', () => AppData.formatInputRupiah(input));
+      },
       showCancelButton: true,
       confirmButtonText: 'Pindahkan Dana',
       confirmButtonColor: '#10b981',
       inputValidator: (value) => {
-        if (!value || value <= 0) return 'Nominal harus lebih dari 0';
-        if (value > currentBalance) return 'Saldo utama tidak mencukupi';
+        const amount = AppData.parseRupiah(value);
+        if (!amount || amount <= 0) return 'Nominal harus lebih dari 0';
+        if (amount > currentBalance) return 'Saldo utama tidak mencukupi';
       }
     }).then(result => {
       if (result.isConfirmed) {
-        const amount = parseFloat(result.value);
+        const amount = AppData.parseRupiah(result.value);
         
         s.current = (parseFloat(s.current) || 0) + amount;
         AppData.save('muwatok_cash_savings', savings);
@@ -210,6 +229,38 @@ window.addFundsToSaving = (idx) => {
         renderSavingsPage();
         if (typeof renderDashboard === 'function') renderDashboard(); // Update dashboard balance
         Swal.fire({ icon: 'success', title: 'Berhasil!', text: `${AppData.formatIDR(amount)} dipindahkan ke tabungan.`, timer: 1500, showConfirmButton: false });
+      }
+    });
+};
+
+window.deleteSavingTransaction = (idx) => {
+    Swal.fire({
+      title: 'Hapus Riwayat?',
+      text: "Saldo di tabungan terkait akan dikurangi sesuai nominal ini.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#ef4444',
+      confirmButtonText: 'Ya, Hapus'
+    }).then(r => {
+      if (r.isConfirmed) {
+        let savingTrans = AppData.get('muwatok_cash_saving_transactions');
+        let savings = AppData.get('muwatok_cash_savings');
+        const tx = savingTrans[idx];
+        
+        const goalName = tx.name.replace('Auto Saving: ', '').replace('Saving: ', '');
+        const goal = savings.find(s => s.name === goalName);
+        
+        if (goal) {
+          goal.current = (parseFloat(goal.current) || 0) - (parseFloat(tx.amount) || 0);
+          AppData.save('muwatok_cash_savings', savings);
+        }
+        
+        savingTrans.splice(idx, 1);
+        AppData.save('muwatok_cash_saving_transactions', savingTrans);
+        
+        renderSavingsPage();
+        if (typeof renderDashboard === 'function') renderDashboard();
+        Swal.fire({ icon: 'success', title: 'Berhasil Dihapus', timer: 1500, showConfirmButton: false });
       }
     });
 };

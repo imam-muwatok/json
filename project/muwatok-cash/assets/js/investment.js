@@ -165,6 +165,10 @@ window.initInvestmentModal = () => {
     const modal = document.getElementById('investmentModal'), form = document.getElementById('investmentForm');
     if (!modal || !form) return;
 
+    const invInvestedInput = document.getElementById('invInvested');
+    if (invInvestedInput) {
+      invInvestedInput.addEventListener('input', () => AppData.formatInputRupiah(invInvestedInput));
+    }
     const invNameSelect = $('#invName');
 
     if (typeof jQuery !== 'undefined' && invNameSelect.length) {
@@ -269,8 +273,8 @@ window.initInvestmentModal = () => {
       document.getElementById('invModalTitle').textContent = "Edit Crypto Asset";
       document.getElementById('invName').value = inv.name;
       document.getElementById('invApiId').value = inv.apiId || "";
-      document.getElementById('invUnits').value = inv.units || "";
-      document.getElementById('invInvested').value = inv.invested;
+      document.getElementById('invUnits').value = inv.units || ""; // Units are not Rupiah
+      invInvestedInput.value = new Intl.NumberFormat('id-ID').format(inv.invested); // Format for display
       document.getElementById('invDate').value = inv.date ? inv.date.split(' ')[0] : new Date().toISOString().split('T')[0];
       document.getElementById('selectedInvColor').value = inv.color;
       renderPickers();
@@ -299,7 +303,7 @@ window.initInvestmentModal = () => {
       const name = document.getElementById('invName').value.trim();
       const apiId = document.getElementById('invApiId').value.trim().toLowerCase();
       const units = parseFloat(document.getElementById('invUnits').value) || 0;
-      const invested = parseFloat(document.getElementById('invInvested').value) || 0;
+      const invested = AppData.parseRupiah(document.getElementById('invInvested').value); // Use parseRupiah
       const date = document.getElementById('invDate').value + " 00:00:00";
       const color = document.getElementById('selectedInvColor').value;
       const eIdx = parseInt(document.getElementById('editInvIndex').value);
@@ -394,18 +398,23 @@ window.addFundsToInvestment = (idx) => {
     Swal.fire({
       title: inv ? `Deposit: ${inv.name}` : 'Deposit Dana Investasi',
       text: `Pindahkan dana dari Total Balance ke Portofolio. Tersedia: ${AppData.formatIDR(currentBalance)}`,
-      input: 'number',
-      inputAttributes: { min: 0, step: 1000 },
+      input: 'text',
+      inputAttributes: { inputmode: 'numeric' },
+      didOpen: () => {
+        const input = Swal.getInput();
+        input.addEventListener('input', () => AppData.formatInputRupiah(input));
+      },
       showCancelButton: true,
       confirmButtonText: 'Pindahkan Dana',
       confirmButtonColor: '#10b981',
       inputValidator: (value) => {
-        if (!value || value <= 0) return 'Nominal harus lebih dari 0';
-        if (value > currentBalance) return 'Saldo utama tidak mencukupi';
+        const amount = AppData.parseRupiah(value);
+        if (!amount || amount <= 0) return 'Nominal harus lebih dari 0';
+        if (amount > currentBalance) return 'Saldo utama tidak mencukupi';
       }
     }).then(result => {
       if (result.isConfirmed) {
-        const amount = parseFloat(result.value);
+        const amount = AppData.parseRupiah(result.value);
         
         if (inv) {
           inv.invested = (parseFloat(inv.invested) || 0) + amount;

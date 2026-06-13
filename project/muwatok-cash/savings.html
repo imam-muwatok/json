@@ -67,7 +67,8 @@
                   <tr>
                     <th class="px-6 py-4">Tujuan Tabungan</th>
                     <th class="px-6 py-4">Tanggal</th>
-                    <th class="px-6 py-4 text-right">Nominal</th>
+                    <th class="px-6 py-4">Nominal</th>
+                    <th class="px-6 py-4 text-right">Aksi</th>
                   </tr>
                 </thead>
                 <tbody id="savingsHistoryBody" class="divide-y divide-gray-50 dark:divide-gray-700/50">
@@ -84,7 +85,7 @@
   <!-- Add Saving Modal -->
   <div id="savingsModal" class="fixed inset-0 z-50 flex items-center justify-center hidden p-4">
     <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" id="savingsModalBackdrop"></div>
-    <div class="bg-white dark:bg-gray-900 w-full max-w-md rounded-2xl shadow-2xl relative z-10 overflow-hidden border border-gray-100 dark:border-gray-800">
+    <div class="bg-white dark:bg-gray-900 w-full max-w-lg rounded-2xl shadow-2xl relative z-10 overflow-hidden border border-gray-100 dark:border-gray-800">
       <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50/50 dark:bg-gray-800/50">
         <h3 id="savingsModalTitle" class="font-bold text-lg">Add Saving Goal</h3>
         <button id="closeSavingsModalBtn" class="text-gray-400 hover:text-gray-200"><i class="fas fa-times"></i></button>
@@ -98,11 +99,11 @@
         <div class="grid grid-cols-2 gap-4">
           <div>
             <label class="block text-sm font-medium mb-1 text-gray-500 dark:text-gray-400">Target Amount</label>
-            <input type="number" id="savingsTarget" required placeholder="0" class="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none transition">
+            <input type="text" inputmode="numeric" id="savingsTarget" required placeholder="0" class="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none transition">
           </div>
           <div>
             <label class="block text-sm font-medium mb-1 text-gray-500 dark:text-gray-400">Current Balance</label>
-            <input type="number" id="savingsCurrent" placeholder="0" class="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none transition">
+            <input type="text" inputmode="numeric" id="savingsCurrent" placeholder="0" class="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none transition">
           </div>
         </div>
         <div>

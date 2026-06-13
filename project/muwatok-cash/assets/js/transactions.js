@@ -82,6 +82,10 @@ window.initTransactionModal = () => {
     const modal = document.getElementById('transactionModal'), form = document.getElementById('transactionForm');
     if (!modal || !form) return;
 
+    const amountInput = form.querySelector('[name="amount"]');
+    if (amountInput) {
+      amountInput.addEventListener('input', () => AppData.formatInputRupiah(amountInput));
+    }
     const tagSelect = form.querySelector('[name="tag"]');
     const transactionSourceInput = document.getElementById('transactionSource');
     const sourceOfFundsGroup = document.getElementById('sourceOfFundsGroup');
@@ -168,7 +172,7 @@ window.initTransactionModal = () => {
       document.getElementById('modalTitle').textContent = "Edit Transaction";
       toggle(true);
       form.querySelector('[name="name"]').value = t.name;
-      form.querySelector('[name="amount"]').value = t.amount;
+      amountInput.value = new Intl.NumberFormat('id-ID').format(t.amount); // Format for display
       form.querySelector('[name="tag"]').value = t.tag;
       form.querySelector('[name="date"]').value = t.date.split(' ')[0];
       form.querySelector('[name="description"]').value = t.description || "";
@@ -192,9 +196,9 @@ window.initTransactionModal = () => {
       const savingsGoalIndex = (source === 'savings' && savingsGoalDropdown.value !== '') ? parseInt(savingsGoalDropdown.value) : undefined;
 
       const nt = { 
-        name: f.get('name'), 
-        type: f.get('type'), 
-        amount: parseFloat(f.get('amount')), 
+        name: f.get('name'),
+        type: f.get('type'),
+        amount: AppData.parseRupiah(f.get('amount')), // Use parseRupiah
         tag: f.get('tag'), 
         date: f.get('date') + " 00:00:00", 
         description: f.get('description') || "",
@@ -208,7 +212,7 @@ window.initTransactionModal = () => {
 
       if (source === 'savings') {
         if (savingsGoalIndex === undefined) return Swal.fire({ icon: 'error', title: 'Error', text: 'Pilih tujuan tabungan!' });
-        if (nt.type === 'pengeluaran') {
+        if (nt.type === 'pengeluaran' && nt.amount > 0) { // Only check if amount is positive
           const sGoal = savings[savingsGoalIndex];
           if (nt.amount > (parseFloat(sGoal.current) || 0)) return Swal.fire({ icon: 'error', title: 'Error', text: 'Saldo tabungan tidak mencukupi!' });
         }
@@ -253,29 +257,52 @@ window.initTransactionModal = () => {
       AppData.save('muwatok_cash_data', d);
 
       // Logic Auto-Allocation Savings
-      if (nt.type === 'pemasukan' && eIdx === -1) { // Only for new income transactions
-        savings = AppData.get('muwatok_cash_savings');
-        savingLogs = AppData.get('muwatok_cash_saving_transactions');
+      const applyAutoAllocation = () => {
+        const currentSavings = AppData.get('muwatok_cash_savings');
+        const currentSavingLogs = AppData.get('muwatok_cash_saving_transactions');
         let wasUpdated = false;
-        savings.forEach(s => {
+        currentSavings.forEach(s => {
           if (s.allocation && s.allocation > 0) {
             const allocatedAmount = nt.amount * (parseFloat(s.allocation) / 100);
             s.current = (parseFloat(s.current) || 0) + allocatedAmount;
-            
-            savingLogs.push({ name: `Auto Saving: ${s.name}`, amount: allocatedAmount, date: new Date().toISOString().replace('T', ' ').split('.')[0], description: `Automatic allocation from income.` });
+            currentSavingLogs.push({ name: `Auto Saving: ${s.name}`, amount: allocatedAmount, date: new Date().toISOString().replace('T', ' ').split('.')[0], description: `Automatic allocation from income.` });
             wasUpdated = true;
           }
         });
         if (wasUpdated) {
-          AppData.save('muwatok_cash_savings', savings);
-          AppData.save('muwatok_cash_saving_transactions', savingLogs);
-          if (typeof renderSavingsPage === 'function') renderSavingsPage(); // Update savings page if open
+          AppData.save('muwatok_cash_savings', currentSavings);
+          AppData.save('muwatok_cash_saving_transactions', currentSavingLogs);
+          if (typeof renderSavingsPage === 'function') renderSavingsPage();
         }
-      }
+      };
 
-      toggle(false); renderTransactionsPage();
-      if (typeof renderDashboard === 'function') renderDashboard();
-      Swal.fire({ icon: 'success', title: 'Saved', timer: 1500, showConfirmButton: false });
+      const finishSubmission = () => {
+        toggle(false); renderTransactionsPage();
+        if (typeof renderDashboard === 'function') renderDashboard();
+        Swal.fire({ icon: 'success', title: 'Berhasil Simpan!', timer: 1500, showConfirmButton: false });
+      };
+
+      if (nt.type === 'pemasukan' && eIdx === -1) {
+        if (nt.tag.toLowerCase() === 'gaji') {
+          applyAutoAllocation();
+          finishSubmission();
+        } else {
+          Swal.fire({
+            title: 'Simpan ke Tabungan?',
+            text: 'Pendapatan ini bukan gaji. Apakah Anda ingin mengalokasikan ke tabungan secara otomatis sesuai persentase?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Tabungkan',
+            cancelButtonText: 'Tidak',
+            confirmButtonColor: '#4f46e5'
+          }).then((result) => {
+            if (result.isConfirmed) applyAutoAllocation();
+            finishSubmission();
+          });
+        }
+      } else {
+        finishSubmission();
+      }
     });
 };
 
