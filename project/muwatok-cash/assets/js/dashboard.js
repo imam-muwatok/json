@@ -155,6 +155,7 @@ window.renderDashboard = () => {
 
     const budgetSettings = JSON.parse(localStorage.getItem('muwatok_cash_settings')) || { strategy: 'manual', limit: 0 };
     let targetExp = 0;
+    let targetPercent = 0;
 
     const strategyRatios = {
       'extreme': 0.3,
@@ -179,12 +180,16 @@ window.renderDashboard = () => {
     };
 
     if (budgetSettings.strategy === 'manual') {
-      targetExp = stats.inc * (budgetSettings.limit / 100);
+      targetPercent = budgetSettings.limit;
+      targetExp = stats.inc * (targetPercent / 100);
     } else if (budgetSettings.strategy === 'autosaving') {
       const totalAllocation = savings.reduce((acc, s) => acc + (parseFloat(s.allocation) || 0), 0);
-      targetExp = stats.inc * Math.max(0, 1 - (totalAllocation / 100));
+      targetPercent = Math.max(0, 100 - totalAllocation);
+      targetExp = stats.inc * (targetPercent / 100);
     } else {
-      targetExp = stats.inc * (strategyRatios[budgetSettings.strategy] || 0);
+      const ratio = strategyRatios[budgetSettings.strategy] || 0;
+      targetPercent = ratio * 100;
+      targetExp = stats.inc * ratio;
     }
 
     const bTitle = document.getElementById('budgetTitle'), bTarget = document.getElementById('budgetTarget');
@@ -192,7 +197,7 @@ window.renderDashboard = () => {
 
     if (bTarget) {
       const currentMode = strategyLabels[budgetSettings.strategy] || 'Manual';
-      bTitle.textContent = `Spending Limit (${currentMode})`;
+      bTitle.textContent = `Spending Limit (${currentMode} - ${targetPercent}%)`;
       bTarget.textContent = AppData.formatIDR(targetExp);
 
       const pRaw = targetExp > 0 ? (stats.exp / targetExp) * 100 : 0;
