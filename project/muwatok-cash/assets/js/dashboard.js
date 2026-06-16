@@ -3,6 +3,7 @@ window.renderDashboard = () => {
     const savings = AppData.get('muwatok_cash_savings') || [];
     const now = new Date();
     const month = now.getMonth(), year = now.getFullYear();
+    const budgetSource = localStorage.getItem('muwatok_cash_budget_source') || 'all_income';
 
     let stats = { bal: 0, inc: 0, exp: 0 };
     transactions.forEach(t => {
@@ -11,7 +12,15 @@ window.renderDashboard = () => {
       const isCurrent = d.getMonth() === month && d.getFullYear() === year;
       if (t.type === 'pemasukan') {
         stats.bal += amt;
-        if (isCurrent) stats.inc += amt;
+        if (isCurrent) {
+          if (budgetSource === 'salary_only') {
+            if (t.tag && t.tag.toLowerCase() === 'gaji') { // Assuming 'gaji' is the salary tag
+              stats.inc += amt;
+            }
+          } else { // 'all_income'
+            stats.inc += amt;
+          }
+        }
       } else {
         stats.bal -= amt;
         if (isCurrent && !t.excludeFromBudget) stats.exp += amt;
@@ -25,7 +34,15 @@ window.renderDashboard = () => {
       const amt = parseFloat(t.amount);
       const d = new Date(t.date);
       if (d.getMonth() === pMonth && d.getFullYear() === pYear) {
-        if (t.type === 'pemasukan') prevStats.inc += amt;
+        if (t.type === 'pemasukan') {
+          if (budgetSource === 'salary_only') {
+            if (t.tag && t.tag.toLowerCase() === 'gaji') {
+              prevStats.inc += amt;
+            }
+          } else { // 'all_income'
+            prevStats.inc += amt;
+          }
+        }
         else if (!t.excludeFromBudget) prevStats.exp += amt;
       }
     });

@@ -136,6 +136,35 @@ const AppData = {
     updateUI();
   };
 
+  window.initBudgetSourceToggle = () => {
+    const btn = document.getElementById('toggleBudgetSourceBtn');
+    if (!btn) return;
+
+    const updateButtonUI = () => {
+        const budgetSource = localStorage.getItem('muwatok_cash_budget_source') || 'all_income'; // Default to 'all_income'
+        if (budgetSource === 'salary_only') {
+            btn.innerHTML = '<i class="fas fa-hand-holding-usd"></i>'; // Icon for salary
+            btn.title = 'Sumber Anggaran: Gaji Saja';
+        } else {
+            btn.innerHTML = '<i class="fas fa-money-bill-wave"></i>'; // Icon for all income
+            btn.title = 'Sumber Anggaran: Semua Pemasukan';
+        }
+    };
+
+    btn.addEventListener('click', () => {
+        const currentSource = localStorage.getItem('muwatok_cash_budget_source') || 'all_income';
+        const newSource = currentSource === 'salary_only' ? 'all_income' : 'salary_only';
+        localStorage.setItem('muwatok_cash_budget_source', newSource);
+        updateButtonUI();
+        if (typeof renderDashboard === 'function') renderDashboard();
+        if (typeof renderTransactionsPage === 'function' && document.getElementById('transactionsTableBody')) renderTransactionsPage();
+        if (typeof renderAnalytics === 'function' && document.getElementById('totalTransCount')) renderAnalytics(); // Re-render analytics if open
+    });
+
+    updateButtonUI(); // Set initial UI
+};
+
+
   const initCurrentDate = () => {
     const el = document.getElementById('currentDate');
     if (el) el.textContent = new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
@@ -144,6 +173,7 @@ const AppData = {
   window.initSidebar = initSidebar;
   window.initMobileSidebar = initMobileSidebar;
   window.initVisibilityToggle = initVisibilityToggle;
+  window.initBudgetSourceToggle = initBudgetSourceToggle;
   window.initCurrentDate = initCurrentDate;
 
   // USDT PRICE LOGIC
@@ -177,6 +207,7 @@ const AppData = {
     initMobileSidebar();
     initCurrentDate();
     initVisibilityToggle();
+    initBudgetSourceToggle(); // Call the new function
     if (document.getElementById('usdtPriceValue')) fetchUsdtPrice();
   };
 

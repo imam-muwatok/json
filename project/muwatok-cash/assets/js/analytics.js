@@ -26,6 +26,7 @@ window.renderAnalytics = () => {
 
     const transactions = AppData.get('muwatok_cash_data').transactions || [];
     const customTags = AppData.get('muwatok_cash_tags');
+    const budgetSource = localStorage.getItem('muwatok_cash_budget_source') || 'all_income';
 
     const fMonth = document.getElementById('filterMonth')?.value || '';
     const fYear = document.getElementById('filterYear')?.value || '';
@@ -41,7 +42,10 @@ window.renderAnalytics = () => {
         const m = d.getMonth(), y = d.getFullYear();
         monthLabels.push(new Intl.DateTimeFormat('id-ID', { month: 'short' }).format(d));
         const filtered = transactions.filter(t => { const td = new Date(t.date); return td.getMonth() === m && td.getFullYear() === y; });
-        incData.push(filtered.filter(t => t.type === 'pemasukan').reduce((acc, t) => acc + parseFloat(t.amount), 0));
+        incData.push(filtered.filter(t => t.type === 'pemasukan').reduce((acc, t) => {
+          if (budgetSource === 'salary_only' && (!t.tag || t.tag.toLowerCase() !== 'gaji')) return acc;
+          return acc + parseFloat(t.amount);
+        }, 0));
         expData.push(filtered.filter(t => t.type === 'pengeluaran').reduce((acc, t) => acc + parseFloat(t.amount), 0));
         budgetExpData.push(filtered.filter(t => t.type === 'pengeluaran' && !t.excludeFromBudget).reduce((acc, t) => acc + parseFloat(t.amount), 0));
       }
@@ -52,7 +56,10 @@ window.renderAnalytics = () => {
         const d = new Date(y, m, 1);
         monthLabels.push(new Intl.DateTimeFormat('id-ID', { month: 'short' }).format(d));
         const filtered = transactions.filter(t => { const td = new Date(t.date); return td.getMonth() === m && td.getFullYear() === y; });
-        incData.push(filtered.filter(t => t.type === 'pemasukan').reduce((acc, t) => acc + parseFloat(t.amount), 0));
+        incData.push(filtered.filter(t => t.type === 'pemasukan').reduce((acc, t) => {
+          if (budgetSource === 'salary_only' && (!t.tag || t.tag.toLowerCase() !== 'gaji')) return acc;
+          return acc + parseFloat(t.amount);
+        }, 0));
         expData.push(filtered.filter(t => t.type === 'pengeluaran').reduce((acc, t) => acc + parseFloat(t.amount), 0));
         budgetExpData.push(filtered.filter(t => t.type === 'pengeluaran' && !t.excludeFromBudget).reduce((acc, t) => acc + parseFloat(t.amount), 0));
       }
@@ -65,7 +72,10 @@ window.renderAnalytics = () => {
     if (fYear !== '') filteredForStats = filteredForStats.filter(t => new Date(t.date).getFullYear() === parseInt(fYear));
     if (fMonth !== '') filteredForStats = filteredForStats.filter(t => new Date(t.date).getMonth() === parseInt(fMonth));
 
-    const totalInc = filteredForStats.filter(t => t.type === 'pemasukan').reduce((acc, t) => acc + parseFloat(t.amount), 0);
+    const totalInc = filteredForStats.filter(t => t.type === 'pemasukan').reduce((acc, t) => {
+      if (budgetSource === 'salary_only' && (!t.tag || t.tag.toLowerCase() !== 'gaji')) return acc;
+      return acc + parseFloat(t.amount);
+    }, 0);
     const totalExp = filteredForStats.filter(t => t.type === 'pengeluaran' && !t.excludeFromBudget).reduce((acc, t) => acc + parseFloat(t.amount), 0);
     
     // Divisor for average: if month selected, it's 1 month. If year selected, 12 months.
@@ -119,7 +129,10 @@ window.renderAnalytics = () => {
 
         const totalMonthIncome = transactions
           .filter(t => { const td = new Date(t.date); return td.getMonth() === m && td.getFullYear() === y && t.type === 'pemasukan'; })
-          .reduce((acc, t) => acc + parseFloat(t.amount), 0);
+          .reduce((acc, t) => {
+            if (budgetSource === 'salary_only' && (!t.tag || t.tag.toLowerCase() !== 'gaji')) return acc;
+            return acc + parseFloat(t.amount);
+          }, 0);
 
         let runningPot = totalMonthIncome;
 

@@ -74,6 +74,9 @@
             <button id="toggleVisibilityBtn" class="flex items-center justify-center w-11 h-11 bg-white dark:bg-gray-800/60 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:text-indigo-500 transition-all">
               <i class="fas fa-eye"></i>
             </button>
+            <button id="toggleBudgetSourceBtn" class="flex items-center justify-center w-11 h-11 bg-white dark:bg-gray-800/60 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:text-indigo-500 transition-all" title="Toggle Budget Source">
+              <i class="fas fa-money-bill-wave"></i>
+            </button>
             <button id="addTransactionBtn" class="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-2xl shadow-lg shadow-indigo-500/20 transition-all font-medium whitespace-nowrap">
               <i class="fas fa-plus text-sm"></i>
               <span class="hidden sm:inline">Add Transaction</span>
@@ -172,21 +175,6 @@
               </div>
               <div id="recentTransactionsList" class="divide-y divide-gray-100 dark:divide-gray-700/60">
                 <!-- Rendered by JS -->
-              </div>
-            </div>
-            <!-- quick actions card -->
-            <div class="bg-white dark:bg-gray-800/80 rounded-2xl shadow-md border border-gray-100 dark:border-gray-700 p-5">
-              <h3 class="text-md font-semibold mb-3 flex items-center gap-2"><i class="fas fa-bolt text-yellow-500"></i> Quick Actions</h3>
-              <div class="grid grid-cols-3 gap-3">
-                <button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-gray-50 dark:bg-gray-700/40 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition group">
-                  <i class="fas fa-paper-plane text-indigo-500 text-xl group-hover:scale-110"></i><span class="text-xs font-medium">Send</span>
-                </button>
-                <button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-gray-50 dark:bg-gray-700/40 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition group">
-                  <i class="fas fa-download text-emerald-500 text-xl group-hover:scale-110"></i><span class="text-xs font-medium">Receive</span>
-                </button>
-                <button class="flex flex-col items-center gap-1 p-2 rounded-xl bg-gray-50 dark:bg-gray-700/40 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition group">
-                  <i class="fas fa-chart-line text-purple-500 text-xl group-hover:scale-110"></i><span class="text-xs font-medium">Analytics</span>
-                </button>
               </div>
             </div>
           </div>

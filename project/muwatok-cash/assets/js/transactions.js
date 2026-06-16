@@ -34,6 +34,7 @@ window.renderTransactionsPage = () => {
     if (!tableBody) return;
     const data = AppData.get('muwatok_cash_data');
     const transactions = data.transactions || [];
+    const budgetSource = localStorage.getItem('muwatok_cash_budget_source') || 'all_income';
 
     const fName = document.getElementById('filterName')?.value.toLowerCase() || '';
     const fTag = document.getElementById('filterTag')?.value || '';
@@ -48,7 +49,15 @@ window.renderTransactionsPage = () => {
       .filter(t => fYear === '' || new Date(t.date).getFullYear() === parseInt(fYear));
 
     let totals = { inc: 0, exp: 0 };
-    filtered.forEach(t => { const a = parseFloat(t.amount); if (t.type === 'pemasukan') totals.inc += a; else totals.exp += a; });
+    filtered.forEach(t => { 
+      const a = parseFloat(t.amount); 
+      if (t.type === 'pemasukan') {
+        if (budgetSource === 'salary_only' && (!t.tag || t.tag.toLowerCase() !== 'gaji')) return;
+        totals.inc += a;
+      } else { 
+        totals.exp += a; 
+      } 
+    });
     const updateEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = AppData.formatIDR(val); };
     updateEl('filteredIncome', totals.inc); updateEl('filteredExpense', totals.exp); updateEl('filteredBalance', totals.inc - totals.exp);
 
