@@ -129,9 +129,22 @@ window.initSavingsModal = () => {
       modal.classList.toggle('hidden', !show);
       if (!show) {
         form.reset();
-        document.getElementById('editSavingsIndex').value = "-1";
-        document.getElementById('savingsModalTitle').textContent = "Add Saving Goal";
+        if (document.getElementById('editSavingsIndex')) document.getElementById('editSavingsIndex').value = "-1";
+        if (document.getElementById('savingsModalTitle')) document.getElementById('savingsModalTitle').textContent = "Add Saving Goal";
+        populateRedirectDropdown();
       }
+    };
+
+    const populateRedirectDropdown = (currentGoalName = "") => {
+        const dropdown = document.getElementById('savingsRedirect');
+        if (!dropdown) return;
+        const savings = AppData.get('muwatok_cash_savings');
+        dropdown.innerHTML = '<option value="">-- Tidak Ada (Berhenti) --</option>';
+        savings.forEach(s => {
+            if (s.name !== currentGoalName) {
+                dropdown.innerHTML += `<option value="${s.name}">${s.name}</option>`;
+            }
+        });
     };
     
     // Add event listeners for Rupiah formatting
@@ -164,17 +177,29 @@ window.initSavingsModal = () => {
       const savings = AppData.get('muwatok_cash_savings');
       const s = savings[idx];
       document.getElementById('editSavingsIndex').value = idx;
-      document.getElementById('savingsModalTitle').textContent = "Edit Saving Goal"; // Title is text
-      document.getElementById('savingsName').value = s.name; // Name is text
-      savingsTargetInput.value = new Intl.NumberFormat('id-ID').format(s.target); // Format for display
-      savingsCurrentInput.value = new Intl.NumberFormat('id-ID').format(s.current); // Format for display
-      document.getElementById('selectedSavingsIcon').value = s.icon;
-      document.getElementById('selectedSavingsColor').value = s.color;
-      document.getElementById('savingsAllocation').value = s.allocation || 0;
-      renderPickers(); toggle(true);
+      if (document.getElementById('savingsModalTitle')) document.getElementById('savingsModalTitle').textContent = "Edit Saving Goal";
+      if (document.getElementById('savingsName')) document.getElementById('savingsName').value = s.name;
+      
+      const targetVal = parseFloat(s.target) || 0;
+      const currentVal = parseFloat(s.current) || 0;
+
+      if (savingsTargetInput) savingsTargetInput.value = new Intl.NumberFormat('id-ID').format(targetVal);
+      if (savingsCurrentInput) savingsCurrentInput.value = new Intl.NumberFormat('id-ID').format(currentVal);
+      
+      if (document.getElementById('selectedSavingsIcon')) document.getElementById('selectedSavingsIcon').value = s.icon;
+      if (document.getElementById('selectedSavingsColor')) document.getElementById('selectedSavingsColor').value = s.color;
+      if (document.getElementById('savingsAllocation')) document.getElementById('savingsAllocation').value = s.allocation || 0;
+      
+      // Update dropdown pengalihan dan set nilainya
+      populateRedirectDropdown(s.name);
+      const redirectEl = document.getElementById('savingsRedirect');
+      if (redirectEl) redirectEl.value = s.redirectGoalName || "";
+      
+      renderPickers(); 
+      modal.classList.remove('hidden'); // Buka modal tanpa memicu fungsi toggle() yang melakukan reset
     };
 
-    document.getElementById('addSavingsBtn')?.addEventListener('click', () => { renderPickers(); toggle(true); });
+    document.getElementById('addSavingsBtn')?.addEventListener('click', () => { populateRedirectDropdown(); renderPickers(); toggle(true); });
     document.getElementById('closeSavingsModalBtn')?.addEventListener('click', () => toggle(false));
     document.getElementById('savingsModalBackdrop')?.addEventListener('click', () => toggle(false));
 
@@ -186,13 +211,24 @@ window.initSavingsModal = () => {
       const allocation = parseFloat(document.getElementById('savingsAllocation').value) || 0;
       const icon = document.getElementById('selectedSavingsIcon').value;
       const color = document.getElementById('selectedSavingsColor').value;
+      const redirectGoalName = document.getElementById('savingsRedirect')?.value || "";
       const eIdx = parseInt(document.getElementById('editSavingsIndex').value);
 
       let savings = AppData.get('muwatok_cash_savings');
-      const newSaving = { name, target, current, icon, color, allocation };
+      const newSaving = { name, target, current, icon, color, allocation, redirectGoalName };
 
-      if (eIdx > -1) savings[eIdx] = newSaving;
-      else savings.push(newSaving);
+      if (eIdx > -1) {
+        const oldName = savings[eIdx].name;
+        if (oldName !== name) {
+          // Perbarui referensi pengalihan di tabungan lain jika nama berubah
+          savings.forEach(goal => {
+            if (goal.redirectGoalName === oldName) goal.redirectGoalName = name;
+          });
+        }
+        savings[eIdx] = newSaving;
+      } else {
+        savings.push(newSaving);
+      }
 
       AppData.save('muwatok_cash_savings', savings);
       toggle(false); renderSavingsPage();

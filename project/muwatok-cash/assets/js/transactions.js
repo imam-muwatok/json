@@ -269,12 +269,44 @@ window.initTransactionModal = () => {
       const applyAutoAllocation = () => {
         const currentSavings = AppData.get('muwatok_cash_savings');
         const currentSavingLogs = AppData.get('muwatok_cash_saving_transactions');
+
+        // Fungsi Rekursif untuk mendistribusikan dana (Waterfall Logic)
+        const distributeWithOverflow = (amount, goalName, savingsArr, logsArr, visited = new Set()) => {
+          if (amount <= 0 || !goalName || visited.has(goalName)) return;
+          visited.add(goalName); // Hindari infinite loop (A alihkan ke B, B alihkan ke A)
+
+          const s = savingsArr.find(item => item.name === goalName);
+          if (!s) return;
+
+          const target = parseFloat(s.target) || 0;
+          const current = parseFloat(s.current) || 0;
+          const spaceLeft = Math.max(0, target - current);
+
+          if (spaceLeft > 0) {
+              const canTake = Math.min(amount, spaceLeft);
+              s.current = current + canTake;
+              logsArr.push({ 
+                  name: `Auto Saving: ${s.name}`, 
+                  amount: canTake, 
+                  date: new Date().toISOString().replace('T', ' ').split('.')[0], 
+                  description: `Automatic allocation from income.` 
+              });
+              const remaining = amount - canTake;
+              // Jika masih ada sisa (overflow) dan ada tujuan pengalihan, jalankan rekursi
+              if (remaining > 0 && s.redirectGoalName) {
+                  distributeWithOverflow(remaining, s.redirectGoalName, savingsArr, logsArr, visited);
+              }
+          } else if (s.redirectGoalName) {
+              // Jika target ini sudah penuh sejak awal, alihkan seluruh dana
+              distributeWithOverflow(amount, s.redirectGoalName, savingsArr, logsArr, visited);
+          }
+        };
+
         let wasUpdated = false;
         currentSavings.forEach(s => {
           if (s.allocation && s.allocation > 0) {
             const allocatedAmount = nt.amount * (parseFloat(s.allocation) / 100);
-            s.current = (parseFloat(s.current) || 0) + allocatedAmount;
-            currentSavingLogs.push({ name: `Auto Saving: ${s.name}`, amount: allocatedAmount, date: new Date().toISOString().replace('T', ' ').split('.')[0], description: `Automatic allocation from income.` });
+            distributeWithOverflow(allocatedAmount, s.name, currentSavings, currentSavingLogs);
             wasUpdated = true;
           }
         });

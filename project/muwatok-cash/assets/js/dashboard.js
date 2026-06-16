@@ -145,11 +145,13 @@ window.renderDashboard = () => {
       transactions.filter(t => t.type === 'pengeluaran' && !t.excludeFromBudget && new Date(t.date).getMonth() === month && new Date(t.date).getFullYear() === year).forEach(t => cats[t.tag] = (cats[t.tag] || 0) + parseFloat(t.amount));
       const sorted = Object.entries(cats).sort((a,b) => b[1]-a[1]).slice(0, 5);
       catList.innerHTML = sorted.map(([tag, amt]) => {
-        const p = stats.exp > 0 ? Math.min((amt/stats.exp)*100, 100).toFixed(0) : 0;
+        const pInc = stats.inc > 0 ? ((amt / stats.inc) * 100).toFixed(1) : 0;
+        const pVisual = stats.inc > 0 ? Math.min((amt / stats.inc) * 100, 100).toFixed(0) : 0;
+
         const tagInfo = customTags.find(ct => ct.name === tag);
         const iconBase = tagInfo ? tagInfo.icon : 'fa-tag';
         const iconClass = iconBase.startsWith('fa-') ? `fas ${iconBase}` : iconBase;
-        return `<div><div class="flex justify-between text-sm"><span><i class="${iconClass} mr-2 text-indigo-400"></i>${tag}</span><span>${AppData.formatIDR(amt)}</span></div><div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden"><div class="bg-indigo-500 h-2 rounded-full" style="width:${p}%"></div></div></div>`;
+        return `<div><div class="flex justify-between text-sm"><span><i class="${iconClass} mr-2 text-indigo-400"></i>${tag} <span class="text-[10px] text-gray-400 font-medium ml-1">(${pInc}%)</span></span><span>${AppData.formatIDR(amt)}</span></div><div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden"><div class="bg-indigo-500 h-2 rounded-full" style="width:${pVisual}%"></div></div></div>`;
       }).join('');
     }
 
