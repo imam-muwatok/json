@@ -56,10 +56,35 @@
 
         <!-- Auto Allocation Log -->
         <div id="savingsHistorySection" class="mt-12 hidden">
-          <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
-            <i class="fas fa-history text-indigo-500"></i>
-            Riwayat Distribusi Otomatis
-          </h2>
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+            <h2 class="text-xl font-bold flex items-center gap-2">
+              <i class="fas fa-history text-indigo-500"></i>
+              Riwayat Distribusi Otomatis
+            </h2>
+            <div class="flex flex-wrap items-center gap-2">
+              <select id="filterHistoryGoal" class="px-3 py-1.5 text-xs rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 outline-none focus:ring-1 focus:ring-indigo-500">
+                <option value="">Semua Tabungan</option>
+              </select>
+              <select id="filterHistoryMonth" class="px-3 py-1.5 text-xs rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 outline-none focus:ring-1 focus:ring-indigo-500">
+                <option value="">Semua Bulan</option>
+                <option value="0">Januari</option>
+                <option value="1">Februari</option>
+                <option value="2">Maret</option>
+                <option value="3">April</option>
+                <option value="4">Mei</option>
+                <option value="5">Juni</option>
+                <option value="6">Juli</option>
+                <option value="7">Agustus</option>
+                <option value="8">September</option>
+                <option value="9">Oktober</option>
+                <option value="10">November</option>
+                <option value="11">Desember</option>
+              </select>
+              <select id="filterHistoryYear" class="px-3 py-1.5 text-xs rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 outline-none focus:ring-1 focus:ring-indigo-500">
+                <option value="">Semua Tahun</option>
+              </select>
+            </div>
+          </div>
           <div class="bg-white dark:bg-gray-800/80 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden shadow-sm">
             <div class="overflow-x-auto">
               <table class="w-full text-left">
