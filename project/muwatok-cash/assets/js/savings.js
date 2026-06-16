@@ -13,14 +13,14 @@ window.renderSavingsPage = () => {
     const now = new Date();
     const month = now.getMonth(), year = now.getFullYear();
     
-    const monthlyAutoTrans = savingTrans
+    const monthlySavingTrans = savingTrans
       .map((st, index) => ({ ...st, originalIndex: index }))
       .filter(st => {
         const d = new Date(st.date);
-        return d.getMonth() === month && d.getFullYear() === year && st.name.startsWith('Auto Saving:');
+        return d.getMonth() === month && d.getFullYear() === year;
       });
 
-    const totalAutoMonthly = monthlyAutoTrans.reduce((acc, t) => acc + (parseFloat(t.amount) || 0), 0);
+    const totalAutoMonthly = monthlySavingTrans.filter(t => t.amount > 0).reduce((acc, t) => acc + (parseFloat(t.amount) || 0), 0);
     
     const summaryEl = document.getElementById('autoSavingSummary');
     const totalAutoEl = document.getElementById('totalMonthlyAutoSaved');
@@ -37,18 +37,23 @@ window.renderSavingsPage = () => {
     const historySection = document.getElementById('savingsHistorySection');
     const historyBody = document.getElementById('savingsHistoryBody');
     if (historySection && historyBody) {
-      if (monthlyAutoTrans.length > 0) {
+      if (monthlySavingTrans.length > 0) {
         historySection.classList.remove('hidden');
-        historyBody.innerHTML = monthlyAutoTrans.sort((a,b) => new Date(b.date) - new Date(a.date)).slice(0, 10).map(t => `
+        historyBody.innerHTML = monthlySavingTrans.sort((a,b) => new Date(b.date) - new Date(a.date)).slice(0, 10).map(t => {
+          const isInc = t.amount >= 0;
+          const cleanName = t.name.replace('Auto Saving: ', '').replace('Withdrawal: ', '').replace('Saving: ', '');
+          return `
           <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-800/30 transition">
-            <td class="px-6 py-4 text-sm font-semibold">${t.name.replace('Auto Saving: ', '')}</td>
+            <td class="px-6 py-4 text-sm font-semibold">${cleanName}</td>
             <td class="px-6 py-4 text-xs text-gray-500">${new Date(t.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}</td>
-            <td class="px-6 py-4 text-right font-bold text-emerald-600 dark:text-emerald-400">+${AppData.formatIDR(t.amount)}</td>
+            <td class="px-6 py-4 text-right font-bold ${isInc ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}">
+              ${isInc ? '+' : '-'}${AppData.formatIDR(Math.abs(t.amount))}
+            </td>
             <td class="px-6 py-4 text-right">
               <button onclick="deleteSavingTransaction(${t.originalIndex})" class="text-rose-400 hover:text-rose-600 transition"><i class="fas fa-trash-alt text-xs"></i></button>
             </td>
-          </tr>
-        `).join('');
+          </tr>`;
+        }).join('');
       } else {
         historySection.classList.add('hidden');
       }
@@ -62,9 +67,17 @@ window.renderSavingsPage = () => {
     container.innerHTML = savings.map((s, i) => {
       const ic = s.icon.startsWith('fa-') ? `fas ${s.icon}` : s.icon;
       const progress = s.target > 0 ? Math.min((s.current / s.target) * 100, 100).toFixed(1) : 0;
+
+      // Hitung akumulasi uang yang pernah masuk (Saldo sekarang + total penarikan yang pernah dilakukan)
+      const totalWithdrawals = savingTrans
+        .filter(st => st.amount < 0 && st.description && st.description.includes(`"${s.name}"`))
+        .reduce((acc, st) => acc + Math.abs(parseFloat(st.amount) || 0), 0);
+      const totalAccumulated = (parseFloat(s.current) || 0) + totalWithdrawals;
+
       return `
         <div class="bg-white dark:bg-gray-800/80 rounded-2xl p-6 border border-gray-100 dark:border-gray-700 shadow-sm relative group card-hover">
           <div class="absolute top-4 right-4 flex gap-2">
+            <button onclick="withdrawFromSaving(${i})" class="w-8 h-8 rounded-full bg-rose-50 dark:bg-rose-900/50 text-rose-600 dark:text-rose-400 flex items-center justify-center hover:bg-rose-100 transition shadow-sm" title="Spend from this saving"><i class="fas fa-shopping-bag text-xs"></i></button>
             <button onclick="addFundsToSaving(${i})" class="w-8 h-8 rounded-full bg-emerald-50 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center hover:bg-emerald-100 transition shadow-sm" title="Add funds from balance"><i class="fas fa-plus text-xs"></i></button>
             <button onclick="editSaving(${i})" class="w-8 h-8 rounded-full bg-indigo-50 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center hover:bg-indigo-100 transition shadow-sm"><i class="fas fa-edit text-xs"></i></button>
             <button onclick="deleteSaving(${i})" class="w-8 h-8 rounded-full bg-rose-50 dark:bg-rose-900/50 text-rose-600 flex items-center justify-center hover:bg-rose-100 transition shadow-sm"><i class="fas fa-trash text-xs"></i></button>
@@ -76,6 +89,7 @@ window.renderSavingsPage = () => {
                 <span class="font-bold text-lg leading-tight">${s.name}</span>
                 <div class="flex items-center gap-2 mt-1">
                   <span class="text-xs text-gray-500 uppercase tracking-wider font-semibold">Target: ${AppData.formatIDR(s.target)}</span>
+                  <span class="text-[10px] text-gray-400 font-medium">· Masuk: ${AppData.formatIDR(totalAccumulated)}</span>
                   ${s.allocation > 0 ? `<span class="text-[10px] bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 px-1.5 py-0.5 rounded-md font-bold">Auto: ${s.allocation}%</span>` : ''}
                 </div>
               </div>
@@ -229,6 +243,71 @@ window.addFundsToSaving = (idx) => {
         renderSavingsPage();
         if (typeof renderDashboard === 'function') renderDashboard(); // Update dashboard balance
         Swal.fire({ icon: 'success', title: 'Berhasil!', text: `${AppData.formatIDR(amount)} dipindahkan ke tabungan.`, timer: 1500, showConfirmButton: false });
+      }
+    });
+};
+
+window.withdrawFromSaving = (idx) => {
+    const savings = AppData.get('muwatok_cash_savings');
+    const s = savings[idx];
+    const currentBalance = parseFloat(s.current) || 0;
+
+    Swal.fire({
+      title: `Pakai Tabungan: ${s.name}`,
+      text: `Gunakan dana dari tabungan ini untuk pengeluaran. Tersedia: ${AppData.formatIDR(currentBalance)}`,
+      html: `
+        <input id="swal-input-name" class="swal2-input" placeholder="Nama Transaksi (misal: Beli Sepatu)">
+        <input id="swal-input-amount" class="swal2-input" placeholder="Nominal" inputmode="numeric">
+      `,
+      didOpen: () => {
+        const amountInput = document.getElementById('swal-input-amount');
+        amountInput.addEventListener('input', () => AppData.formatInputRupiah(amountInput));
+      },
+      showCancelButton: true,
+      confirmButtonText: 'Catat Pengeluaran',
+      confirmButtonColor: '#f43f5e',
+      preConfirm: () => {
+        const name = document.getElementById('swal-input-name').value;
+        const amountStr = document.getElementById('swal-input-amount').value;
+        const amount = AppData.parseRupiah(amountStr);
+
+        if (!name) { Swal.showValidationMessage('Nama transaksi harus diisi'); return false; }
+        if (!amount || amount <= 0) { Swal.showValidationMessage('Nominal harus lebih dari 0'); return false; }
+        if (amount > currentBalance) { Swal.showValidationMessage('Saldo tabungan tidak mencukupi'); return false; }
+
+        return { name, amount };
+      }
+    }).then(result => {
+      if (result.isConfirmed) {
+        const { name, amount } = result.value;
+        const date = new Date().toISOString().replace('T', ' ').split('.')[0];
+
+        // 1. Kurangi Saldo Tabungan
+        s.current = (parseFloat(s.current) || 0) - amount;
+        AppData.save('muwatok_cash_savings', savings);
+
+        // 2. Tambah Log Tabungan (Negative amount for withdrawal)
+        const st = AppData.get('muwatok_cash_saving_transactions');
+        st.push({ name: `Withdrawal: ${name}`, amount: -amount, date: date, description: `Spent from savings goal "${s.name}".` });
+        AppData.save('muwatok_cash_saving_transactions', st);
+
+        // 3. Tambah ke Transaksi Utama (Marked with source: savings)
+        const d = AppData.get('muwatok_cash_data');
+        d.transactions.push({
+          name: name,
+          type: 'pengeluaran',
+          amount: amount,
+          tag: 'Tabungan',
+          date: date,
+          description: `Diambil dari tabungan: ${s.name}`,
+          source: 'savings',
+          savingsGoalIndex: idx
+        });
+        AppData.save('muwatok_cash_data', d);
+
+        renderSavingsPage();
+        if (typeof renderDashboard === 'function') renderDashboard();
+        Swal.fire({ icon: 'success', title: 'Berhasil!', text: `Pengeluaran ${AppData.formatIDR(amount)} dicatat dari tabungan.`, timer: 1500, showConfirmButton: false });
       }
     });
 };
