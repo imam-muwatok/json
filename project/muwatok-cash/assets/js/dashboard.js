@@ -149,8 +149,23 @@ window.renderDashboard = () => {
       '702010': 0.7  // Fallback untuk versi lama
     };
 
+    const strategyLabels = {
+      'manual': 'Manual',
+      'autosaving': 'Auto Saving',
+      'extreme': 'Extreme',
+      'hard': 'Hard',
+      'medium': 'Medium',
+      'normal': 'Normal',
+      'easy': 'Easy',
+      '503020': '50/30/20',
+      '702010': '70/20/10'
+    };
+
     if (budgetSettings.strategy === 'manual') {
       targetExp = stats.inc * (budgetSettings.limit / 100);
+    } else if (budgetSettings.strategy === 'autosaving') {
+      const totalAllocation = savings.reduce((acc, s) => acc + (parseFloat(s.allocation) || 0), 0);
+      targetExp = stats.inc * Math.max(0, 1 - (totalAllocation / 100));
     } else {
       targetExp = stats.inc * (strategyRatios[budgetSettings.strategy] || 0);
     }
@@ -159,7 +174,8 @@ window.renderDashboard = () => {
     const bProgress = document.getElementById('budgetProgress'), bPercent = document.getElementById('budgetPercent'), bDetail = document.getElementById('budgetDetail');
 
     if (bTarget) {
-      bTitle.textContent = budgetSettings.strategy === 'manual' ? 'Monthly Budget' : 'Spending Limit';
+      const currentMode = strategyLabels[budgetSettings.strategy] || 'Manual';
+      bTitle.textContent = `Spending Limit (${currentMode})`;
       bTarget.textContent = AppData.formatIDR(targetExp);
 
       const pRaw = targetExp > 0 ? (stats.exp / targetExp) * 100 : 0;

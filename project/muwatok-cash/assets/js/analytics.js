@@ -186,9 +186,18 @@ window.renderAnalytics = () => {
       const strategyRatios = {
         'extreme': 0.3, 'hard': 0.5, 'medium': 0.7, 'normal': 0.8, 'easy': 0.9, '503020': 0.8, '702010': 0.7
       };
+      
+      let autoSavingRatio = 0;
+      if (budgetSettings.strategy === 'autosaving') {
+        const savings = AppData.get('muwatok_cash_savings') || [];
+        const totalAllocation = savings.reduce((acc, s) => acc + (parseFloat(s.allocation) || 0), 0);
+        autoSavingRatio = Math.max(0, 1 - (totalAllocation / 100));
+      }
 
       const targetData = incData.map(inc => {
-        const ratio = budgetSettings.strategy === 'manual' ? (budgetSettings.limit / 100) : (strategyRatios[budgetSettings.strategy] || 0);
+        if (budgetSettings.strategy === 'manual') return inc * (budgetSettings.limit / 100);
+        if (budgetSettings.strategy === 'autosaving') return inc * autoSavingRatio;
+        const ratio = strategyRatios[budgetSettings.strategy] || 0;
         return inc * ratio;
       });
 
