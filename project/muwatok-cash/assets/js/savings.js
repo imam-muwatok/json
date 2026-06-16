@@ -300,39 +300,77 @@ window.addFundsToSaving = (idx) => {
     const s = savings[idx];
     const data = AppData.get('muwatok_cash_data');
     const transactions = data.transactions || [];
+    const investmentTrans = AppData.get('muwatok_cash_investment_transactions') || [];
+    const savingTrans = AppData.get('muwatok_cash_saving_transactions') || [];
     
-    let currentBalance = 0;
-    transactions.forEach(t => { if (t.type === 'pemasukan') currentBalance += parseFloat(t.amount); else currentBalance -= parseFloat(t.amount); });
-    const savingTrans = AppData.get('muwatok_cash_saving_transactions');
-    savingTrans.forEach(st => { currentBalance -= parseFloat(st.amount) || 0; });
+    // Hitung saldo dompet (hanya transaksi yang bukan external)
+    let walletBalance = 0;
+    transactions.forEach(t => { if (t.type === 'pemasukan') walletBalance += parseFloat(t.amount); else walletBalance -= parseFloat(t.amount); });
+    savingTrans.forEach(st => { if (!st.isExternal) walletBalance -= parseFloat(st.amount) || 0; });
+    investmentTrans.forEach(it => { walletBalance -= parseFloat(it.amount) || 0; });
 
     Swal.fire({
       title: `Top Up: ${s.name}`,
-      text: `Masukkan nominal dari Saldo Utama untuk ditabung. Tersedia: ${AppData.formatIDR(currentBalance)}`,
-      input: 'text',
-      inputAttributes: { inputmode: 'numeric' },
+      background: '#111827',
+      color: '#f3f4f6',
+      html: `
+        <div class="text-left space-y-4 mt-4">
+          <div>
+            <label class="block text-xs font-medium text-gray-500 mb-1">Nama Transaksi</label>
+            <input id="swal-input-name" class="w-full px-4 py-2.5 rounded-xl border border-gray-700 bg-gray-800 text-white focus:ring-2 focus:ring-indigo-500 outline-none transition" placeholder="Misal: Bunga Bank, Topup Gaji">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-500 mb-1">Nominal</label>
+            <input id="swal-input-amount" class="w-full px-4 py-2.5 rounded-xl border border-gray-700 bg-gray-800 text-white focus:ring-2 focus:ring-indigo-500 outline-none transition" placeholder="0" inputmode="numeric">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-500 mb-1">Sumber Dana</label>
+            <select id="swal-input-source" class="w-full px-4 py-2.5 rounded-xl border border-gray-700 bg-gray-800 text-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+              <option value="wallet">Saldo Utama (Wallet)</option>
+              <option value="external">Dana Luar (Bunga, Hibah, dll)</option>
+            </select>
+          </div>
+          <p class="text-[11px] text-gray-500 italic">Saldo Utama Tersedia: ${AppData.formatIDR(walletBalance)}</p>
+        </div>
+      `,
       didOpen: () => {
-        const input = Swal.getInput();
-        input.addEventListener('input', () => AppData.formatInputRupiah(input));
+        const amountInput = document.getElementById('swal-input-amount');
+        amountInput.addEventListener('input', () => AppData.formatInputRupiah(amountInput));
       },
       showCancelButton: true,
       confirmButtonText: 'Pindahkan Dana',
       confirmButtonColor: '#10b981',
-      inputValidator: (value) => {
-        const amount = AppData.parseRupiah(value);
-        if (!amount || amount <= 0) return 'Nominal harus lebih dari 0';
-        if (amount > currentBalance) return 'Saldo utama tidak mencukupi';
+      preConfirm: () => {
+        const name = document.getElementById('swal-input-name').value.trim();
+        const amountStr = document.getElementById('swal-input-amount').value;
+        const source = document.getElementById('swal-input-source').value;
+        const amount = AppData.parseRupiah(amountStr);
+
+        if (!name) { Swal.showValidationMessage('Nama transaksi harus diisi'); return false; }
+        if (!amount || amount <= 0) { Swal.showValidationMessage('Nominal harus lebih dari 0'); return false; }
+        if (source === 'wallet' && amount > walletBalance) { Swal.showValidationMessage('Saldo utama tidak mencukupi'); return false; }
+
+        return { name, amount, source };
       }
     }).then(result => {
       if (result.isConfirmed) {
-        const amount = AppData.parseRupiah(result.value);
+        const { name, amount, source } = result.value;
+        const isExternal = source === 'external';
         
         s.current = (parseFloat(s.current) || 0) + amount;
         AppData.save('muwatok_cash_savings', savings);
 
-        const st = AppData.get('muwatok_cash_saving_transactions');
-        st.push({ name: `Saving: ${s.name}`, amount: amount, date: new Date().toISOString().replace('T', ' ').split('.')[0], description: `Manual top-up from wallet balance.` });
-        AppData.save('muwatok_cash_saving_transactions', st);
+        const st_list = AppData.get('muwatok_cash_saving_transactions');
+        st_list.push({ 
+          name: `Saving: ${s.name}`, 
+          amount: amount, 
+          date: new Date().toISOString().replace('T', ' ').split('.')[0], 
+          description: `Deposit: ${name}`,
+          sourceTransaction: name,
+          isExternal: isExternal,
+          allocationPercent: null
+        });
+        AppData.save('muwatok_cash_saving_transactions', st_list);
 
         renderSavingsPage();
         if (typeof renderDashboard === 'function') renderDashboard(); // Update dashboard balance
@@ -344,6 +382,8 @@ window.addFundsToSaving = (idx) => {
 window.deleteSavingTransaction = (idx) => {
     Swal.fire({
       title: 'Hapus Riwayat?',
+      background: '#111827',
+      color: '#f3f4f6',
       text: "Saldo di tabungan terkait akan dikurangi sesuai nominal ini.",
       icon: 'warning',
       showCancelButton: true,
@@ -374,7 +414,15 @@ window.deleteSavingTransaction = (idx) => {
 };
 
 window.deleteSaving = (idx) => {
-    Swal.fire({ title: 'Hapus Goal?', text: "Data tabungan ini akan hilang.", icon: 'warning', showCancelButton: true, confirmButtonColor: '#ef4444' }).then(r => {
+    Swal.fire({ 
+      title: 'Hapus Goal?', 
+      background: '#111827',
+      color: '#f3f4f6',
+      text: "Data tabungan ini akan hilang.", 
+      icon: 'warning', 
+      showCancelButton: true, 
+      confirmButtonColor: '#ef4444' 
+    }).then(r => {
       if (r.isConfirmed) {
         let s = AppData.get('muwatok_cash_savings'); s.splice(idx, 1); AppData.save('muwatok_cash_savings', s);
         renderSavingsPage();

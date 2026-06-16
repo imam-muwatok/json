@@ -48,7 +48,9 @@ window.renderDashboard = () => {
     });
 
     const savingTrans = AppData.get('muwatok_cash_saving_transactions');
-    savingTrans.forEach(st => { stats.bal -= parseFloat(st.amount) || 0; });
+    savingTrans.forEach(st => { 
+      if (!st.isExternal) stats.bal -= parseFloat(st.amount) || 0; 
+    });
 
     const investmentTrans = AppData.get('muwatok_cash_investment_transactions');
     investmentTrans.forEach(it => { stats.bal -= parseFloat(it.amount) || 0; });
@@ -71,7 +73,7 @@ window.renderDashboard = () => {
 
     savingTrans.forEach(st => {
         const d = new Date(st.date);
-        if (d <= endOfPrevMonth) { prevMonthTotalBalance -= parseFloat(st.amount) || 0; }
+        if (d <= endOfPrevMonth && !st.isExternal) { prevMonthTotalBalance -= parseFloat(st.amount) || 0; }
     });
 
     investmentTrans.forEach(it => {

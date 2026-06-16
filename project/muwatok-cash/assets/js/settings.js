@@ -111,6 +111,8 @@ window.initSettingsPage = () => {
     document.getElementById('btnReset')?.addEventListener('click', function() {
       Swal.fire({
         title: 'Hapus Semua Data?',
+        background: '#111827',
+        color: '#f3f4f6',
         text: "Semua transaksi dan kustomisasi tag akan hilang selamanya!",
         icon: 'warning',
         showCancelButton: true,
@@ -204,6 +206,9 @@ window.initSettingsPage = () => {
             t.sourceTransaction = 'Distribusi Otomatis (Legacy)';
             changed = true;
           }
+        } else if (t.name.startsWith('Saving:') && t.isExternal === undefined) {
+            t.isExternal = false; // Default untuk top-up manual lama adalah dari wallet
+            changed = true;
         }
         if (changed) count++;
         return t;
@@ -213,12 +218,21 @@ window.initSettingsPage = () => {
         AppData.save('muwatok_cash_saving_transactions', updatedTrans);
         Swal.fire({
           icon: 'success',
+          background: '#111827',
+          color: '#f3f4f6',
           title: 'Berhasil!',
           text: `${count} riwayat tabungan telah diperbarui dengan informasi persentase dan sumber data.`,
           confirmButtonColor: '#4f46e5'
         });
       } else {
-        Swal.fire({ icon: 'info', title: 'Sudah Terkini', text: 'Semua data riwayat Anda sudah memiliki struktur terbaru.', confirmButtonColor: '#4f46e5' });
+        Swal.fire({ 
+          icon: 'info', 
+          background: '#111827',
+          color: '#f3f4f6',
+          title: 'Sudah Terkini', 
+          text: 'Semua data riwayat Anda sudah memiliki struktur terbaru.', 
+          confirmButtonColor: '#4f46e5' 
+        });
       }
     });
 
