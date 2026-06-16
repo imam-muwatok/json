@@ -271,7 +271,7 @@ window.initTransactionModal = () => {
         const currentSavingLogs = AppData.get('muwatok_cash_saving_transactions');
 
         // Fungsi Rekursif untuk mendistribusikan dana (Waterfall Logic)
-        const distributeWithOverflow = (amount, goalName, savingsArr, logsArr, visited = new Set()) => {
+        const distributeWithOverflow = (amount, goalName, savingsArr, logsArr, percent, visited = new Set()) => {
           if (amount <= 0 || !goalName || visited.has(goalName)) return;
           visited.add(goalName); // Hindari infinite loop (A alihkan ke B, B alihkan ke A)
 
@@ -289,16 +289,18 @@ window.initTransactionModal = () => {
                   name: `Auto Saving: ${s.name}`, 
                   amount: canTake, 
                   date: new Date().toISOString().replace('T', ' ').split('.')[0], 
-                  description: `Automatic allocation from income.` 
+                  description: `Automatic allocation from income.`,
+                  sourceTransaction: nt.name,
+                  allocationPercent: percent
               });
               const remaining = amount - canTake;
               // Jika masih ada sisa (overflow) dan ada tujuan pengalihan, jalankan rekursi
               if (remaining > 0 && s.redirectGoalName) {
-                  distributeWithOverflow(remaining, s.redirectGoalName, savingsArr, logsArr, visited);
+                  distributeWithOverflow(remaining, s.redirectGoalName, savingsArr, logsArr, percent, visited);
               }
           } else if (s.redirectGoalName) {
               // Jika target ini sudah penuh sejak awal, alihkan seluruh dana
-              distributeWithOverflow(amount, s.redirectGoalName, savingsArr, logsArr, visited);
+              distributeWithOverflow(amount, s.redirectGoalName, savingsArr, logsArr, percent, visited);
           }
         };
 
@@ -306,7 +308,7 @@ window.initTransactionModal = () => {
         currentSavings.forEach(s => {
           if (s.allocation && s.allocation > 0) {
             const allocatedAmount = nt.amount * (parseFloat(s.allocation) / 100);
-            distributeWithOverflow(allocatedAmount, s.name, currentSavings, currentSavingLogs);
+            distributeWithOverflow(allocatedAmount, s.name, currentSavings, currentSavingLogs, s.allocation);
             wasUpdated = true;
           }
         });

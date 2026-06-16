@@ -180,6 +180,48 @@ window.initSettingsPage = () => {
       Swal.fire({ icon: 'success', title: 'Berhasil!', text: 'Data telah berhasil diekspor sebagai file JSON.', timer: 1500, showConfirmButton: false });
     });
 
+    // UPDATE DATA STRUCTURE LOGIC
+    document.getElementById('btnUpdateData')?.addEventListener('click', function() {
+      let savingTrans = AppData.get('muwatok_cash_saving_transactions');
+      let savings = AppData.get('muwatok_cash_savings');
+      let count = 0;
+
+      const updatedTrans = savingTrans.map(t => {
+        let changed = false;
+        // Hanya perbarui jika ini adalah log alokasi otomatis
+        if (t.name.startsWith('Auto Saving:')) {
+          // Cek apakah data persentase atau sumber transaksi benar-benar kosong (undefined/null/empty)
+          const isAllocationMissing = t.allocationPercent === undefined || t.allocationPercent === null;
+          const isSourceMissing = !t.sourceTransaction || t.sourceTransaction.trim() === '';
+
+          if (isAllocationMissing) {
+            const goalName = t.name.replace('Auto Saving: ', '');
+            const goal = savings.find(s => s.name === goalName);
+            t.allocationPercent = goal ? goal.allocation : 0;
+            changed = true;
+          }
+          if (isSourceMissing) {
+            t.sourceTransaction = 'Distribusi Otomatis (Legacy)';
+            changed = true;
+          }
+        }
+        if (changed) count++;
+        return t;
+      });
+
+      if (count > 0) {
+        AppData.save('muwatok_cash_saving_transactions', updatedTrans);
+        Swal.fire({
+          icon: 'success',
+          title: 'Berhasil!',
+          text: `${count} riwayat tabungan telah diperbarui dengan informasi persentase dan sumber data.`,
+          confirmButtonColor: '#4f46e5'
+        });
+      } else {
+        Swal.fire({ icon: 'info', title: 'Sudah Terkini', text: 'Semua data riwayat Anda sudah memiliki struktur terbaru.', confirmButtonColor: '#4f46e5' });
+      }
+    });
+
     // BUDGET SETTINGS LOGIC
     const strategySelect = document.getElementById('budgetStrategy');
     const manualContent = document.getElementById('manualBudgetContent');

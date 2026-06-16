@@ -59,9 +59,15 @@ window.renderSavingsPage = () => {
           historyBody.innerHTML = filteredSavingTrans.sort((a,b) => new Date(b.date) - new Date(a.date)).slice(0, 20).map(t => {
           const isInc = t.amount >= 0;
           const cleanName = t.name.replace('Auto Saving: ', '').replace('Withdrawal: ', '').replace('Saving: ', '');
+          const sourceInfo = t.sourceTransaction || (t.name.startsWith('Auto Saving:') ? 'Distribusi Otomatis' : '');
           return `
           <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-800/30 transition">
-            <td class="px-6 py-4 text-sm font-semibold">${cleanName}</td>
+            <td class="px-6 py-4 text-sm">
+              <div class="flex flex-col">
+                <span class="font-semibold">${cleanName} ${t.allocationPercent ? `<span class="text-[10px] text-indigo-500 font-bold">(${t.allocationPercent}%)</span>` : ''}</span>
+                ${sourceInfo ? `<span class="text-[10px] text-gray-500 italic">${sourceInfo}</span>` : ''}
+              </div>
+            </td>
             <td class="px-6 py-4 text-xs text-gray-500">${new Date(t.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}</td>
             <td class="px-6 py-4 text-right font-bold ${isInc ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}">
               ${isInc ? '+' : '-'}${AppData.formatIDR(Math.abs(t.amount))}
