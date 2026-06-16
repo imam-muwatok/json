@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>About · Muwatok Cash</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <!-- Markdown Parser -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    /* Refined Markdown Styling */
+    #readmeContent h1 { @apply text-3xl md:text-4xl font-black mb-8 bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent; }
+    #readmeContent h2 { @apply text-2xl font-bold mt-12 mb-6 text-indigo-300 border-b border-gray-800 pb-3 flex items-center gap-2; }
+    #readmeContent h3 { @apply text-lg font-bold mt-8 mb-4 text-gray-100 flex items-center gap-2; }
+    #readmeContent p { @apply mb-5 text-gray-400 leading-relaxed text-sm md:text-base; }
+    #readmeContent ul { @apply list-none mb-6 text-gray-400 space-y-3 pl-2; }
+    #readmeContent li { @apply flex gap-3; }
+    #readmeContent li::before { content: "•"; @apply text-indigo-500 font-bold; }
+    #readmeContent strong { @apply text-indigo-200 font-bold; }
+    #readmeContent code { @apply bg-indigo-500/10 px-2 py-0.5 rounded border border-indigo-500/20 text-indigo-300 text-xs font-mono; }
+    #readmeContent blockquote { @apply border-l-4 border-indigo-500 bg-indigo-500/5 px-6 py-4 rounded-r-xl my-6 italic text-gray-300; }
+    #readmeContent hr { @apply border-gray-800 my-8; }
+  </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-950 text-gray-800 dark:text-gray-100 antialiased overflow-x-hidden">
+
+  <div id="sidebarBackdrop" class="fixed inset-0 bg-black/50 z-30 hidden transition-opacity duration-300 lg:hidden"></div>
+
+  <div class="flex min-h-screen relative">
+    <!-- ========== SIDEBAR ========== -->
+    <aside id="sidebar" class="fixed lg:sticky top-0 left-0 z-40 w-64 h-screen bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 shadow-xl lg:shadow-none transform -translate-x-full lg:translate-x-0 sidebar-transition flex flex-col">
+      <div class="flex items-center justify-between p-5 border-b border-gray-100 dark:border-gray-800">
+        <div class="flex items-center gap-2">
+          <i class="fas fa-wallet text-indigo-600 dark:text-indigo-400 text-2xl"></i>
+          <span class="font-bold text-xl bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">Muwatok-Cash</span>
+        </div>
+        <button id="closeSidebarBtn" class="lg:hidden text-gray-500 text-xl"><i class="fas fa-times"></i></button>
+      </div>
+      <nav id="sidebarNav" class="flex-1 py-6 px-3 space-y-1.5"></nav>
+    </aside>
+
+    <!-- ========== MAIN CONTENT ========== -->
+    <main class="flex-1 w-full transition-all duration-300">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        
+        <div class="flex items-center gap-3 mb-10">
+          <button id="openSidebarBtn" class="lg:hidden text-gray-600 dark:text-gray-300 text-2xl focus:outline-none">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div>
+            <h1 class="text-3xl font-black tracking-tight">System Info</h1>
+            <p class="text-gray-500 text-sm mt-2">Documentation & Application Details</p>
+          </div>
+        </div>
+
+        <!-- Hero Section -->
+        <div class="relative mb-10 p-8 rounded-3xl bg-gradient-to-br from-indigo-600 to-purple-700 text-white overflow-hidden shadow-2xl">
+          <div class="absolute top-0 right-0 -mt-8 -mr-8 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+          <div class="relative z-10 flex flex-col md:flex-row items-center gap-8">
+            <div class="w-24 h-24 rounded-3xl bg-white/20 backdrop-blur-md flex items-center justify-center text-4xl shadow-inner border border-white/30">
+              <i class="fas fa-wallet text-white"></i>
+            </div>
+            <div class="text-center md:text-left">
+              <h2 class="text-3xl font-black mb-2 tracking-tight">Muwatok Cash</h2>
+              <p class="text-indigo-100/80 text-sm max-w-md">Solusi cerdas untuk mengelola keuangan pribadi Anda secara lokal, aman, dan tanpa iklan.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Content Card -->
+        <div class="bg-white dark:bg-gray-900/50 backdrop-blur-xl rounded-3xl shadow-xl border border-gray-100 dark:border-gray-800 p-8 md:p-12 relative">
+          <div id="readmeContent" class="animate-pulse space-y-4">
+             <div class="h-8 bg-gray-800 rounded w-3/4"></div>
+             <div class="h-4 bg-gray-800 rounded w-full"></div>
+             <div class="h-4 bg-gray-800 rounded w-5/6"></div>
+          </div>
+        </div>
+
+        <div class="mt-8 text-center text-xs text-gray-400">
+          <p class="font-medium">Version 1.2.0 — Built with <i class="fas fa-heart text-rose-500 mx-1"></i> by Muwatok</p>
+          <p class="mt-1 opacity-60">© 2025 Muwatok Cash. All rights reserved.</p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="assets/js/script.js"></script>
+  <script>
+    async function loadReadme() {
+      const contentDiv = document.getElementById('readmeContent');
+      try {
+        const response = await fetch('README.md');
+        if (!response.ok) throw new Error('Gagal memuat file README.md');
+        const text = await response.text();
+        contentDiv.classList.remove('animate-pulse');
+        contentDiv.innerHTML = marked.parse(text);
+      } catch (err) {
+        contentDiv.innerHTML = `<div class="p-4 bg-rose-900/20 text-rose-400 rounded-xl border border-rose-900/50">Error: ${err.message}</div>`;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadReadme);
+  </script>
+</body>
+</html>

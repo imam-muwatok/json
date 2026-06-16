@@ -46,6 +46,7 @@ const AppData = {
     { name: 'Investment', icon: 'fas fa-money-bill', link: 'investment.html' },
     { name: 'Savings', icon: 'fas fa-piggy-bank', link: 'savings.html' },
     { name: 'Settings', icon: 'fas fa-cog', link: 'settings.html' },
+    { name: 'About', icon: 'fas fa-info-circle', link: 'about.html' },
   ];
 
   window.state = {
