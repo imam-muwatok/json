@@ -197,7 +197,9 @@ window.renderDashboard = () => {
 
     if (bTarget) {
       const currentMode = strategyLabels[budgetSettings.strategy] || 'Manual';
-      bTitle.textContent = `Spending Limit (${currentMode} - ${targetPercent}%)`;
+      const spendPct = Number(targetPercent).toFixed(0);
+      const savePct = (100 - targetPercent).toFixed(0);
+      bTitle.textContent = `Spending Limit - ${spendPct}%(${currentMode} - ${savePct}%)`;
       bTarget.textContent = AppData.formatIDR(targetExp);
 
       const pRaw = targetExp > 0 ? (stats.exp / targetExp) * 100 : 0;
