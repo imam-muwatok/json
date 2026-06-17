@@ -8,8 +8,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="stylesheet" href="assets/css/style.css">
-  <!-- Markdown Parser -->
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <style>
     /* Refined Markdown Styling */
     #readmeContent h1 { @apply text-3xl md:text-4xl font-black mb-8 bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent; }
@@ -17,8 +15,8 @@
     #readmeContent h3 { @apply text-lg font-bold mt-8 mb-4 text-gray-100 flex items-center gap-2; }
     #readmeContent p { @apply mb-5 text-gray-400 leading-relaxed text-sm md:text-base; }
     #readmeContent ul { @apply list-none mb-6 text-gray-400 space-y-3 pl-2; }
-    #readmeContent li { @apply flex gap-3; }
-    #readmeContent li::before { content: "•"; @apply text-indigo-500 font-bold; }
+    #readmeContent ul li { @apply flex gap-3; }
+    #readmeContent ul li::before { content: "•"; @apply text-indigo-500 font-bold; }
     #readmeContent strong { @apply text-indigo-200 font-bold; }
     #readmeContent code { @apply bg-indigo-500/10 px-2 py-0.5 rounded border border-indigo-500/20 text-indigo-300 text-xs font-mono; }
     #readmeContent blockquote { @apply border-l-4 border-indigo-500 bg-indigo-500/5 px-6 py-4 rounded-r-xl my-6 italic text-gray-300; }
@@ -72,10 +70,115 @@
 
         <!-- Main Content Card -->
         <div class="bg-white dark:bg-gray-900/50 backdrop-blur-xl rounded-3xl shadow-xl border border-gray-100 dark:border-gray-800 p-8 md:p-12 relative">
-          <div id="readmeContent" class="animate-pulse space-y-4">
-             <div class="h-8 bg-gray-800 rounded w-3/4"></div>
-             <div class="h-4 bg-gray-800 rounded w-full"></div>
-             <div class="h-4 bg-gray-800 rounded w-5/6"></div>
+          <div id="readmeContent">
+            <h1>💰 Muwatok Cash - Personal Finance Manager</h1>
+            <p>Muwatok Cash adalah aplikasi manajemen keuangan pribadi berbasis web yang ringan, aman, dan berfokus pada privasi. Aplikasi ini membantu Anda melacak pendapatan, pengeluaran, target tabungan secara otomatis, serta portofolio investasi kripto dalam satu tempat.</p>
+
+            <h2>🌟 Fitur Utama</h2>
+
+            <h3>1. Dashboard Interaktif</h3>
+            <ul>
+              <li><strong>Ringkasan Real-time:</strong> Pantau Total Saldo, Total Tabungan, Pendapatan, dan Pengeluaran bulan berjalan.</li>
+              <li><strong>Indikator Tren:</strong> Lihat persentase kenaikan atau penurunan dibandingkan bulan sebelumnya.</li>
+              <li><strong>Spending Limit:</strong> Batas pengeluaran dinamis yang menampilkan persentase alokasi belanja terhadap strategi yang dipilih (misal: <em>Spending Limit - 70% (Auto Saving - 30%)</em>).</li>
+              <li><strong>Kategori Pengeluaran:</strong> Visualisasi kategori belanja paling dominan beserta persentasenya terhadap pendapatan (Gaji atau Total Income).</li>
+            </ul>
+
+            <h3>2. Manajemen Transaksi Cerdas</h3>
+            <ul>
+              <li><strong>Multi-Source:</strong> Catat transaksi yang diambil dari saldo utama (Wallet) atau langsung dari pos Tabungan tertentu.</li>
+              <li><strong>Auto-Allocation:</strong> Setiap pendapatan (Gaji) dapat dipotong otomatis berdasarkan persentase yang Anda tentukan untuk mengisi pos-pos tabungan.</li>
+              <li><strong>Filter Powerfull:</strong> Cari riwayat transaksi berdasarkan nama, kategori (tag), bulan, atau tahun.</li>
+            </ul>
+
+            <h3>3. Savings Waterfall (Tabungan Pintar)</h3>
+            <ul>
+              <li><strong>Auto-Redirect:</strong> Jika sebuah target tabungan sudah tercapai (100%), alokasi otomatis akan dialihkan ke tabungan berikutnya yang Anda pilih.</li>
+              <li><strong>External Deposit:</strong> Masukkan dana bunga bank atau hibah langsung ke tabungan tanpa memengaruhi saldo dompet utama.</li>
+              <li><strong>Accumulated Tracking:</strong> Lihat total uang yang pernah masuk ke sebuah pos tabungan, memberikan perspektif seberapa konsisten Anda menyisihkan uang.</li>
+              <li><strong>History dengan Filter:</strong> Pantau riwayat distribusi otomatis per bulan atau per tujuan tabungan.</li>
+            </ul>
+
+            <h3>4. Portofolio Investasi Kripto</h3>
+            <ul>
+              <li><strong>CoinGecko Integration:</strong> Sinkronisasi harga aset kripto Anda secara real-time langsung dari API CoinGecko.</li>
+              <li><strong>Profit/Loss Tracking:</strong> Pantau performa aset, ROI (Return on Investment), dan total nilai pasar portofolio Anda.</li>
+              <li><strong>USDT Swap:</strong> Simulasi pembelian aset menggunakan saldo USDT yang sudah ada dalam portofolio.</li>
+            </ul>
+
+            <h3>5. Analitik Mendalam</h3>
+            <ul>
+              <li><strong>Trend Chart:</strong> Grafik garis pendapatan vs pengeluaran antar bulan.</li>
+              <li><strong>Budget vs Actual:</strong> Bandingkan rencana anggaran (berdasarkan strategi) dengan realita pengeluaran.</li>
+              <li><strong>Daily Depletion:</strong> Lihat bagaimana "pot" uang Anda berkurang setiap harinya dalam satu bulan untuk menjaga ritme belanja.</li>
+            </ul>
+
+            <h3>6. Privasi & Keamanan Data</h3>
+            <ul>
+              <li><strong>Local Storage:</strong> Data Anda 100% milik Anda dan hanya disimpan di browser Anda sendiri. Tidak ada server eksternal.</li>
+              <li><strong>Censor Mode:</strong> Sembunyikan nominal angka dengan satu klik (ikon mata) di header saat ingin menunjukkan dashboard kepada orang lain.</li>
+              <li><strong>Data Management:</strong> Ekspor dan Impor seluruh data dalam format JSON untuk cadangan (backup).</li>
+            </ul>
+
+            <hr>
+
+            <h2>🚀 Panduan Penggunaan untuk Pengguna Baru</h2>
+
+            <h3>Langkah 1: Pengaturan Awal</h3>
+            <ol class="list-decimal pl-8 mb-6 text-gray-400 space-y-4">
+              <li>Buka menu <strong>Settings</strong>.</li>
+              <li>Tentukan <strong>Budget Strategy</strong>. 
+                <ul class="mt-2 pl-4 border-l border-gray-800">
+                  <li>Pilih <code>Berdasarkan Alokasi Tabungan (Auto Saving)</code> jika Anda ingin batas belanja dihitung dari sisa uang setelah dipotong semua target tabungan.</li>
+                  <li>Atau pilih strategi preset seperti <code>Hard</code> (50%) atau <code>Normal</code> (80%).</li>
+                </ul>
+              </li>
+              <li>Pergi ke menu <strong>Tags</strong> untuk menambahkan kategori pengeluaran kustom Anda (misal: Makan, Listrik, Hiburan).</li>
+            </ol>
+
+            <h3>Langkah 2: Membuat Target Tabungan</h3>
+            <ol class="list-decimal pl-8 mb-6 text-gray-400 space-y-4">
+              <li>Buka menu <strong>Savings</strong> dan klik <strong>New Goal</strong>.</li>
+              <li>Masukkan nama (misal: Dana Darurat), target nominal, dan <strong>Auto Allocation</strong> (misal: 10%).</li>
+              <li>Pilih <strong>Target Pengalihan</strong> jika Anda ingin uang otomatis pindah ke tabungan lain (misal: Tabungan Liburan) saat Dana Darurat sudah penuh.</li>
+            </ol>
+
+            <h3>Langkah 3: Mencatat Pendapatan</h3>
+            <ol class="list-decimal pl-8 mb-6 text-gray-400 space-y-4">
+              <li>Klik <strong>Add Transaction</strong> di Dashboard.</li>
+              <li>Pilih tipe <strong>Income</strong>.</li>
+              <li><strong>Penting:</strong> Jika Anda menggunakan Tag <strong>"Gaji"</strong>, sistem akan otomatis membagi uang tersebut ke pos-pos tabungan sesuai persentase yang Anda buat di Langkah 2. Jika bukan gaji, sistem akan bertanya apakah Anda ingin tetap membaginya ke tabungan.</li>
+            </ol>
+
+            <h3>Langkah 4: Mencatat Pengeluaran</h3>
+            <ol class="list-decimal pl-8 mb-6 text-gray-400 space-y-4">
+              <li>Klik <strong>Add Transaction</strong>.</li>
+              <li>Pilih <strong>Source of Funds</strong>. 
+                <ul class="mt-2 pl-4 border-l border-gray-800">
+                  <li>Pilih <strong>Wallet</strong> untuk pengeluaran sehari-hari menggunakan saldo utama.</li>
+                  <li>Pilih <strong>Savings</strong> jika Anda membeli sesuatu menggunakan uang yang sudah dikumpulkan di tabungan (misal: beli laptop dari tabungan "Gadget").</li>
+                </ul>
+              </li>
+            </ol>
+
+            <h3>Langkah 5: Memantau Investasi</h3>
+            <ol class="list-decimal pl-8 mb-6 text-gray-400 space-y-4">
+              <li>Di menu <strong>Investment</strong>, tambahkan aset kripto dengan memasukkan <strong>CoinGecko ID</strong> (misal: <code>bitcoin</code>, <code>solana</code>, <code>tether</code>).</li>
+              <li>Gunakan tombol <strong>Sync Prices</strong> (ikon putar) untuk memperbarui nilai aset Anda ke harga pasar saat ini.</li>
+            </ol>
+
+            <hr>
+
+            <h2>🛠 Tips Pro</h2>
+            <ul>
+              <li><strong>Budget Source Toggle:</strong> Di header, gunakan ikon uang untuk beralih antara melihat laporan berdasarkan <strong>Semua Pemasukan</strong> atau hanya berdasarkan <strong>Gaji</strong>. Ini membantu Anda fokus pada anggaran dari gaji tetap tanpa terganggu pendapatan sampingan.</li>
+              <li><strong>Data Update:</strong> Jika Anda baru saja memperbarui aplikasi, masuk ke <strong>Settings</strong> dan klik <strong>Perbarui Struktur Data</strong> untuk memastikan fitur-fitur baru (seperti log persentase tabungan) berfungsi pada data lama Anda.</li>
+              <li><strong>Live USDT:</strong> Dashboard menampilkan harga Live USDT/IDR sebagai referensi kurs cepat untuk aset kripto Anda.</li>
+              <li><strong>External Savings:</strong> Jika Anda mendapatkan bunga bank, gunakan fitur <strong>Top Up</strong> di menu Savings dan pilih sumber <strong>Dana Luar (External)</strong> agar saldo tabungan bertambah tanpa mengurangi isi dompet (Wallet) Anda.</li>
+            </ul>
+
+            <hr>
+            <p class="text-center italic mt-10">Muwatok Cash - Kelola uang dengan logika, nikmati hidup dengan tenang.</p>
           </div>
         </div>
 
@@ -88,21 +191,5 @@
   </div>
 
   <script src="assets/js/script.js"></script>
-  <script>
-    async function loadReadme() {
-      const contentDiv = document.getElementById('readmeContent');
-      try {
-        const response = await fetch('README.md');
-        if (!response.ok) throw new Error('Gagal memuat file README.md');
-        const text = await response.text();
-        contentDiv.classList.remove('animate-pulse');
-        contentDiv.innerHTML = marked.parse(text);
-      } catch (err) {
-        contentDiv.innerHTML = `<div class="p-4 bg-rose-900/20 text-rose-400 rounded-xl border border-rose-900/50">Error: ${err.message}</div>`;
-      }
-    }
-
-    document.addEventListener('DOMContentLoaded', loadReadme);
-  </script>
 </body>
 </html>
