@@ -280,7 +280,7 @@ window.renderAnalytics = () => {
           datasets: [
             { label: 'Income', data: incData, backgroundColor: '#10b981', borderRadius: 6, barPercentage: 0.6 },
             { label: 'Expense', data: expData, backgroundColor: '#f43f5e', borderRadius: 6, barPercentage: 0.6 },
-            { label: 'Sisa', data: remData, backgroundColor: 'rgba(255, 255, 255, 0.3)', borderRadius: 6, barPercentage: 0.6 }
+            { label: 'Balance', data: remData, backgroundColor: 'rgba(255, 255, 255, 0.3)', borderRadius: 6, barPercentage: 0.6 }
           ]
         },
         options: { 
@@ -288,7 +288,20 @@ window.renderAnalytics = () => {
           maintainAspectRatio: false, 
           plugins: { 
             legend: { labels: { color: '#94a3b8' } },
-            tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: ${AppData.formatIDR(ctx.parsed.y)}` } }
+            tooltip: { 
+              callbacks: { 
+                label: (ctx) => {
+                  const val = ctx.parsed.y;
+                  const income = incData[ctx.dataIndex];
+                  let label = `${ctx.dataset.label}: ${AppData.formatIDR(val)}`;
+                  if (ctx.datasetIndex > 0 && income > 0) {
+                    const pct = ((val / income) * 100).toFixed(1);
+                    label += ` (${pct}%)`;
+                  }
+                  return label;
+                }
+              } 
+            }
           }, 
           scales: { 
             y: { ticks: { color: '#94a3b8', callback: (val) => AppData.formatIDR(val) }, grid: { color: '#334155' } }, 
@@ -320,7 +333,7 @@ window.renderAnalytics = () => {
 
       if (sisa > 0) {
         const p = ((sisa / totalDenominator) * 100).toFixed(1);
-        chartLabels.push(`Sisa (${p}%)`);
+        chartLabels.push(`Balance (${p}%)`);
         chartData.push(sisa);
         chartColors.push('#ffffff'); // Putih solid
       }
@@ -368,12 +381,37 @@ window.renderAnalytics = () => {
       if (activeCharts.yearly) activeCharts.yearly.destroy();
       activeCharts.yearly = new Chart(yearlyCtx, {
         type: 'bar',
+        plugins: [{
+          id: 'barLabels',
+          afterDatasetsDraw(chart) {
+            const { ctx, data } = chart;
+            ctx.save();
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'bottom';
+            ctx.font = 'bold 9px Inter';
+            ctx.fillStyle = '#94a3b8';
+            data.datasets.forEach((dataset, i) => {
+              if (i === 0) return; // Lewati persentase untuk Income
+              const meta = chart.getDatasetMeta(i);
+              meta.data.forEach((bar, index) => {
+                const income = data.datasets[0].data[index];
+                if (income > 0) {
+                  const val = dataset.data[index];
+                  const pct = ((val / income) * 100).toFixed(0) + '%';
+                  // Posisi teks: di atas bar jika positif, di bawah jika negatif
+                  ctx.fillText(pct, bar.x, val >= 0 ? bar.y - 2 : bar.y + 10);
+                }
+              });
+            });
+            ctx.restore();
+          }
+        }],
         data: {
           labels: sortedYrs,
           datasets: [
             { label: 'Income', data: yIncData, backgroundColor: '#10b981', borderRadius: 6 },
             { label: 'Expense', data: yExpData, backgroundColor: '#f43f5e', borderRadius: 6 },
-            { label: 'Sisa', data: yRemData, backgroundColor: 'rgba(99, 102, 241, 0.6)', borderRadius: 6 }
+            { label: 'Balance', data: yRemData, backgroundColor: 'rgba(99, 102, 241, 0.6)', borderRadius: 6 }
           ]
         },
         options: {
@@ -381,7 +419,20 @@ window.renderAnalytics = () => {
           maintainAspectRatio: false,
           plugins: {
             legend: { labels: { color: '#94a3b8' } },
-            tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: ${AppData.formatIDR(ctx.parsed.y)}` } }
+            tooltip: { 
+              callbacks: { 
+                label: (ctx) => {
+                  const val = ctx.parsed.y;
+                  const income = yIncData[ctx.dataIndex];
+                  let label = `${ctx.dataset.label}: ${AppData.formatIDR(val)}`;
+                  if (ctx.datasetIndex > 0 && income > 0) {
+                    const pct = ((val / income) * 100).toFixed(1);
+                    label += ` (${pct}%)`;
+                  }
+                  return label;
+                }
+              } 
+            }
           },
           scales: {
             y: { ticks: { color: '#94a3b8', callback: (val) => AppData.formatIDR(val) }, grid: { color: '#334155' } },
